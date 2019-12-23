@@ -6,7 +6,7 @@ Virtual Radar Server (VRS) provides an amazing website interface of aircraft vie
 
 When this VRS installation script finishes, some very useful information will be displayed specific to that particular installation. It will be useful to read and record this information.
 
-This script has been confirmed to work with VRS versions 2.4.2 and 2.4.3 on Raspbian (Stretch & Buster) & Lubuntu.
+This script has been confirmed to work with VRS versions 2.4.2, 2.4.3 and 2.4.4 on Raspbian (Stretch & Buster) & Lubuntu.
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/)
 
@@ -17,11 +17,14 @@ Here is a very brief summary of what this script will do:
 * [Install VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-install-vrs)
   * Install Mono (necessary to run VRS on Linux)
   * Install a quick fix to Mono
+  * Download and install VRS server files
 * [Download and install the following VRS plugins:](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#vrs-plugins)
   * Custom Content Plugin
   * Database Editor Plugin
   * Database Writer Plugin
+  * Tile Server Cache Plugin
   * Web Admin Plugin
+* [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
 * Allow the user to select the following:
   * [Which port number VRS should use](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#port-number)
   * [Which default language the VRS website should display](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#default-language)
@@ -32,7 +35,7 @@ Here is a very brief summary of what this script will do:
 * [Create a set of directories to contain all of the user's custom files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#directory-structure)
 * [Auto-fill the directory/file paths in the VRS settings for a few of the custom directories/files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#auto-fill-directory--file-paths)
 * Create additional commands/scripts
-  * [A global command script in the Linux operating system to start VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#global-command-to-start-vrs)
+  * [A global command to start VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#global-command-to-start-vrs)
   * [A script to routinely backup the database file](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#script-to-backup-database)
   * [A script to autorun VRS at system boot](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#script-to-autorun-vrs)
 * [Provide an easy method of displaying an announcement at the top of the VRS webpage](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#display-an-announcement-on-the-webpage)
@@ -55,7 +58,12 @@ This VRS installation script will install the following four VRS plugins. Click 
   * [Custom Content Plugin](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx)
   * [Database Editor Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-database-editor)
   * [Database Writer Plugin](http://www.virtualradarserver.co.uk/Documentation/DatabaseWriter/Default.aspx)
+  * [Tile Server Cache Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-tileservercache)
   * [Web Admin Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin)
+
+## Language Packs
+
+This VRS installation script will download and install the language packs created for VRS.  Based on the current language set for the Linux operating system, the VRS server interface will automatically set the language for the VRS server interface.  Not all languages are supported. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-translations)
 
 ## Port Number
 
@@ -63,7 +71,7 @@ This VRS installation script will prompt the user for the port number VRS should
 
 ## Default Language
 
-The default language for a typical VRS installation is "English (United Kingdom)".  However, this script will allow the user to choose from a number of languages and regional locales.
+The default language for a typical VRS installation for the webpage is "English (United Kingdom)".  However, this script will allow the user to choose from a number of languages and regional locales.
 
 ## Download Additional Files
 
@@ -78,7 +86,7 @@ As mentioned in the Overview section above, this VRS installation script will cr
 
 Here is a visual of the default directory structure:
 
-![VRS Directory Structure](https://i.imgur.com/UKLBs5x.png "VRS Directory Structure")
+![VRS Directory Structure](https://i.imgur.com/vcmjK0E.png "VRS Directory Structure")
 
 ### Installation
 
@@ -131,6 +139,10 @@ This directory may contain silhouette *\*.bmp* images of aircrafts. If a silhoue
 An example of a silhouette image named `B748.bmp`:
 
 ![Boeing 747-800 silhouette](https://i.imgur.com/HuYWHFZ.png "Boeing 747-800 silhouette")
+
+#### TileCache
+
+This directory will hold cached copies of the map tiles from the tile servers if the Tile Server Cache Plugin is enabled.  This may improve the load time of the map tiles appearing on the VRS webpage. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-tileservercache)
 
 ## Auto-fill Directory & File Paths
 
