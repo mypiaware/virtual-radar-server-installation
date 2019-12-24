@@ -86,7 +86,7 @@ As mentioned in the Overview section above, this VRS installation script will cr
 
 Here is a visual of the default directory structure:
 
-![VRS Directory Structure](https://i.imgur.com/vcmjK0E.png "VRS Directory Structure")
+![VRS Directory Structure](https://i.imgur.com/xknv8i1.png "VRS Directory Structure")
 
 ### Installation
 
