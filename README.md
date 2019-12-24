@@ -54,7 +54,7 @@ Run the above one-line command to execute this VRS installation script. The vast
 
 ## VRS Plugins
 
-This VRS installation script will install the following four VRS plugins. Click on each for more information on the plugin.
+This VRS installation script will install the following five VRS plugins. Click on each for more information on the plugin.
   * [Custom Content Plugin](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx)
   * [Database Editor Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-database-editor)
   * [Database Writer Plugin](http://www.virtualradarserver.co.uk/Documentation/DatabaseWriter/Default.aspx)
