@@ -28,9 +28,11 @@ Here is a very brief summary of what this script will do:
 * Allow the user to select the following:
   * [Which port number VRS should use](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#port-number)
   * [Which default language the VRS website should display](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#default-language)
+  * [The latitude and longitude of the center of the VRS webpage map](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#latitiude-and-longitude-of-the-vrs-map)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
   * Airline operator flags
   * Aircraft silhouettes
+  * Aircraft pictures
   * Sample database
 * [Create a set of directories to contain all of the user's custom files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#directory-structure)
 * [Auto-fill the directory/file paths in the VRS settings for a few of the custom directories/files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#auto-fill-directory--file-paths)
@@ -73,11 +75,16 @@ This VRS installation script will prompt the user for the port number VRS should
 
 The default language for a typical VRS installation for the webpage is "English (United Kingdom)".  However, this script will allow the user to choose from a number of languages and regional locales.
 
+## Latitiude and Longitude of the VRS Map
+
+The user has an option of entering the center of the VRS webpage map.  The benefit of this is to have the map centered exactly where the user would like it to be centered from the very first time the VRS webpage is accessed.  Otherwise, the default center of the map is near London.
+
 ## Download Additional Files
 
 This VRS installation script will also provide the option to download some sample files to help enhance the VRS webpage if the user does not already have any of these files. These files will be downloaded to the directories described below. These additional files include:
   * Airline operator flags (downloaded to the `OperatorFlags` directory)
   * Aircraft silhouettes (downloaded to the `Silhouettes` directory)
+  * Aircraft pictures (downloaded to the `Pictures` directory)
   * A sample database (downloaded to the `Database` directory)
 
 ## Directory Structure
