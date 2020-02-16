@@ -7,9 +7,10 @@
 #
 # This script helps the novice user to install VRS.
 # With just a few keystrokes, VRS and a few VRS plugins may be downloaded and installed with this script.
-# (User will still need to manually configure VRS to fetch data from ADSB/MLAT receivers and peform other personalizations.)
+# (User will still need to manually configure VRS to fetch data from ADSB/MLAT receivers and perform other personalizations.)
 # Operator flags and silhouette flags may also be downloaded and installed.
 # A sample database file consisting of more detailed information of a few planes may be downloaded.
+# As an option, the user may also enter the latitude and longitude of the center of the VRS webpage map.
 # A directory structure will be created for the convenience of those who wish to enhance VRS' appearance and performance.
 # For advanced users:
 #  If the "Configuration.xml" and "PluginsConfiguration.txt" files from a previous VRS installation
@@ -73,8 +74,29 @@ STARTCOMMANDDIR="/usr/local/bin"                       # The location of the uni
 STARTCOMMANDFILENAME="vrs"                             # An arbitrary simple filename of the universal command to start VRS.
 STARTCOMMAND="$STARTCOMMANDDIR/$STARTCOMMANDFILENAME"  # The full path of the VRS start command.
 
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  # Get directory of where this script is located.
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  # Get directory of where this script is located.  (This value should not be changed.)
 TEMPDIR="/tmp/vrs"  # An arbitrary directory where downloaded files are kept.
+
+
+# List of all possible directories that will need to be created.
+VRSDIRECTORIES=(
+   "$VRSROOTDIRECTORY"
+   "$VRSINSTALLDIRECTORY"
+   "$SHAREDIRECTORY"
+   "$EXTRASDIRECTORY"
+   "$AUTORUNDIRECTORY"
+   "$CUSTOMCONTENTPLUGINDIRECTORY"
+   "$CUSTOMINJECTEDFILESDIRECTORY"
+   "$CUSTOMWEBFILESDIRECTORY"
+   "$DATABASEMAINDIRECTORY"
+   "$DATABASEDIRECTORY"
+   "$DATABASEBACKUPDIRECTORY"
+   "$OPFLAGSDIRECTORY"
+   "$PICTURESDIRECTORY"
+   "$SILHOUETTESDIRECTORY"
+   "$TILECACHEDIRECTORY"
+   "$TEMPDIR"
+)
 
 
 # Declare an array of URLs for all the VRS files.
@@ -93,7 +115,8 @@ VRSFILES=(
 # Declare URLs for operator flags, silhouettes and a database file. (Change any URL if better files are found elsewhere.)
 OPFLAGSURL="http://www.woodair.net/SBS/Download/LOGO.zip"
 SILHOUETTESURL="http://www.kinetic.co.uk/repo/SilhouettesLogos.zip"
-DATABASEURL="https://data.flightairmap.com/data/basestation/BaseStation.sqb.zip"
+DATABASEURL="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/Database/BaseStation.sqb"
+PICTURESURL="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/Pictures/Pictures.zip"
 
 
 # Declare a default port value. (User is given a choice to change it.  If a port has already been set from a previous installation, then set the already existing port value as the default.)
@@ -182,8 +205,9 @@ fi
 
 
 # Prompt user if the following sample files should be downloaded:  Operator Flags, Silhouettes and a database file.
-while ! [[ $DL_OF =~ ^[YyNn]$ ]]; do printf "Download & install operator flags? [yn]: "; read DL_OF; done
-while ! [[ $DL_S  =~ ^[YyNn]$ ]]; do printf "Download & install silhouettes? [yn]: ";    read DL_S;  done
+while ! [[ $DL_OPF =~ ^[YyNn]$ ]]; do printf "Download & install operator flags? [yn]: "; read DL_OPF; done
+while ! [[ $DL_SIL =~ ^[YyNn]$ ]]; do printf "Download & install silhouettes? [yn]: ";    read DL_SIL; done
+while ! [[ $DL_PIC =~ ^[YyNn]$ ]]; do printf "Download & install pictures? [yn]: ";       read DL_PIC; done
 if [ ! -e "$DATABASEFILE" ] && ( [ $IGNOREFILES -eq 1 ] || [ ! -e "$SCRIPTDIR/$DATABASEFILENAME" ] ); then  # For safety reasons, prevent any possible existing database file from getting overwritten by an possibly older database file.  It is assumed that an existing database should not be overwritten.
    while ! [[ $DL_DB =~ ^[YyNn]$ ]]; do printf "Download & install a sample database? [yn]: "; read DL_DB; done
 fi
@@ -239,6 +263,41 @@ done
 printf "\nLocalization has been set to:  ${ORANGE_COLOR}%s${NO_COLOR}\n\n" "$LANG_COUNTRY"
 
 
+# Add option for user to enter longitude & latitude coordinates of the center of the VRS webpage map.
+printf "OPTIONAL: Enter longitude and latitude coordinates of the center of the map.\n"
+while ! [[ $ENTER_GPS =~ ^[YyNn]$ ]]; do printf "Do you wish to enter coordinates? [yn]: "; read ENTER_GPS; done
+if [[ $ENTER_GPS =~ [Yy] ]]; then
+   while ! [[ $COORDINATE_LON =~ ^\s*(([-+]?180(\.0*)?))\s*$ || $COORDINATE_LON =~ ^\s*([-+]?(1?[0-7]?|[89]?)?[0-9]{1}(\.[0-9]*)?)\s*$ ]]; do printf "  Enter Longitude [-180.0 to +180.0]: "; read COORDINATE_LON; done
+   COORDINATE_LON=${BASH_REMATCH[1]}
+   if [[ $COORDINATE_LON =~ \.$ ]];    then COORDINATE_LON="${COORDINATE_LON}0";  fi  # Any number ending with a decimal should have a '0' appended to it.
+   if ! [[ $COORDINATE_LON =~ \. ]];   then COORDINATE_LON="${COORDINATE_LON}.0"; fi  # Any number without a decimal should have a '.0' appended to it.
+   if [[ $COORDINATE_LON =~ ^[0-9] ]]; then COORDINATE_LON="+${COORDINATE_LON}";  fi  # Just for the sake of temporarily printing a '+' in front of a positive number to the screen.
+   while ! [[ $COORDINATE_LAT =~ ^\s*([-+]?90(\.0*)?)\s*$ || $COORDINATE_LAT =~ ^\s*([-+]?[0-8]?[0-9]{1}(\.[0-9]*)?)\s*$ ]]; do printf "  Enter Latitude  [ -90.0 to +90.0 ]: "; read COORDINATE_LAT; done
+   COORDINATE_LAT=${BASH_REMATCH[1]}
+   if [[ $COORDINATE_LAT =~ \.$ ]];    then COORDINATE_LAT="${COORDINATE_LAT}0";  fi  # Any number ending with a decimal should have a '0' appended to it.
+   if ! [[ $COORDINATE_LAT =~ \. ]];   then COORDINATE_LAT="${COORDINATE_LAT}.0"; fi  # Any number without a decimal should have a '.0' appended to it.
+   if [[ $COORDINATE_LAT =~ ^[0-9] ]]; then COORDINATE_LAT="+${COORDINATE_LAT}";  fi  # Just for the sake of temporarily printing a '+' in front of a positive number to the screen.
+   # The following is just for the purpose of lining up the decimal points when printed to the screen.
+   LONDEC="$(echo "$COORDINATE_LON" | grep -aob '\.' | grep -oE '[0-9]+')"
+   LATDEC="$(echo "$COORDINATE_LAT" | grep -aob '\.' | grep -oE '[0-9]+')"
+   if [[ $LONDEC -gt $LATDEC ]]; then
+      NUMSPACES="$(($LONDEC-$LATDEC))"
+      PADDEDSPACES=$(printf '%0.s ' $(seq 1 $NUMSPACES))
+      COORDINATE_LAT=$PADDEDSPACES$COORDINATE_LAT
+   elif [[ $LATDEC -gt $LONDEC ]]; then
+      NUMSPACES="$(($LATDEC-$LONDEC))"
+      PADDEDSPACES=$(printf '%0.s ' $(seq 1 $NUMSPACES))
+      COORDINATE_LON=$PADDEDSPACES$COORDINATE_LON
+   fi
+   printf "\n"
+   printf "Longitude set to: ${ORANGE_COLOR}%s${NO_COLOR}\n" "$COORDINATE_LON"
+   printf "Latitude set to:  ${ORANGE_COLOR}%s${NO_COLOR}\n" "$COORDINATE_LAT"
+   if [[ $COORDINATE_LON =~ ^[+]?(.+) ]]; then COORDINATE_LON=${BASH_REMATCH[1]}; fi  # Remove any '+' at the beginning because VRS does not accept the '+' symbol.
+   if [[ $COORDINATE_LAT =~ ^[+]?(.+) ]]; then COORDINATE_LAT=${BASH_REMATCH[1]}; fi  # Remove any '+' at the beginning because VRS does not accept the '+' symbol.
+fi
+printf "\n"
+
+
 # User only needs to press [Enter] key to start the VRS installation.
 printf "No more user input necessary.\n"
 printf "${GREEN_COLOR}Press [ENTER] to begin the VRS installation...${NO_COLOR}"; read -p ""
@@ -258,21 +317,9 @@ fi
 
 
 # Good time to make sure directories of interest are present (create if not already present).
-if [ ! -d "$VRSINSTALLDIRECTORY" ];          then mkdir -p "$VRSINSTALLDIRECTORY"; fi;          ERROREXIT 10 "Failed to create $VRSINSTALLDIRECTORY!"
-if [ ! -d "$SHAREDIRECTORY" ];               then mkdir -p "$SHAREDIRECTORY"; fi;               ERROREXIT 11 "Failed to create $SHAREDIRECTORY!"
-if [ ! -d "$EXTRASDIRECTORY" ];              then mkdir -p "$EXTRASDIRECTORY"; fi;              ERROREXIT 12 "Failed to create $EXTRASDIRECTORY!"
-if [ ! -d "$AUTORUNDIRECTORY" ];             then mkdir -p "$AUTORUNDIRECTORY"; fi;             ERROREXIT 13 "Failed to create $AUTORUNDIRECTORY!"
-if [ ! -d "$CUSTOMCONTENTPLUGINDIRECTORY" ]; then mkdir -p "$CUSTOMCONTENTPLUGINDIRECTORY"; fi; ERROREXIT 14 "Failed to create $CUSTOMCONTENTPLUGINDIRECTORY!"
-if [ ! -d "$CUSTOMINJECTEDFILESDIRECTORY" ]; then mkdir -p "$CUSTOMINJECTEDFILESDIRECTORY"; fi; ERROREXIT 15 "Failed to create $CUSTOMINJECTEDFILESDIRECTORY!"
-if [ ! -d "$CUSTOMWEBFILESDIRECTORY" ];      then mkdir -p "$CUSTOMWEBFILESDIRECTORY"; fi;      ERROREXIT 16 "Failed to create $CUSTOMWEBFILESDIRECTORY!"
-if [ ! -d "$DATABASEMAINDIRECTORY" ];        then mkdir -p "$DATABASEMAINDIRECTORY"; fi;        ERROREXIT 17 "Failed to create $DATABASEMAINDIRECTORY!"
-if [ ! -d "$DATABASEDIRECTORY" ];            then mkdir -p "$DATABASEDIRECTORY"; fi;            ERROREXIT 18 "Failed to create $DATABASEDIRECTORY!"
-if [ ! -d "$DATABASEBACKUPDIRECTORY" ];      then mkdir -p "$DATABASEBACKUPDIRECTORY"; fi;      ERROREXIT 19 "Failed to create $DATABASEBACKUPDIRECTORY!"
-if [ ! -d "$OPFLAGSDIRECTORY" ];             then mkdir -p "$OPFLAGSDIRECTORY"; fi;             ERROREXIT 20 "Failed to create $OPFLAGSDIRECTORY!"
-if [ ! -d "$PICTURESDIRECTORY" ];            then mkdir -p "$PICTURESDIRECTORY"; fi;            ERROREXIT 21 "Failed to create $PICTURESDIRECTORY!"
-if [ ! -d "$SILHOUETTESDIRECTORY" ];         then mkdir -p "$SILHOUETTESDIRECTORY"; fi;         ERROREXIT 22 "Failed to create $SILHOUETTESDIRECTORY!"
-if [ ! -d "$TILECACHEDIRECTORY" ];           then mkdir -p "$TILECACHEDIRECTORY"; fi;           ERROREXIT 23 "Failed to create $TILECACHEDIRECTORY!"
-if [ ! -d "$TEMPDIR" ];                      then mkdir -p "$TEMPDIR"; fi;                      ERROREXIT 24 "Failed to create $TEMPDIR!"
+for NEWDIRECTORY in "${VRSDIRECTORIES[@]}"; do
+   if [ ! -d "$NEWDIRECTORY" ]; then mkdir -p "$NEWDIRECTORY"; fi; ERROREXIT 10 "Failed to create $NEWDIRECTORY!"
+done
 
 
 # Download/extract files from the VRS website to install VRS and the VRS plugins.
@@ -280,14 +327,14 @@ for URL in "${VRSFILES[@]}"; do
    REGEX="\/([^/]*)$"
    [[ $URL =~ $REGEX ]]
    FILENAME=${BASH_REMATCH[1]}
-   if [ ! -f "$TEMPDIR/$FILENAME" ]; then wget -P "$TEMPDIR" "$URL"; fi;  ERROREXIT 25 "Failed to download $FILENAME!"
-   tar -xf "$TEMPDIR/$FILENAME" -C "$VRSINSTALLDIRECTORY";                ERROREXIT 26 "Failed to untar $FILENAME!"
+   if [ ! -f "$TEMPDIR/$FILENAME" ]; then wget -P "$TEMPDIR" "$URL"; fi;  ERROREXIT 11 "Failed to download $FILENAME!"
+   tar -xf "$TEMPDIR/$FILENAME" -C "$VRSINSTALLDIRECTORY";                ERROREXIT 12 "Failed to untar $FILENAME!"
 done
 
 
-# Function to download & extract addon files (operator flags, silhouettes, database file).
+# Function to download & extract addon files (operator flags, silhouettes, pictures, database file).
 function UNPACK {
-   local ID=$1
+   local ID="$1"
    local URL="$2"
    local DIRECTORYPATH="$3"
 
@@ -299,16 +346,16 @@ function UNPACK {
    if [ $? -ne 0 ]; then printf "Failed to download %s!\n" "$FILENAME"; printf "${RED_COLOR}Press [ENTER] to continue with the VRS installation...${NO_COLOR}"; read -p ""
    else
       if [ $ID == "OperatorFlagsFolder" ]; then
-         unzip -j -o -qq "$TEMPDIR/$FILENAME" "*.bmp" -d "$DIRECTORYPATH";  ERROREXIT 27 "Failed to unzip $FILENAME!"  # The "*.bmp" may need to be changed if a different compressed file is used.
+         unzip -j -o -qq "$TEMPDIR/$FILENAME" "[A-Z][A-Z][A-Z].bmp" -d "$DIRECTORYPATH";  ERROREXIT 13 "Failed to unzip $FILENAME!"  # The "*.bmp" may need to be changed if a different compressed file is used.
       fi
       if [ $ID == "SilhouettesFolder" ]; then
-         unzip -j -o -qq "$TEMPDIR/$FILENAME" "*.bmp" -d "$DIRECTORYPATH";  ERROREXIT 28 "Failed to unzip $FILENAME!"  # The "*.bmp" may need to be changed if a different compressed file is used.
+         unzip -j -o -qq "$TEMPDIR/$FILENAME" "*.bmp" -d "$DIRECTORYPATH";  ERROREXIT 14 "Failed to unzip $FILENAME!"  # The "*.bmp" may need to be changed if a different compressed file is used.
+      fi
+      if [ $ID == "Pictures" ]; then
+         unzip -j -o -qq "$TEMPDIR/$FILENAME" "*.*" -d "$DIRECTORYPATH";    ERROREXIT 15 "Failed to unzip $FILENAME!"
       fi
       if [ $ID == "DatabaseFileName" ]; then
-         local DBZIPNAME="BaseStation.sqb"  # Change this value to whatever name is used for the database file in the zip file.
-         printf "Unzipping large '$DATABASEFILENAME' file....."
-         unzip -j -o -qq "$TEMPDIR/$FILENAME" "*$DBZIPNAME" -d "$TEMPDIR"; ERROREXIT 29 "Failed to unzip $FILENAME!"  # The "BaseStation.sqb" may need to be changed if a different compressed file is used.
-         mv "$TEMPDIR/$DBZIPNAME" "$DIRECTORYPATH/$DATABASEFILENAME";      ERROREXIT 30 "Failed to move $FILENAME!"   # Only purpose of this command is the event the database file in the zip file is not "BaseStation.sqb".
+         mv "$TEMPDIR/BaseStation.sqb" "$DIRECTORYPATH/$DATABASEFILENAME";  ERROREXIT 16 "Failed to move $FILENAME!"   # Be sure the downloaded file's name is actually "BaseStation.sqb".
          printf "\n"
       fi
    fi
@@ -316,30 +363,33 @@ function UNPACK {
 
 
 # Download & extract addon files (operator flags, silhouettes, a sample database file).
-if [[ $DL_OF =~ [Yy] ]]; then UNPACK "OperatorFlagsFolder" "$OPFLAGSURL"      "$OPFLAGSDIRECTORY";     fi
-if [[ $DL_S  =~ [Yy] ]]; then UNPACK "SilhouettesFolder"   "$SILHOUETTESURL"  "$SILHOUETTESDIRECTORY"; fi
-if [[ $DL_DB =~ [Yy] ]]; then UNPACK "DatabaseFileName"    "$DATABASEURL"     "$DATABASEDIRECTORY";    fi
+if [[ $DL_OPF =~ [Yy] ]]; then UNPACK "OperatorFlagsFolder" "$OPFLAGSURL"      "$OPFLAGSDIRECTORY";     fi
+if [[ $DL_SIL =~ [Yy] ]]; then UNPACK "SilhouettesFolder"   "$SILHOUETTESURL"  "$SILHOUETTESDIRECTORY"; fi
+if [[ $DL_PIC =~ [Yy] ]]; then UNPACK "Pictures"            "$PICTURESURL"     "$PICTURESDIRECTORY";    fi
+if [[ $DL_DB  =~ [Yy] ]]; then UNPACK "DatabaseFileName"    "$DATABASEURL"     "$DATABASEDIRECTORY";    fi
 
 
 # Create an initial "Configuration.xml" file (if not already existing).
 if ! [ -f "$CONFIGFILE" ]; then
-   touch "$CONFIGFILE";                                                                                                                            ERROREXIT 31 "Failed to create $CONFIGFILE!"
-   echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>"                                                                              > "$CONFIGFILE"; ERROREXIT 32 "Failed to edit $CONFIGFILE!"
-   echo "<Configuration xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">" >> "$CONFIGFILE"; ERROREXIT 33 "Failed to edit $CONFIGFILE!"
-   echo "  <BaseStationSettings>"                                                                                                >> "$CONFIGFILE"; ERROREXIT 34 "Failed to edit $CONFIGFILE!"
-   echo "  </BaseStationSettings>"                                                                                               >> "$CONFIGFILE"; ERROREXIT 35 "Failed to edit $CONFIGFILE!"
-   echo "</Configuration>"                                                                                                       >> "$CONFIGFILE"; ERROREXIT 36 "Failed to edit $CONFIGFILE!"
+   touch "$CONFIGFILE";                                                                                                                            ERROREXIT 17 "Failed to create $CONFIGFILE!"
+   echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>"                                                                              > "$CONFIGFILE"; ERROREXIT 18 "Failed to edit $CONFIGFILE!"
+   echo "<Configuration xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">" >> "$CONFIGFILE"; ERROREXIT 19 "Failed to edit $CONFIGFILE!"
+   echo "  <BaseStationSettings>"                                                                                                >> "$CONFIGFILE"; ERROREXIT 20 "Failed to edit $CONFIGFILE!"
+   echo "  </BaseStationSettings>"                                                                                               >> "$CONFIGFILE"; ERROREXIT 21 "Failed to edit $CONFIGFILE!"
+   echo "  <GoogleMapSettings>"                                                                                                  >> "$CONFIGFILE"; ERROREXIT 22 "Failed to edit $CONFIGFILE!"
+   echo "  </GoogleMapSettings>"                                                                                                 >> "$CONFIGFILE"; ERROREXIT 23 "Failed to edit $CONFIGFILE!"
+   echo "</Configuration>"                                                                                                       >> "$CONFIGFILE"; ERROREXIT 24 "Failed to edit $CONFIGFILE!"
 fi
 
 
 # Function to fill in the directory/file paths in the initial "Configuration.xml" file created above (operator flags, silhouettes, database file, pictures).
 function EDITCONFIGFILE {
-   local ID=$1
+   local ID="$1"
    local DIRECTORYPATH="$2"
-   if grep -q "<$ID>.*<\/$ID>" "$CONFIGFILE"; then  # If ID already existing, modify its value.
-      sed -i "s|<$ID>.*<\/$ID>|<$ID>$DIRECTORYPATH<\/$ID>|" "$CONFIGFILE";                                    ERROREXIT 37 "Failed to edit $CONFIGFILE!"
+   if grep -q "<$ID>.*</$ID>" "$CONFIGFILE"; then  # If ID already existing, modify its value.
+      sed -i "s|<$ID>.*</$ID>|<$ID>$DIRECTORYPATH</$ID>|" "$CONFIGFILE";                                     ERROREXIT 25 "Failed to edit $CONFIGFILE!"
    else  # If ID not already existing, create it with the appropriate value.
-      sed -i "s|<BaseStationSettings>|<BaseStationSettings>\n    <$ID>$DIRECTORYPATH<\/$ID>|" "$CONFIGFILE";  ERROREXIT 38 "Failed to edit $CONFIGFILE!"
+      sed -i "s|<BaseStationSettings>|<BaseStationSettings>\n    <$ID>$DIRECTORYPATH</$ID>|" "$CONFIGFILE";  ERROREXIT 26 "Failed to edit $CONFIGFILE!"
    fi
 }
 
@@ -351,49 +401,66 @@ EDITCONFIGFILE "OperatorFlagsFolder" "$OPFLAGSDIRECTORY"
 EDITCONFIGFILE "DatabaseFileName"    "$DATABASEFILE"
 
 
+# If user has entered location coordinates then set these coordinate values in the "Configuration.xml" file.
+if [[ $ENTER_GPS =~ [Yy] ]]; then
+   # Set longitude.
+   if grep -q "<InitialMapLongitude>.*</InitialMapLongitude>" "$CONFIGFILE"; then  # If InitialMapLongitude already existing, modify its value.
+      sed -i "s|<InitialMapLongitude>.*</InitialMapLongitude>|<InitialMapLongitude>$COORDINATE_LON</InitialMapLongitude>|" "$CONFIGFILE"; ERROREXIT 27 "Failed to edit $CONFIGFILE!"
+   else  # If InitialMapLongitude not already existing, create it with the appropriate value.
+      sed -i "s|<GoogleMapSettings>|<GoogleMapSettings>\n    <InitialMapLongitude>$COORDINATE_LON</InitialMapLongitude>|" "$CONFIGFILE";  ERROREXIT 28 "Failed to edit $CONFIGFILE!"
+   fi
+   # Set latitude.
+   if grep -q "<InitialMapLatitude>.*</InitialMapLatitude>" "$CONFIGFILE"; then  # If InitialMapLatitude already existing, modify its value.
+      sed -i "s|<InitialMapLatitude>.*</InitialMapLatitude>|<InitialMapLatitude>$COORDINATE_LAT</InitialMapLatitude>|" "$CONFIGFILE";     ERROREXIT 29 "Failed to edit $CONFIGFILE!"
+   else  # If InitialMapLatitude not already existing, create it with the appropriate value.
+      sed -i "s|<GoogleMapSettings>|<GoogleMapSettings>\n    <InitialMapLatitude>$COORDINATE_LAT</InitialMapLatitude>|" "$CONFIGFILE";    ERROREXIT 30 "Failed to edit $CONFIGFILE!"
+   fi
+fi
+
+
 # Create a file to allow for a different port to be used by the VRS.
-touch "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME";                                                                                                                                ERROREXIT 39 "Failed to create $INSTALLERCONFIGFILENAME!"
-echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"                                                                                 > "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 40 "Failed to edit $INSTALLERCONFIGFILENAME!"
-echo "<InstallerSettings xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">" >> "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 41 "Failed to edit $INSTALLERCONFIGFILENAME!"
-echo "    <WebServerPort>$PORT</WebServerPort>"                                                                                   >> "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 42 "Failed to edit $INSTALLERCONFIGFILENAME!"  # The custom port is written in this line.
-echo "</InstallerSettings>"                                                                                                       >> "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 43 "Failed to edit $INSTALLERCONFIGFILENAME!"
+touch "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME";                                                                                                                                ERROREXIT 31 "Failed to create $INSTALLERCONFIGFILENAME!"
+echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"                                                                                 > "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 32 "Failed to edit $INSTALLERCONFIGFILENAME!"
+echo "<InstallerSettings xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">" >> "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 33 "Failed to edit $INSTALLERCONFIGFILENAME!"
+echo "    <WebServerPort>$PORT</WebServerPort>"                                                                                   >> "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 34 "Failed to edit $INSTALLERCONFIGFILENAME!"  # The custom port is written in this line.
+echo "</InstallerSettings>"                                                                                                       >> "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME"; ERROREXIT 35 "Failed to edit $INSTALLERCONFIGFILENAME!"
 
 
 # Create an HTML file and an accompanying readme file to create messages that may appear at the top of the website.
 if ! [ -f "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME" ]; then
-   touch "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME";                                                      ERROREXIT 44 "Failed to create $ANNOUNCEMENTFILENAME!"
-   echo '<!--'                                              > "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 45 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "<div style=\""                                    >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 46 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "   color: red;"                                   >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 47 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "   text-align: center;"                           >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 48 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "   font-weight: bold;"                            >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 49 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "   font-size: 1em"                                >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 50 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "\">"                                              >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 51 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "This text will be at the top of the VRS website!" >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 52 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "</div>"                                           >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 53 "Failed to edit $ANNOUNCEMENTFILENAME!"
-   echo "-->"                                              >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 54 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   touch "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME";                                                      ERROREXIT 36 "Failed to create $ANNOUNCEMENTFILENAME!"
+   echo '<!--'                                              > "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 37 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "<div style=\""                                    >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 38 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "   color: red;"                                   >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 39 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "   text-align: center;"                           >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 40 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "   font-weight: bold;"                            >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 41 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "   font-size: 1em"                                >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 42 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "\">"                                              >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 43 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "This text will be at the top of the VRS website!" >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 44 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "</div>"                                           >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 45 "Failed to edit $ANNOUNCEMENTFILENAME!"
+   echo "-->"                                              >> "$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"; ERROREXIT 46 "Failed to edit $ANNOUNCEMENTFILENAME!"
 fi
 if ! [ -f "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME" ]; then
-   touch "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";                                                                                                         ERROREXIT 55 "Failed to create $READMEFILENAME!"
-   echo "Any text in the \"$ANNOUNCEMENTFILENAME\" file will be placed at the very top of the VRS web page."  > "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 56 "Failed to edit $READMEFILENAME!"
-   echo "The text could be used to provide the website visitors an announcement."                            >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 57 "Failed to edit $READMEFILENAME!"
-   echo "This text will be at the top of both the desktop and mobile version of the website."                >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 58 "Failed to edit $READMEFILENAME!"
-   echo ""                                                                                                   >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 59 "Failed to edit $READMEFILENAME!"
-   echo "For example, the following text could be placed at the top:"                                        >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 60 "Failed to edit $READMEFILENAME!"
-   echo "\"Server will perform a reboot at 12:00am (UTC).\""                                                 >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 61 "Failed to edit $READMEFILENAME!"
-   echo ""                                                                                                   >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 62 "Failed to edit $READMEFILENAME!"
-   echo "Because this is an HTML file, standard HTML tags may be used with the text."                        >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 63 "Failed to edit $READMEFILENAME!"
-   echo "For example, the following usage of HTML tags will help enhance this text:"                         >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 64 "Failed to edit $READMEFILENAME!"
-   echo "<b><font color=\"red\">This text is both bold and in a red color!</font></b>"                       >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 65 "Failed to edit $READMEFILENAME!"
+   touch "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";                                                                                                         ERROREXIT 47 "Failed to create $READMEFILENAME!"
+   echo "Any text in the \"$ANNOUNCEMENTFILENAME\" file will be placed at the very top of the VRS web page."  > "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 48 "Failed to edit $READMEFILENAME!"
+   echo "The text could be used to provide the website visitors an announcement."                            >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 49 "Failed to edit $READMEFILENAME!"
+   echo "This text will be at the top of both the desktop and mobile version of the website."                >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 50 "Failed to edit $READMEFILENAME!"
+   echo ""                                                                                                   >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 51 "Failed to edit $READMEFILENAME!"
+   echo "For example, the following text could be placed at the top:"                                        >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 52 "Failed to edit $READMEFILENAME!"
+   echo "\"Server will perform a reboot at 12:00am (UTC).\""                                                 >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 53 "Failed to edit $READMEFILENAME!"
+   echo ""                                                                                                   >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 54 "Failed to edit $READMEFILENAME!"
+   echo "Because this is an HTML file, standard HTML tags may be used with the text."                        >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 55 "Failed to edit $READMEFILENAME!"
+   echo "For example, the following usage of HTML tags will help enhance this text:"                         >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 56 "Failed to edit $READMEFILENAME!"
+   echo "<b><font color=\"red\">This text is both bold and in a red color!</font></b>"                       >> "$CUSTOMINJECTEDFILESDIRECTORY/$READMEFILENAME";  ERROREXIT 57 "Failed to edit $READMEFILENAME!"
 fi
 
 
 # Enable & configure the Custom Content Plugin to find the ANNOUNCEMENTFILENAME file to inject into 'desktop.html' and 'mobile.html' VRS files.
 # Enable & configure the Custom Content Plugin to look in the CUSTOMWEBFILESDIRECTORY directory for any custom web files.
 INJECTIONFILEPATHNAME="$CUSTOMINJECTEDFILESDIRECTORY/$ANNOUNCEMENTFILENAME"
-INJECTIONFILE="${INJECTIONFILEPATHNAME//\//%2f}";           ERROREXIT 66 "Failed to create the $INJECTIONFILE variable!"    # Replace '/' with '%2f' HTML character code.
-INJECTIONFOLDER="${CUSTOMINJECTEDFILESDIRECTORY//\//%2f}";  ERROREXIT 67 "Failed to create the $INJECTIONFOLDER variable!"  # Replace '/' with '%2f' HTML character code.
-SITEROOTFOLDER="${CUSTOMWEBFILESDIRECTORY//\//%2f}";        ERROREXIT 68 "Failed to create the $SITEROOTFOLDER variable!"   # Replace '/' with '%2f' HTML character code.
+INJECTIONFILE="${INJECTIONFILEPATHNAME//\//%2f}";           ERROREXIT 58 "Failed to create the $INJECTIONFILE variable!"    # Replace '/' with '%2f' HTML character code.
+INJECTIONFOLDER="${CUSTOMINJECTEDFILESDIRECTORY//\//%2f}";  ERROREXIT 59 "Failed to create the $INJECTIONFOLDER variable!"  # Replace '/' with '%2f' HTML character code.
+SITEROOTFOLDER="${CUSTOMWEBFILESDIRECTORY//\//%2f}";        ERROREXIT 60 "Failed to create the $SITEROOTFOLDER variable!"   # Replace '/' with '%2f' HTML character code.
 CUSTOMCONTENTTEMPLATE="\
 VirtualRadar.Plugin.CustomContent.Options=%3c%3fxml+version%3d%221.0%22%3f%3e%0a\
 %3cOptions+xmlns%3axsd%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXMLSchema%22+xmlns%3axsi%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXMLSchema-instance%22%3e%0a\
@@ -418,19 +485,19 @@ VirtualRadar.Plugin.CustomContent.Options=%3c%3fxml+version%3d%221.0%22%3f%3e%0a
 ++%3cDefaultInjectionFilesFolder%3e${INJECTIONFOLDER}%3c%2fDefaultInjectionFilesFolder%3e%0a\
 ++%3cSiteRootFolder%3e${SITEROOTFOLDER}%3c%2fSiteRootFolder%3e%0a\
 ++%3cResourceImagesFolder+%2f%3e%0a\
-%3c%2fOptions%3e";  ERROREXIT 69 "Failed to create the CUSTOMCONTENTTEMPLATE variable!"
+%3c%2fOptions%3e";  ERROREXIT 61 "Failed to create the CUSTOMCONTENTTEMPLATE variable!"
 if ! [ -e "$PLUGINSCONFIGFILE" ]; then
-   touch "$PLUGINSCONFIGFILE";  ERROREXIT 70 "Failed to create $PLUGINSCONFIGFILE!"
+   touch "$PLUGINSCONFIGFILE";  ERROREXIT 62 "Failed to create $PLUGINSCONFIGFILE!"
 fi
 if ! grep -q "VirtualRadar.Plugin.CustomContent.Options" "$PLUGINSCONFIGFILE"; then  # If no CustomContent setting is present at all, then create the setting from scratch.
-   echo -e "$CUSTOMCONTENTTEMPLATE" >> "$PLUGINSCONFIGFILE";  ERROREXIT 71 "Failed to edit $PLUGINSCONFIGFILE!"
+   echo -e "$CUSTOMCONTENTTEMPLATE" >> "$PLUGINSCONFIGFILE";  ERROREXIT 63 "Failed to edit $PLUGINSCONFIGFILE!"
 else
-   sed -i -r "s/VirtualRadar\.Plugin\.CustomContent\.Options.*/$CUSTOMCONTENTTEMPLATE/" "$PLUGINSCONFIGFILE"; ERROREXIT 72 "Failed to edit $PLUGINSCONFIGFILE!"
+   sed -i -r "s/VirtualRadar\.Plugin\.CustomContent\.Options.*/$CUSTOMCONTENTTEMPLATE/" "$PLUGINSCONFIGFILE"; ERROREXIT 64 "Failed to edit $PLUGINSCONFIGFILE!"
 fi
 
 
 # Configure the Tile Server Cache Plugin to use the TILECACHEDIRECTORY directory.
-TILECACHEPATH="${TILECACHEDIRECTORY//\//%2f}"; ERROREXIT 73 "Failed to create the $TILECACHEPATH variable!"  # Replace '/' with '%2f' HTML character code.
+TILECACHEPATH="${TILECACHEDIRECTORY//\//%2f}"; ERROREXIT 65 "Failed to create the $TILECACHEPATH variable!"  # Replace '/' with '%2f' HTML character code.
 TILECACHETEMPLATE="\
 VirtualRadar.Plugin.TileServerCache.Options=%7b%22DataVersion%22%3a0%2c\
 %22IsPluginEnabled%22%3afalse%2c\
@@ -439,46 +506,46 @@ VirtualRadar.Plugin.TileServerCache.Options=%7b%22DataVersion%22%3a0%2c\
 %22UseDefaultCacheFolder%22%3afalse%2c\
 %22TileServerTimeoutSeconds%22%3a30%2c\
 %22CacheMapTiles%22%3atrue%2c\
-%22CacheLayerTiles%22%3atrue%7d";  ERROREXIT 74 "Failed to create the TILECACHETEMPLATE variable!"
+%22CacheLayerTiles%22%3atrue%7d";  ERROREXIT 66 "Failed to create the TILECACHETEMPLATE variable!"
 if ! [ -e "$PLUGINSCONFIGFILE" ]; then
-   touch "$PLUGINSCONFIGFILE";  ERROREXIT 75 "Failed to create $PLUGINSCONFIGFILE!"
+   touch "$PLUGINSCONFIGFILE";  ERROREXIT 67 "Failed to create $PLUGINSCONFIGFILE!"
 fi
 if ! grep -q "VirtualRadar.Plugin.TileServerCache.Options" "$PLUGINSCONFIGFILE"; then  # If no Tile Server Cache Plugin setting is present at all, then create the setting from scratch.
-   echo -e "$TILECACHETEMPLATE" >> "$PLUGINSCONFIGFILE";  ERROREXIT 76 "Failed to edit $PLUGINSCONFIGFILE!"
+   echo -e "$TILECACHETEMPLATE" >> "$PLUGINSCONFIGFILE";  ERROREXIT 68 "Failed to edit $PLUGINSCONFIGFILE!"
 else
-   sed -i -r "s/VirtualRadar\.Plugin\.TileServerCache\.Options.*/$TILECACHETEMPLATE/" "$PLUGINSCONFIGFILE"; ERROREXIT 77 "Failed to edit $PLUGINSCONFIGFILE!"
+   sed -i -r "s/VirtualRadar\.Plugin\.TileServerCache\.Options.*/$TILECACHETEMPLATE/" "$PLUGINSCONFIGFILE"; ERROREXIT 69 "Failed to edit $PLUGINSCONFIGFILE!"
 fi
 
 
 # Change global localization from 'en-GB' to a custom default localization (for example: 'en-US') defined earlier in the script.
-cp "$VRSINSTALLDIRECTORY/Web/desktop.html"       "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 78 "Failed to copy $VRSINSTALLDIRECTORY/Web/desktop.html!"
-cp "$VRSINSTALLDIRECTORY/Web/desktopReport.html" "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 79 "Failed to copy $VRSINSTALLDIRECTORY/Web/desktopReport.html!"
-cp "$VRSINSTALLDIRECTORY/Web/mobile.html"        "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 80 "Failed to copy $VRSINSTALLDIRECTORY/Web//mobile.html!"
-cp "$VRSINSTALLDIRECTORY/Web/mobileReport.html"  "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 81 "Failed to copy $VRSINSTALLDIRECTORY/Web/mobileReport.html!"
-cp "$VRSINSTALLDIRECTORY/Web/fsx.html"           "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 82 "Failed to copy $VRSINSTALLDIRECTORY/Web/fsx.html!"
-sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/desktop.html";        ERROREXIT 83 "Failed to edit $CUSTOMWEBFILESDIRECTORY/desktop.html!"
-sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/desktopReport.html";  ERROREXIT 84 "Failed to edit $CUSTOMWEBFILESDIRECTORY/desktopReport.html!"
-sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/mobile.html";         ERROREXIT 85 "Failed to edit $CUSTOMWEBFILESDIRECTORY/mobile.html!"
-sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/mobileReport.html";   ERROREXIT 86 "Failed to edit $CUSTOMWEBFILESDIRECTORY/mobileReport.html!"
-sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/fsx.html";            ERROREXIT 87 "Failed to edit $CUSTOMWEBFILESDIRECTORY/fsx.html!"
+cp "$VRSINSTALLDIRECTORY/Web/desktop.html"       "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 70 "Failed to copy $VRSINSTALLDIRECTORY/Web/desktop.html!"
+cp "$VRSINSTALLDIRECTORY/Web/desktopReport.html" "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 71 "Failed to copy $VRSINSTALLDIRECTORY/Web/desktopReport.html!"
+cp "$VRSINSTALLDIRECTORY/Web/mobile.html"        "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 72 "Failed to copy $VRSINSTALLDIRECTORY/Web//mobile.html!"
+cp "$VRSINSTALLDIRECTORY/Web/mobileReport.html"  "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 73 "Failed to copy $VRSINSTALLDIRECTORY/Web/mobileReport.html!"
+cp "$VRSINSTALLDIRECTORY/Web/fsx.html"           "$CUSTOMWEBFILESDIRECTORY";            ERROREXIT 74 "Failed to copy $VRSINSTALLDIRECTORY/Web/fsx.html!"
+sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/desktop.html";        ERROREXIT 75 "Failed to edit $CUSTOMWEBFILESDIRECTORY/desktop.html!"
+sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/desktopReport.html";  ERROREXIT 76 "Failed to edit $CUSTOMWEBFILESDIRECTORY/desktopReport.html!"
+sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/mobile.html";         ERROREXIT 77 "Failed to edit $CUSTOMWEBFILESDIRECTORY/mobile.html!"
+sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/mobileReport.html";   ERROREXIT 78 "Failed to edit $CUSTOMWEBFILESDIRECTORY/mobileReport.html!"
+sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/fsx.html";            ERROREXIT 79 "Failed to edit $CUSTOMWEBFILESDIRECTORY/fsx.html!"
 
 
 # Create a script to help backup the database file. (A cron job can later be set to automatically run the script at any time interval.)
-touch "$DATABASEBACKUPSCRIPT";                                                                     ERROREXIT 88 "Failed to create $DATABASEBACKUPSCRIPT!"
-echo "#!/bin/bash"                                                     > "$DATABASEBACKUPSCRIPT";  ERROREXIT 89 "Failed to edit $DATABASEBACKUPSCRIPT!"
-echo "# Use this script to routinely backup the VRS database file.\n" >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 90 "Failed to edit $DATABASEBACKUPSCRIPT!"
-echo "mkdir -p \"$DATABASEBACKUPDIRECTORY\""                          >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 91 "Failed to edit $DATABASEBACKUPSCRIPT!"
-echo "cp \"$DATABASEFILE\" \"$DATABASEBACKUPFILE\""                   >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 92 "Failed to edit $DATABASEBACKUPSCRIPT!"
-echo "exit"                                                           >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 93 "Failed to edit $DATABASEBACKUPSCRIPT!"
+touch "$DATABASEBACKUPSCRIPT";                                                                     ERROREXIT 80 "Failed to create $DATABASEBACKUPSCRIPT!"
+echo "#!/bin/bash"                                                     > "$DATABASEBACKUPSCRIPT";  ERROREXIT 81 "Failed to edit $DATABASEBACKUPSCRIPT!"
+echo "# Use this script to routinely backup the VRS database file.\n" >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 82 "Failed to edit $DATABASEBACKUPSCRIPT!"
+echo "mkdir -p \"$DATABASEBACKUPDIRECTORY\""                          >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 83 "Failed to edit $DATABASEBACKUPSCRIPT!"
+echo "cp \"$DATABASEFILE\" \"$DATABASEBACKUPFILE\""                   >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 84 "Failed to edit $DATABASEBACKUPSCRIPT!"
+echo "exit"                                                           >> "$DATABASEBACKUPSCRIPT";  ERROREXIT 85 "Failed to edit $DATABASEBACKUPSCRIPT!"
 
 
 # Create a script to use if desiring to autorun VRS.
-touch "$AUTORUNSCRIPT";                                                            ERROREXIT 94 "Failed to create $AUTORUNSCRIPT!"
-echo "#!/bin/bash"                                            > "$AUTORUNSCRIPT";  ERROREXIT 95 "Failed to edit $AUTORUNSCRIPT!"
-echo "# Use this script in a cron job to autostart VRS."     >> "$AUTORUNSCRIPT";  ERROREXIT 96 "Failed to edit $AUTORUNSCRIPT!"
-echo "mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui" >> "$AUTORUNSCRIPT";  ERROREXIT 97 "Failed to edit $AUTORUNSCRIPT!"
-echo "exit"                                                  >> "$AUTORUNSCRIPT";  ERROREXIT 98 "Failed to edit $AUTORUNSCRIPT!"
-chmod +x "$AUTORUNSCRIPT";                                                         ERROREXIT 99 "The 'chmod' command failed on $AUTORUNSCRIPT!"
+touch "$AUTORUNSCRIPT";                                                            ERROREXIT 86 "Failed to create $AUTORUNSCRIPT!"
+echo "#!/bin/bash"                                            > "$AUTORUNSCRIPT";  ERROREXIT 87 "Failed to edit $AUTORUNSCRIPT!"
+echo "# Use this script in a cron job to autostart VRS."     >> "$AUTORUNSCRIPT";  ERROREXIT 88 "Failed to edit $AUTORUNSCRIPT!"
+echo "mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui" >> "$AUTORUNSCRIPT";  ERROREXIT 89 "Failed to edit $AUTORUNSCRIPT!"
+echo "exit"                                                  >> "$AUTORUNSCRIPT";  ERROREXIT 90 "Failed to edit $AUTORUNSCRIPT!"
+chmod +x "$AUTORUNSCRIPT";                                                         ERROREXIT 91 "The 'chmod' command failed on $AUTORUNSCRIPT!"
 
 
 # Function to copy any custom files user may have from a previous installation of VRS.
@@ -504,18 +571,18 @@ fi
 
 
 # Create a universal command to start VRS.
-if ! [ -f "$STARTCOMMAND" ]; then sudo touch "$STARTCOMMAND"; fi;                    ERROREXIT 100 "Failed to create $STARTCOMMAND!"
-sudo chmod 666 "$STARTCOMMAND";                                                      ERROREXIT 101 "The 'chmod' command failed on  $STARTCOMMAND!"
-echo "#!/bin/bash"                                               > "$STARTCOMMAND";  ERROREXIT 102 "Failed to edit $STARTCOMMAND!"
-echo "# Use this script as a global command to start VRS."      >> "$STARTCOMMAND";  ERROREXIT 103 "Failed to edit $STARTCOMMAND!"
-echo "if [[ \$DISPLAY == \"\" ]]; then"                         >> "$STARTCOMMAND";  ERROREXIT 104 "Failed to edit $STARTCOMMAND!"
-echo "   mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui" >> "$STARTCOMMAND";  ERROREXIT 105 "Failed to edit $STARTCOMMAND!"
-echo "else"                                                     >> "$STARTCOMMAND";  ERROREXIT 106 "Failed to edit $STARTCOMMAND!"
-echo "   mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" \$1"    >> "$STARTCOMMAND";  ERROREXIT 107 "Failed to edit $STARTCOMMAND!"
-echo "fi"                                                       >> "$STARTCOMMAND";  ERROREXIT 108 "Failed to edit $STARTCOMMAND!"
-echo "exit"                                                     >> "$STARTCOMMAND";  ERROREXIT 109 "Failed to edit $STARTCOMMAND!"
-sudo chmod 755 "$STARTCOMMAND";                                                      ERROREXIT 110 "The 'chmod' command failed on  $STARTCOMMAND!"
-sudo chown root:root "$STARTCOMMAND";                                                ERROREXIT 111 "The 'chown' command failed on  $STARTCOMMAND!"
+if ! [ -f "$STARTCOMMAND" ]; then sudo touch "$STARTCOMMAND"; fi;                    ERROREXIT 92  "Failed to create $STARTCOMMAND!"
+sudo chmod 666 "$STARTCOMMAND";                                                      ERROREXIT 93  "The 'chmod' command failed on  $STARTCOMMAND!"
+echo "#!/bin/bash"                                               > "$STARTCOMMAND";  ERROREXIT 94  "Failed to edit $STARTCOMMAND!"
+echo "# Use this script as a global command to start VRS."      >> "$STARTCOMMAND";  ERROREXIT 95  "Failed to edit $STARTCOMMAND!"
+echo "if [[ \$DISPLAY == \"\" ]]; then"                         >> "$STARTCOMMAND";  ERROREXIT 96  "Failed to edit $STARTCOMMAND!"
+echo "   mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui" >> "$STARTCOMMAND";  ERROREXIT 97  "Failed to edit $STARTCOMMAND!"
+echo "else"                                                     >> "$STARTCOMMAND";  ERROREXIT 98  "Failed to edit $STARTCOMMAND!"
+echo "   mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" \$1"    >> "$STARTCOMMAND";  ERROREXIT 99  "Failed to edit $STARTCOMMAND!"
+echo "fi"                                                       >> "$STARTCOMMAND";  ERROREXIT 100 "Failed to edit $STARTCOMMAND!"
+echo "exit"                                                     >> "$STARTCOMMAND";  ERROREXIT 101 "Failed to edit $STARTCOMMAND!"
+sudo chmod 755 "$STARTCOMMAND";                                                      ERROREXIT 102 "The 'chmod' command failed on  $STARTCOMMAND!"
+sudo chown root:root "$STARTCOMMAND";                                                ERROREXIT 103 "The 'chown' command failed on  $STARTCOMMAND!"
 
 
 ######################################################################################################
