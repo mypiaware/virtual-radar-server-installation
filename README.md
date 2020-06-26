@@ -10,13 +10,13 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS (previously known as Raspbian) Buster (Desktop & Lite) & Lubuntu.
+This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Ubuntu 20.04 and Fedora 32.  Note that Raspberry Pi OS was recently known as Raspbian.
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/)
 
 
-Example of a VRS webpage:
-![VRS Webpage](https://i.imgur.com/tMXVZAj.png "VRS Webpage")
+An example of a VRS webpage:
+![VRS Webpage](https://i.imgur.com/JUuRSxA.png "VRS Webpage")
 
 ## Overview
 
@@ -170,7 +170,7 @@ This VRS installation script will create a global command to allow the user to q
 
 `vrs`
 
-The `vrs` command will provide options on how a user may want to start VRS.  There are several options.
+The `vrs` command will provide options on how a user may want to start VRS.  These are the options:
   
 | Command         | Description                                                |
 | --------------- | ---------------------------------------------------------- |
@@ -186,7 +186,7 @@ The `vrs` command will provide options on how a user may want to start VRS.  The
 
 #### Further notes on using the `vrs` command:
 
-`vrs -gui` will start VRS with a GUI as long as the command is executed in a GUI desktop environment.
+`vrs -gui` will start VRS with a GUI as long as the command is executed in a GUI desktop environment.  If `vrs -gui` is attempted in a command-line environment, VRS will fail to load.
 
 `vrs -nogui` will start VRS without the GUI.  VRS will start and operate fine in a command-line interface environment.  However, two things should be noted:
   * To view a GUI webpage interface for the VRS server settings, the [Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) plugin should be utilized.  The Web Admin username and password may be created with the `vrs -webadmin` command.
@@ -208,6 +208,16 @@ This VRS installation script will also create a script to backup the database fi
 
 As already described above in the ["CustomInjectedFiles"](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#customcontentcustominjectedfiles) description, a template HTML file will be created by this VRS installation script to help display an announcement at the top of the VRS webpage.  Simply edit the existing `Announcement.html` file in the `CustomContent/CustomInjectedFiles` directory to display whatever text deemed necessary at the top of the VRS webpage.
 
+---
+
 ## Other Information
 
 When this VRS installation script finishes, some very useful information will be displayed specific to that particular installation. It will be useful to read and record this information.
+
+## Ubuntu Fix
+
+When starting VRS in Ubuntu 20.04, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error, however if wanting to remove this error message, simply run the following command:
+
+```
+sudo apt-get -y install libcanberra-gtk-module
+```
