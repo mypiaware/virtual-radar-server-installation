@@ -10,7 +10,7 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Ubuntu 20.04 and Fedora 32.  Note that Raspberry Pi OS was recently known as Raspbian.
+This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Ubuntu 20.04 and Fedora 31.  [(Please read the important note below regarding Fedora 32!)](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fedora-32-issue)  Note that "Raspberry Pi OS" was recently known as "Raspbian".
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/)
 
@@ -172,17 +172,17 @@ This VRS installation script will create a global command to allow the user to q
 
 The `vrs` command will provide options on how a user may want to start VRS.  These are the options:
   
-| Command         | Description                                                |
-| --------------- | ---------------------------------------------------------- |
-| `vrs -gui`      | Start VRS with a GUI in a GUI desktop environment          |
-| `vrs -nogui`    | Start VRS without a GUI                                    |
-| `vrs -startbg`  | Start VRS as a background service                          |
-| `vrs -stopbg`   | Stop VRS if running as a background service                |
-| `vrs -enable`   | Allow VRS to start at every system boot                    |
-| `vrs -disable`  | Disable VRS from starting at every system boot             |
-| `vrs -webadmin` | Create username & password for Web Admin & also start VRS  |
-| `vrs -log`      | View history log of VRS running as a background service    |
-| `vrs -?`        | Display the help menu                                      |
+| Command         | Description                                               |
+| --------------- | --------------------------------------------------------- |
+| `vrs -gui`      | Start VRS with a GUI in a GUI desktop environment         |
+| `vrs -nogui`    | Start VRS without a GUI                                   |
+| `vrs -startbg`  | Start VRS as a background service                         |
+| `vrs -stopbg`   | Stop VRS if running as a background service               |
+| `vrs -enable`   | Allow VRS to start at every system boot                   |
+| `vrs -disable`  | Disable VRS from starting at every system boot            |
+| `vrs -webadmin` | Create username & password for Web Admin & also start VRS |
+| `vrs -log`      | View history log of VRS running as a background service   |
+| `vrs -?`        | Display the help menu                                     |
 
 #### Further notes on using the `vrs` command:
 
@@ -221,3 +221,9 @@ When starting VRS in Ubuntu 20.04, an error message may appear that reads: `Fail
 ```
 sudo apt-get -y install libcanberra-gtk-module
 ```
+
+## Fedora 32 Issue
+
+An earlier version of this README indicated that VRS was verified to work on Fedora 32.  VRS does, in fact, work on Fedora 32.  However, there are several graphic issues as a result of Fedora 32 installing a version of Mono that is not less than 6.4.  When VRS is running with a version of Mono that is 6.4 or higher, plane icons will not appear nor will the altitude stalks.  The simple fix to this is to make sure Mono's version is less than 6.4.  However, it has not been determined how to downgrade Mono on Fedora 32.  Until it is determined how to install a version of Mono less than 6.4 on Fedora 32, a possible solution is to use Fedora 31 which will install a version of Mono that is less than 6.4.
+
+As of the time of this writing (30 July 2020), Raspberry Pi OS Buster version 10 and Ubuntu 20.04 both install a version of Mono that is less than 6.4 by default.  Therefore, the same issue should currently not exist with these two operating system versions.
