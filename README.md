@@ -95,9 +95,9 @@ The user has an option of entering the GPS coordinates for the center of the VRS
 The user has an option of adding and entering the configuration information of the ADS-B receiver.  There are four critical parameters to enter for a receiver:
 
   * Receiver name:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
-  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then it may be best to use "AVR or Beast Raw Feed".
+  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then the user may consider selecting "AVR or Beast Raw Feed".
   * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, the user should enter 127.0.0.1 as the IP address.
-  * Receiver IP port:  Enter the ADS-B receiver's port value of the source of aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, and port 30105 for MLAT messages.
+  * Receiver IP port:  Enter the ADS-B receiver's port value of the source of aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
 
 It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly configured in the VRS server settings after VRS is installed.  It should also be noted there are additional parameters the user may find necessary to change, and these changes may also be done in the VRS server settings after VRS is installed.
 
