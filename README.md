@@ -10,9 +10,9 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Ubuntu 20.04 and Fedora 31.  [(Please read the important note below regarding Fedora 32!)](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fedora-32-issue)  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+This script has been confirmed to work with VRS version 2.4.4 (the latest official release) on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10 and Fedora 33.  This script may also install on other popular Linux distributions.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
 
-The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/)
+The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
 
 An example of a VRS webpage:
@@ -92,15 +92,15 @@ The user has an option of entering the GPS coordinates for the center of the VRS
 
 ## Enter a Receiver
 
-The user has an option of adding and entering the configuration information of a receiver.  There are four critical parameters to enter for a receiver:
+The user has an option of adding and entering the configuration information of the ADS-B receiver.  There are four critical parameters to enter for a receiver:
 
   * Receiver name:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
-  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then it may be best to use "AVR or Beast Raw Feed".
+  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then the user may consider selecting "AVR or Beast Raw Feed".
   * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, the user should enter 127.0.0.1 as the IP address.
-  * Receiver IP port:  Enter the ADS-B receiver's port value of the source of aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, and port 30105 for MLAT messages.
+  * Receiver IP port:  Enter the ADS-B receiver's port value of the source of aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
 
 It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly configured in the VRS server settings after VRS is installed.  It should also be noted there are additional parameters the user may find necessary to change, and these changes may also be done in the VRS server settings after VRS is installed.
-  
+
 This script will only ask the user to enter information for one receiver.  However, more receivers may be added in the VRS server settings after VRS is installed.  However, it is possible to run this script multiple times and add an additional receiver each time the script is ran.
 
 ## Directory Structure
@@ -133,14 +133,14 @@ This `Database` directory will contain the one `BaseStation.sqb` database file u
 
 #### Databases/DatabaseBackup
 
-This VRS installation script will create a `backupvrsdb.sh` script in this `DatabaseBackup` directory that may be used by a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/) to routinely backup the `BaseStation.sqb` database file located in the `Database` directory.  Running this script will create a copy of the `BaseStation.sqb` database file and place the copy in this `DatabaseBackup` directory.  The copied database file will be named `BaseStation_BACKUP.sqb`.  Here is an example of a cron job utilizing the `backupvrsdb.sh` script to backup the database every day at 3:00 AM.  Note that the database should only be backed up at time when VRS is known to have the fewest planes visible. 
+This VRS installation script will create a `backupvrsdb.sh` script in this `DatabaseBackup` directory that may be used by a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial") to routinely backup the `BaseStation.sqb` database file located in the `Database` directory.  Running this script will create a copy of the `BaseStation.sqb` database file and place the copy in this `DatabaseBackup` directory.  The copied database file will be named `BaseStation_BACKUP.sqb`.  Here is an example of a cron job utilizing the `backupvrsdb.sh` script to backup the database every day at 3:00 AM.  Note that the database should only be backed up at time when VRS is known to have the fewest planes visible.
 ```
 0 3 * * * bash /home/<username>/VirtualRadarServer/VRS-Extras/Databases/DatabaseBackup/backupvrsdb.sh
 ```
 
 #### OperatorFlags
 
-This directory will store all of the *\*.bmp* airline operator flag files. If VRS detects the airline ICAO code for a particular aircraft, and a *\*.bmp* image file exists in the `OperatorFlags` directory for that particular airline ICAO code, then VRS will display the *\*.bmp* image that is named with the same airline ICAO code. ([More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#flags-folder)) An example of an operator flag named `AAL.bmp`:
+This directory will store all of the *\*.bmp* airline operator flag files. If VRS detects the airline ICAO code for a particular aircraft, and a *\*.bmp* image file exists in the `OperatorFlags` directory for that particular airline ICAO code, then VRS will display the *\*.bmp* image that is named with the same airline ICAO code. ([More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#flags-folder)) An example of an operator flag named `AAL.bmp` for American Airlines:
 
 ![American Airlines operator flag](https://i.imgur.com/Od7H8Tw.png "American Airlines operator flag")
 
@@ -152,9 +152,9 @@ If the user has any personal pictures of any aircraft, those pictures may be pla
 #### Silhouettes
 
 This directory may contain silhouette *\*.bmp* images of aircrafts. If a silhouette image for a particular type of aircraft is in this `Silhouettes` directory, and VRS sees an aircraft of this same type, then VRS will display the silhouette image of that aircraft in the list of aircrafts. The filename of each silhouette image should be the same as the ICAOTypeCode for the aircraft. ([More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#silhouettes-folder))
-An example of a silhouette image named `B748.bmp`:
+An example of a silhouette image named `B748.bmp` for a Boeing 747-800 aircraft:
 
-![Boeing 747-800 silhouette](https://i.imgur.com/HuYWHFZ.png "Boeing 747-800 silhouette")
+![Boeing 747-800 silhouette](https://i.imgur.com/HuYWHFZ.png "Boeing 747-8 silhouette")
 
 #### TileCache
 
@@ -171,18 +171,18 @@ This VRS installation script will create a global command to allow the user to q
 `vrs`
 
 The `vrs` command will provide options on how a user may want to start VRS.  These are the options:
-  
-| Command         | Description                                               |
-| --------------- | --------------------------------------------------------- |
-| `vrs -gui`      | Start VRS with a GUI in a GUI desktop environment         |
-| `vrs -nogui`    | Start VRS without a GUI                                   |
-| `vrs -startbg`  | Start VRS as a background service                         |
-| `vrs -stopbg`   | Stop VRS if running as a background service               |
-| `vrs -enable`   | Allow VRS to start at every system boot                   |
-| `vrs -disable`  | Disable VRS from starting at every system boot            |
-| `vrs -webadmin` | Create username & password for Web Admin & also start VRS |
-| `vrs -log`      | View history log of VRS running as a background service   |
-| `vrs -?`        | Display the help menu                                     |
+
+| Command         | Description                                                     |
+| --------------- | --------------------------------------------------------------- |
+| `vrs -gui`      | Start VRS with a GUI in a GUI desktop environment               |
+| `vrs -nogui`    | Start VRS without a GUI                                         |
+| `vrs -startbg`  | Start VRS as a background service                               |
+| `vrs -stopbg`   | Stop VRS if running as a background service                     |
+| `vrs -enable`   | Allow VRS to start at every system boot as a background service |
+| `vrs -disable`  | Disable VRS from starting at every system boot                  |
+| `vrs -webadmin` | Create username & password for Web Admin & also start VRS       |
+| `vrs -log`      | View history log of VRS running as a background service         |
+| `vrs -?`        | Display the help menu                                           |
 
 #### Further notes on using the `vrs` command:
 
@@ -190,9 +190,9 @@ The `vrs` command will provide options on how a user may want to start VRS.  The
 
 `vrs -nogui` will start VRS without the GUI.  VRS will start and operate fine in a command-line interface environment.  However, two things should be noted:
   * To view a GUI webpage interface for the VRS server settings, the [Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) plugin should be utilized.  The Web Admin username and password may be created with the `vrs -webadmin` command.
-  * If using a SSH client (such as [PuTTY](https://www.putty.org)), the terminal window will need to remain open.  However, if wanting to close the terminal window, installing a utility such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/) will allow VRS to continue running even if the terminal window is closed.
+  * If using a SSH client (such as [PuTTY](https://www.putty.org "PuTTY's homepage")), the terminal window will need to remain open.  However, if wanting to close the terminal window, installing a utility such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial") will allow VRS to continue running even if the terminal window is closed.
 
-`vrs -startbg` will allow the user to quickly and easily start VRS as a background process. This can be especially useful if wanting to run VRS in a command-line environment and not wanting to bother with running a program such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/). `vrs -stopbg` will stop VRS only if it has already been started as a background process.
+`vrs -startbg` will allow the user to quickly and easily start VRS as a background process. This can be especially useful if wanting to run VRS in a command-line environment and not wanting to bother with running a program such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial"). `vrs -stopbg` will stop VRS only if it has already been started as a background process.  Please read the same notes above for the `vrs -nogui` command on how to access the settings for VRS if VRS is chosen to be ran as a background process.
 
 `vrs -enable` will enable VRS to start at every system boot as a background process. `vrs -disable` will prevent VRS from starting at every system boot.
 
@@ -202,28 +202,46 @@ The `vrs` command will provide options on how a user may want to start VRS.  The
 
 ## Script to Backup Database
 
-This VRS installation script will also create a script to backup the database file through a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/).  By default, the script is called `backupvrsdb.sh` and is located in the `Databases/DatabaseBackup` directory. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#databasesdatabasebackup)
+This VRS installation script will also create a script to backup the database file through a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial").  By default, the script is called `backupvrsdb.sh` and is located in the `Databases/DatabaseBackup` directory. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#databasesdatabasebackup)
 
 ## Display an Announcement on the Webpage
 
 As already described above in the ["CustomInjectedFiles"](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#customcontentcustominjectedfiles) description, a template HTML file will be created by this VRS installation script to help display an announcement at the top of the VRS webpage.  Simply edit the existing `Announcement.html` file in the `CustomContent/CustomInjectedFiles` directory to display whatever text deemed necessary at the top of the VRS webpage.
 
----
+<br/><br/>
+# Other Information
+<br/><br/>
 
-## Other Information
+## Installation Summary
 
 When this VRS installation script finishes, some very useful information will be displayed specific to that particular installation. It will be useful to read and record this information.
 
 ## Ubuntu Fix
 
-When starting VRS in Ubuntu 20.04, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error, however if wanting to remove this error message, simply run the following command:
+When starting VRS in a few versions of Linux, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error.  However, this installation script installs `libcanberra-gtk-module` just to be safe.
 
-```
-sudo apt-get -y install libcanberra-gtk-module
-```
+## Mono Issue
 
-## Fedora 32 Issue
+This script will install VRS on most popular Linux distributions.  However, a number of the newer Debian-based operating systems (Ubuntu, Linux Mint, etc.) will install Mono with a version of 6.4 or higher, and the latest versions of Mono could cause an issue with VRS.
 
-An earlier version of this README indicated that VRS was verified to work on Fedora 32.  VRS does, in fact, work on Fedora 32.  However, there are several graphic issues as a result of Fedora 32 installing a version of Mono that is not less than 6.4.  When VRS is running with a version of Mono that is 6.4 or higher, plane icons will not appear nor will the altitude stalks.  The simple fix to this is to make sure Mono's version is less than 6.4.  However, it has not been determined how to downgrade Mono on Fedora 32.  Until it is determined how to install a version of Mono less than 6.4 on Fedora 32, a possible solution is to use Fedora 31 which will install a version of Mono that is less than 6.4.
+The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions greater or equal to 6.4) on some Debian-based operating systems.  The issue is the plane icons and the altitude stalks will not appear on the VRS webpage.
 
-As of the time of this writing (30 July 2020), Raspberry Pi OS Buster version 10 and Ubuntu 20.04 both install a version of Mono that is less than 6.4 by default.  Therefore, the same issue should currently not exist with these two operating system versions.
+However, the preview version (ver 3.0.0 Beta) of VRS will not have this issue with the latest versions of Mono.  The drawback is that the preview version is under development.
+
+This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version or another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version is currently installed and then install the newly selected version.
+
+As of this writing, the versions of Mono that will get installed on the following operating systems are:
+
+| Linux                    | Default Mono Version Installed |Stable Version Works?|
+| ------------------------ |:------------------------------:|:-------------------:|
+| Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
+| Debian 10                | 5.18.0.240                     | :heavy_check_mark:  |
+| Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
+| Ubuntu 20.04.1 LTS       | 6.8.0.105                      | :x:                 |
+| Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
+| Linux Mint 20.0          | 6.8.0.105                      | :x:                 |
+| Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
+| Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
+| Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
+
+\* Stable version of VRS works fine on Fedora regardless of the version of Mono installed.
