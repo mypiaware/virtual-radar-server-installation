@@ -1,19 +1,19 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script.
+# Virtual Radar Server installation script (ver 7.0)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
 #
 # This script helps the novice user to install VRS and have VRS up and running.
-# With just a few keystrokes, VRS may get installed and start displaying planes on the VRS webpage.
+# With just a few keystrokes, VRS (& Mono) may get installed and start displaying planes on the VRS webpage.
 # Operator flags, silhouette flags and a few sample aircraft photos may also be downloaded and installed.
 # A sample database file consisting of more detailed information of a few planes may be downloaded and installed.
 # As an option, the user may also enter the latitude and longitude of the center of the VRS webpage map.
 # As an option, the user may also enter a receiver.
-# A directory structure will be created for the convenience of those who wish to enhance VRS' appearance and performance.
+# A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
-# This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Ubuntu 20.04 and Fedora 32.
+# This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10 and Fedora 33.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 #
 # The author of this script has nothing to do with the creation, development or support of Virtual Radar Server.
@@ -93,8 +93,8 @@ VRSDIRECTORIES=(
 )
 
 
-# Declare an array of URLs for all the VRS files.
-VRSFILES=(
+# Declare an array of URLs for all the VRS files of the stable version of VRS.
+VRSFILES_STABLE=(
    "http://www.virtualradarserver.co.uk/Files/VirtualRadar.LanguagePack.tar.gz"  # Install language pack files first because the 'VirtualRadar.WebSite.resources.dll' file may be newer in the 'VirtualRadar.tar.gz' file.
    "http://www.virtualradarserver.co.uk/Files/VirtualRadar.tar.gz"
    "http://www.virtualradarserver.co.uk/Files/VirtualRadar.exe.config.tar.gz"
@@ -104,6 +104,23 @@ VRSFILES=(
    "http://www.virtualradarserver.co.uk/Files/VirtualRadar.TileServerCachePlugin.tar.gz"
    "http://www.virtualradarserver.co.uk/Files/VirtualRadar.WebAdminPlugin.tar.gz"
 )
+
+
+# Declare an array of URLs for all the VRS files of the preview version of VRS.  Very important to know this preview version is under testing and may have bugs.
+VRSFILES_PREVIEW=(
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/VirtualRadar-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/LanguagePack-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-CustomContent-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-DatabaseEditor-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-DatabaseWriter-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-FeedFilter-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-TileServerCache-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-WebAdmin-3.0.0-preview-1.tar.gz"
+)
+
+
+# Declare a variable that will hold user's choice of whether to install the stable or preview version.
+declare VRS_VERSION
 
 
 # Declare URLs for operator flags, silhouettes and a database file. (Change any URL if better files are found elsewhere.)
@@ -167,7 +184,7 @@ function ERROREXIT {
 # Check if this script is ran as root. (It should not be ran as root.)
 if [[ $EUID == 0 ]]; then
    printf "Do NOT run this script as root! (Do not use 'sudo' in the command.)\n"
-   exit 1
+   exit 2
 fi
 
 
@@ -186,17 +203,40 @@ printf "  * Language Packs\n"
 printf "  * Custom Content Plugin\n"
 printf "  * Database Editor Plugin\n"
 printf "  * Database Writer Plugin\n"
+printf "  * Feed Filter Plugin (only with the preview version of VRS)\n"
 printf "  * Tile Server Cache Plugin\n"
 printf "  * Web Admin Plugin\n\n"
 printf "Need help with this installation script?:\n"
-printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n";
+printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
+
+
+# Prompt user to either install the latest stable version for the preview version.
+printf "Install stable or preview version of VRS?\n";
+printf "  1. Stable (ver 2.4.4)\n"
+printf "  2. Preview (ver 3.0.0 Beta)\n"
+while ! [[ $VRS_CHOICE =~ ^[12]$ ]]; do printf "Choice [12]: "; read VRS_CHOICE; done
+if [[ $VRS_CHOICE =~ 1 ]]; then
+   VRS_VERSION="Stable"
+   VRSFILES=("${VRSFILES_STABLE[@]}")
+   printf "\nVersion set to install:  ${ORANGE_COLOR}Stable${NO_COLOR}\n"
+elif [[ $VRS_CHOICE =~ 2 ]]; then
+   VRS_VERSION="Preview"
+   VRSFILES=("${VRSFILES_PREVIEW[@]}")
+   printf "\n"
+   printf "${RED_COLOR}**************************** WARNING *****************************${NO_COLOR}\n"
+   printf "        ${RED_COLOR}The preview version has been selected to install.${NO_COLOR}\n"
+   printf "    ${RED_COLOR}The preview version is under testing and may contain bugs!${NO_COLOR}\n"
+   printf "${RED_COLOR}Please consider this when choosing to install the preview version!${NO_COLOR}\n"
+   printf "${RED_COLOR}**************************** WARNING *****************************${NO_COLOR}\n"
+fi
+printf "\n"
 
 
 # Prompt user if the following sample files should be downloaded:  Operator Flags, Silhouettes, sample Pictures and a database file.
 while ! [[ $DL_OPF =~ ^[YyNn]$ ]]; do printf "Download & install operator flags (airline logos)? [yn]: "; read DL_OPF; done
-while ! [[ $DL_SIL =~ ^[YyNn]$ ]]; do printf "Download & install silhouettes? [yn]: ";    read DL_SIL; done
-while ! [[ $DL_PIC =~ ^[YyNn]$ ]]; do printf "Download & install pictures? [yn]: ";       read DL_PIC; done
-# For safety reasons, prevent any possible existing database file from getting overwritten by an possibly older database file.  It is assumed that an existing database should not be overwritten.
+while ! [[ $DL_SIL =~ ^[YyNn]$ ]]; do printf "Download & install silhouettes? [yn]: ";                    read DL_SIL; done
+while ! [[ $DL_PIC =~ ^[YyNn]$ ]]; do printf "Download & install pictures? [yn]: ";                       read DL_PIC; done
+# For safety reasons, prevent any possible existing database file from getting overwritten by a possibly older database file.  It is assumed that an existing database should not be overwritten.
 if [[ ! -f "$DATABASEFILE" ]]; then
    while ! [[ $DL_DB =~ ^[YyNn]$ ]]; do printf "Download & install a sample database? [yn]: "; read DL_DB; done
 fi
@@ -363,15 +403,32 @@ printf "\n"
 #############################################################################################
 
 
-# VRS installation begins with the installation of Mono.
-if ! which mono >/dev/null 2>&1; then
-   if which apt-get >/dev/null 2>&1; then  # Install on Raspberry Pi OS (Raspbian) or Ubuntu.
-      sudo apt-get update
-      sudo apt-get -y install mono-complete
-   elif which dnf >/dev/null 2>&1; then    # Install on Fedora.
-      sudo dnf -y install mono-complete
+# Possibly install/update Mono and other necessary software on Debian-based operating systems.
+if which apt >/dev/null 2>&1; then
+   if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
+      ! which unzip >/dev/null 2>&1 ||
+      ! which mono >/dev/null 2>&1; then
+      sudo apt update
+      sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
+      sudo apt install -y unzip
+      sudo apt install -y mono-complete
    fi
 fi
+
+
+# Possibly install/update Mono and other necessary software on Fedora.
+if which dnf >/dev/null 2>&1; then
+   if ! which unzip >/dev/null 2>&1; then
+      sudo dnf install -y unzip
+   fi
+   if ! which mono >/dev/null 2>&1; then
+      sudo dnf install -y mono-complete
+   fi
+fi
+
+
+# In the event the user ran this script again and chose a different version of VRS to install.
+rm -rf "$VRSINSTALLDIRECTORY"
 
 
 # Good time to make sure directories of interest are present (create if not already present).
@@ -447,12 +504,12 @@ fi
 
 # Function to fill in the directory/file paths in the initial "Configuration.xml" file created above (operator flags, silhouettes, pictures, sample database file).
 function EDITCONFIGFILE {
-   local ID="$1"
+   local SETTINGID="$1"
    local DIRECTORYPATH="$2"
-   if grep -q "<$ID>.*</$ID>" "$CONFIGFILE"; then  # If ID already existing, modify its value.
-      sed -i "s|<$ID>.*</$ID>|<$ID>$DIRECTORYPATH</$ID>|" "$CONFIGFILE";                                     ERROREXIT 19 "Failed to edit $CONFIGFILE!"
-   else  # If ID not already existing, create it with the appropriate value.
-      sed -i "s|<BaseStationSettings>|<BaseStationSettings>\n    <$ID>$DIRECTORYPATH</$ID>|" "$CONFIGFILE";  ERROREXIT 20 "Failed to edit $CONFIGFILE!"
+   if grep -q "<$SETTINGID>.*</$SETTINGID>" "$CONFIGFILE"; then  # If SETTINGID already existing, modify its value.
+      sed -i "s|<$SETTINGID>.*</$SETTINGID>|<$SETTINGID>$DIRECTORYPATH</$SETTINGID>|" "$CONFIGFILE";                       ERROREXIT 19 "Failed to edit $CONFIGFILE!"
+   else  # If SETTINGID not already existing, create it with the appropriate value.
+      sed -i "s|<BaseStationSettings>|<BaseStationSettings>\n    <$SETTINGID>$DIRECTORYPATH</$SETTINGID>|" "$CONFIGFILE";  ERROREXIT 20 "Failed to edit $CONFIGFILE!"
    fi
 }
 
@@ -673,83 +730,83 @@ if [[ $VRSCMD_STOPPROCESS_LEN  -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCM
 if [[ $VRSCMD_ENABLE_LEN       -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCMD_ENABLE};       fi
 if [[ $VRSCMD_DISABLE_LEN      -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCMD_DISABLE};      fi
 if [[ $VRSCMD_WEBADMIN_LEN     -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCMD_WEBADMIN};     fi
-if [[ $VRSCMD_LOG_LEN          -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCMD_LOG};     fi
+if [[ $VRSCMD_LOG_LEN          -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCMD_LOG};          fi
 
 
 # Create a universal command to start VRS.
 if ! [ -f "$STARTCOMMAND" ]; then sudo touch "$STARTCOMMAND"; fi;  ERROREXIT 65 "Failed to create $STARTCOMMAND!"
 sudo chmod 777 "$STARTCOMMAND";                                    ERROREXIT 66 "The 'chmod' command failed on  $STARTCOMMAND!"
-echo "#!/bin/bash"                                                                                                                                              > "$STARTCOMMAND";  ERROREXIT 67 "Failed to edit $STARTCOMMAND!"
-echo "# Use this script as a global command to start/stop VRS."                                                                                                >> "$STARTCOMMAND";
-echo ""                                                                                                                                                        >> "$STARTCOMMAND";
-echo "function COMMANDHELP {"                                                                                                                                  >> "$STARTCOMMAND";
-echo "   printf \"Usage: vrs -parameter\n\""                                                                                                                   >> "$STARTCOMMAND";
-echo "   printf -- \"Parameters:\n\""                                                                                                                          >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS with a GUI in a GUI desktop environment\n\" \"$VRSCMD_GUI\""                                                 >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS without a GUI\n\" \"$VRSCMD_NOGUI\""                                                                         >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS as a background service\n\" \"$VRSCMD_STARTPROCESS\""                                                        >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Stop VRS if running as a background service\n\" \"$VRSCMD_STOPPROCESS\""                                               >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Allow VRS to start at every system boot\n\" \"$VRSCMD_ENABLE\""                                                        >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Disable VRS from starting at every system boot\n\" \"$VRSCMD_DISABLE\""                                                >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Create username & password for Web Admin & also start VRS\n\" \"$VRSCMD_WEBADMIN\""                                    >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  View history log of VRS running as a background service\n\" \"$VRSCMD_LOG\""                                           >> "$STARTCOMMAND";
-echo "   printf -- \" -%-${ARGLENGTH}s  Display this help menu\n\" \"?\""                                                                                      >> "$STARTCOMMAND";
-echo "}"                                                                                                                                                       >> "$STARTCOMMAND";
-echo ""                                                                                                                                                        >> "$STARTCOMMAND";
-echo "if [[ \$# -eq 1 ]]; then"                                                                                                                                >> "$STARTCOMMAND";
-echo "   if [[ \$1 == \"-h\" || \$1 == \"-help\" || \$1 == \"-?\" ]]; then COMMANDHELP; exit 0"                                                                >> "$STARTCOMMAND";
+echo "#!/bin/bash"                                                                                                                                                                                                                                                                > "$STARTCOMMAND";  ERROREXIT 67 "Failed to edit $STARTCOMMAND!"
+echo "# Use this script as a global command to start/stop VRS."                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
+echo "function COMMANDHELP {"                                                                                                                                                                                                                                                    >> "$STARTCOMMAND";
+echo "   printf \"Usage: vrs -parameter\n\""                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "   printf -- \"Parameters:\n\""                                                                                                                                                                                                                                            >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS with a GUI in a GUI desktop environment\n\" \"$VRSCMD_GUI\""                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS without a GUI\n\" \"$VRSCMD_NOGUI\""                                                                                                                                                                                           >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS as a background service\n\" \"$VRSCMD_STARTPROCESS\""                                                                                                                                                                          >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Stop VRS if running as a background service\n\" \"$VRSCMD_STOPPROCESS\""                                                                                                                                                                 >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Allow VRS to start at every system boot as a background service\n\" \"$VRSCMD_ENABLE\""                                                                                                                                                  >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Disable VRS from starting at every system boot\n\" \"$VRSCMD_DISABLE\""                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Create username & password for Web Admin & also start VRS\n\" \"$VRSCMD_WEBADMIN\""                                                                                                                                                      >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  View history log of VRS running as a background service\n\" \"$VRSCMD_LOG\""                                                                                                                                                             >> "$STARTCOMMAND";
+echo "   printf -- \" -%-${ARGLENGTH}s  Display this help menu\n\" \"?\""                                                                                                                                                                                                        >> "$STARTCOMMAND";
+echo "}"                                                                                                                                                                                                                                                                         >> "$STARTCOMMAND";
+echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
+echo "if [[ \$# -eq 1 ]]; then"                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "   if [[ \$1 == \"-h\" || \$1 == \"-help\" || \$1 == \"-?\" ]]; then COMMANDHELP; exit 0"                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   elif ! [[ \$1 == \"-$VRSCMD_GUI\" || \$1 == \"-$VRSCMD_NOGUI\" || \$1 == \"-$VRSCMD_STARTPROCESS\" || \$1 == \"-$VRSCMD_STOPPROCESS\" || \$1 == \"-$VRSCMD_ENABLE\" || \$1 == \"-$VRSCMD_DISABLE\" || \$1 == \"-$VRSCMD_WEBADMIN\" || \$1 == \"-$VRSCMD_LOG\" ]]; then" >> "$STARTCOMMAND";
-echo "      printf \"Invalid parameter!\n\n\"; COMMANDHELP; exit 1"                                                                                            >> "$STARTCOMMAND";
-echo "   elif [[ \$1 == \"-$VRSCMD_ENABLE\" ]]; then"                                                                                                          >> "$STARTCOMMAND";
-echo "      sudo systemctl enable $SERVICEFILENAME.service >/dev/null 2>&1"                                                                                    >> "$STARTCOMMAND";
-echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to enable VRS at boot!\n\"; exit 2"                                                                 >> "$STARTCOMMAND";
-echo "      else                    printf \"VRS enabled to start at every system boot.\n\"; fi"                                                               >> "$STARTCOMMAND";
-echo "   elif [[ \$1 == \"-$VRSCMD_DISABLE\" ]]; then"                                                                                                         >> "$STARTCOMMAND";
-echo "      sudo systemctl disable $SERVICEFILENAME.service >/dev/null 2>&1"                                                                                   >> "$STARTCOMMAND";
-echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to disable VRS at boot!\n\"; exit 3"                                                                >> "$STARTCOMMAND";
-echo "      else                    printf \"VRS disabled from starting at every system boot.\n\"; fi"                                                         >> "$STARTCOMMAND";
-echo "   elif [[ \$1 == \"-$VRSCMD_STOPPROCESS\" ]]; then"                                                                                                     >> "$STARTCOMMAND";
-echo "      sudo systemctl stop $SERVICEFILENAME.service"                                                                                                      >> "$STARTCOMMAND";
-echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to stop VRS!\n\"; exit 4"                                                                           >> "$STARTCOMMAND";
-echo "      else                    printf \"VRS has stopped.\n\"; fi"                                                                                         >> "$STARTCOMMAND";
-echo "   elif [[ \$1 == \"-$VRSCMD_LOG\" ]]; then"                                                                                                             >> "$STARTCOMMAND";
-echo "      journalctl -u $SERVICEFILENAME.service"                                                                                                            >> "$STARTCOMMAND";
-echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to get log of VRS!\n\"; exit 5; fi"                                                                 >> "$STARTCOMMAND";
-echo "   elif ! pgrep -f VirtualRadar.exe >/dev/null; then"                                                                                                    >> "$STARTCOMMAND";
-echo "      if [[ \$1 == \"-$VRSCMD_GUI\" ]]; then"                                                                                                            >> "$STARTCOMMAND";
-echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\""                                                                                                 >> "$STARTCOMMAND";
-echo "      elif [[ \$1 == \"-$VRSCMD_NOGUI\" ]]; then"                                                                                                        >> "$STARTCOMMAND";
-echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui"                                                                                          >> "$STARTCOMMAND";
-echo "      elif [[ \$1 == \"-$VRSCMD_STARTPROCESS\" ]]; then"                                                                                                 >> "$STARTCOMMAND";
-echo "         sudo systemctl restart $SERVICEFILENAME.service"                                                                                                >> "$STARTCOMMAND";
-echo "         if [[ \$? -ne 0 ]]; then printf \"Error trying to start VRS!\n\"; exit 6"                                                                       >> "$STARTCOMMAND";
-echo "         else                    printf \"VRS has started as a background process.\n\"; fi"                                                              >> "$STARTCOMMAND";
-echo "      elif [[ \$1 == \"-$VRSCMD_WEBADMIN\" ]]; then"                                                                                                     >> "$STARTCOMMAND";
-echo "         while [[ \${#WAUSERNAME[@]} -ne 1 && WAUSERNAME[0] != \"\" ]]; do printf \"Create Web Admin username: \"; read -r -a WAUSERNAME; done"          >> "$STARTCOMMAND";
-echo "         while [[ \${#WAPASSWORD[@]} -ne 1 && WAPASSWORD[0] != \"\" ]]; do printf \"Create Web Admin password: \"; read -r -a WAPASSWORD; done"          >> "$STARTCOMMAND";
-echo "         printf \"\nAccess the VRS Web Admin on a local device with this URL:\n   http://%s:%s/VirtualRadar/WebAdmin/Index.html\n\n\" $LOCALIP $VRSPORT" >> "$STARTCOMMAND";
-echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui -createAdmin:\$WAUSERNAME -password:\$WAPASSWORD"                                         >> "$STARTCOMMAND";
-echo "      fi"                                                                                                                                                >> "$STARTCOMMAND";
-echo "   elif pgrep -f VirtualRadar.exe >/dev/null; then"                                                                                                      >> "$STARTCOMMAND";
-echo "      if [[ \$1 == \"-$VRSCMD_GUI\" || \$1 == \"-$VRSCMD_NOGUI\" || \$1 == \"-$VRSCMD_STARTPROCESS\" || \$1 == \"-$VRSCMD_WEBADMIN\" ]]; then"           >> "$STARTCOMMAND";
-echo "         printf \"VRS is already running!\n\" COMMANDHELP; exit 7"                                                                                       >> "$STARTCOMMAND";
-echo "      fi"                                                                                                                                                >> "$STARTCOMMAND";
-echo "   else printf \"Unknown error occurred! EXIT CODE: 8\n\"; exit 8"                                                                                       >> "$STARTCOMMAND";
-echo "   fi"                                                                                                                                                   >> "$STARTCOMMAND";
-echo "elif [[ \$# -ge 1 ]]; then"                                                                                                                              >> "$STARTCOMMAND";
-echo "   printf \"Too many parameters!\n\n\"; COMMANDHELP; exit 9"                                                                                             >> "$STARTCOMMAND";
-echo "elif [[ \$# -eq 0 ]]; then"                                                                                                                              >> "$STARTCOMMAND";
-echo "   printf \"Status: \";"                                                                                                                                 >> "$STARTCOMMAND";
-echo "   if pgrep -f VirtualRadar.exe >/dev/null; then"                                                                                                        >> "$STARTCOMMAND";
-echo "      printf \"VRS is running.\n\n\""                                                                                                                    >> "$STARTCOMMAND";
-echo "   else"                                                                                                                                                 >> "$STARTCOMMAND";
-echo "      printf \"VRS is not running.\n\n\""                                                                                                                >> "$STARTCOMMAND";
-echo "   fi"                                                                                                                                                   >> "$STARTCOMMAND";
-echo "   COMMANDHELP; exit 0"                                                                                                                                  >> "$STARTCOMMAND";
-echo "else printf \"Unknown error occurred! EXIT CODE: 10\n\"; exit 10"                                                                                        >> "$STARTCOMMAND";
-echo "fi"                                                                                                                                                      >> "$STARTCOMMAND";
-echo ""                                                                                                                                                        >> "$STARTCOMMAND";
-echo "exit 0"                                                                                                                                                  >> "$STARTCOMMAND";
+echo "      printf \"Invalid parameter!\n\n\"; COMMANDHELP; exit 1"                                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "   elif [[ \$1 == \"-$VRSCMD_ENABLE\" ]]; then"                                                                                                                                                                                                                            >> "$STARTCOMMAND";
+echo "      sudo systemctl enable $SERVICEFILENAME.service >/dev/null 2>&1"                                                                                                                                                                                                      >> "$STARTCOMMAND";
+echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to enable VRS at boot!\n\"; exit 2"                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "      else                    printf \"VRS enabled to start at every system boot.\n\"; fi"                                                                                                                                                                                 >> "$STARTCOMMAND";
+echo "   elif [[ \$1 == \"-$VRSCMD_DISABLE\" ]]; then"                                                                                                                                                                                                                           >> "$STARTCOMMAND";
+echo "      sudo systemctl disable $SERVICEFILENAME.service >/dev/null 2>&1"                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to disable VRS at boot!\n\"; exit 3"                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "      else                    printf \"VRS disabled from starting at every system boot.\n\"; fi"                                                                                                                                                                           >> "$STARTCOMMAND";
+echo "   elif [[ \$1 == \"-$VRSCMD_STOPPROCESS\" ]]; then"                                                                                                                                                                                                                       >> "$STARTCOMMAND";
+echo "      sudo systemctl stop $SERVICEFILENAME.service"                                                                                                                                                                                                                        >> "$STARTCOMMAND";
+echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to stop VRS!\n\"; exit 4"                                                                                                                                                                                             >> "$STARTCOMMAND";
+echo "      else                    printf \"VRS has stopped.\n\"; fi"                                                                                                                                                                                                           >> "$STARTCOMMAND";
+echo "   elif [[ \$1 == \"-$VRSCMD_LOG\" ]]; then"                                                                                                                                                                                                                               >> "$STARTCOMMAND";
+echo "      sudo journalctl -u $SERVICEFILENAME.service"                                                                                                                                                                                                                         >> "$STARTCOMMAND";
+echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to get log of VRS!\n\"; exit 5; fi"                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "   elif ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                               >> "$STARTCOMMAND";
+echo "      if [[ \$1 == \"-$VRSCMD_GUI\" ]]; then"                                                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\""                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "      elif [[ \$1 == \"-$VRSCMD_NOGUI\" ]]; then"                                                                                                                                                                                                                          >> "$STARTCOMMAND";
+echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui"                                                                                                                                                                                                            >> "$STARTCOMMAND";
+echo "      elif [[ \$1 == \"-$VRSCMD_STARTPROCESS\" ]]; then"                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "         sudo systemctl restart $SERVICEFILENAME.service"                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "         if [[ \$? -ne 0 ]]; then printf \"Error trying to start VRS!\n\"; exit 6"                                                                                                                                                                                         >> "$STARTCOMMAND";
+echo "         else                    printf \"VRS has started as a background process.\n\"; fi"                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "      elif [[ \$1 == \"-$VRSCMD_WEBADMIN\" ]]; then"                                                                                                                                                                                                                       >> "$STARTCOMMAND";
+echo "         while [[ \${#WAUSERNAME[@]} -ne 1 && WAUSERNAME[0] != \"\" ]]; do printf \"Create Web Admin username: \"; read -r -a WAUSERNAME; done"                                                                                                                            >> "$STARTCOMMAND";
+echo "         while [[ \${#WAPASSWORD[@]} -ne 1 && WAPASSWORD[0] != \"\" ]]; do printf \"Create Web Admin password: \"; read -r -a WAPASSWORD; done"                                                                                                                            >> "$STARTCOMMAND";
+echo "         printf \"\nAccess the VRS Web Admin on a local device with this URL:\n   http://%s:%s/VirtualRadar/WebAdmin/Index.html\n\n\" $LOCALIP $VRSPORT"                                                                                                                   >> "$STARTCOMMAND";
+echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui -createAdmin:\$WAUSERNAME -password:\$WAPASSWORD"                                                                                                                                                           >> "$STARTCOMMAND";
+echo "      fi"                                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "   elif pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                 >> "$STARTCOMMAND";
+echo "      if [[ \$1 == \"-$VRSCMD_GUI\" || \$1 == \"-$VRSCMD_NOGUI\" || \$1 == \"-$VRSCMD_STARTPROCESS\" || \$1 == \"-$VRSCMD_WEBADMIN\" ]]; then"                                                                                                                             >> "$STARTCOMMAND";
+echo "         printf \"VRS is already running!\n\"; exit 0"                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "      fi"                                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "   else printf \"Unknown error occurred! EXIT CODE: 7\n\"; exit 7"                                                                                                                                                                                                         >> "$STARTCOMMAND";
+echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "elif [[ \$# -ge 1 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "   printf \"Too many parameters!\n\n\"; COMMANDHELP; exit 8"                                                                                                                                                                                                               >> "$STARTCOMMAND";
+echo "elif [[ \$# -eq 0 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "   printf \"Status: \";"                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "   if pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "      printf \"VRS is running.\n\n\""                                                                                                                                                                                                                                      >> "$STARTCOMMAND";
+echo "   else"                                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "      printf \"VRS is not running.\n\n\""                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "   COMMANDHELP; exit 0"                                                                                                                                                                                                                                                    >> "$STARTCOMMAND";
+echo "else printf \"Unknown error occurred! EXIT CODE: 9\n\"; exit 9"                                                                                                                                                                                                            >> "$STARTCOMMAND";
+echo "fi"                                                                                                                                                                                                                                                                        >> "$STARTCOMMAND";
+echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
+echo "exit 0"                                                                                                                                                                                                                                                                    >> "$STARTCOMMAND";
 sudo chmod 755 "$STARTCOMMAND";        ERROREXIT 68 "The 'chmod' command failed on  $STARTCOMMAND!"
 sudo chown root:root "$STARTCOMMAND";  ERROREXIT 69 "The 'chown' command failed on  $STARTCOMMAND!"
 
@@ -764,7 +821,10 @@ printf "${GREEN_COLOR}%s${NO_COLOR}\n"  "-----------------------"
 printf "${GREEN_COLOR}HELPFUL THINGS TO KNOW:${NO_COLOR}\n"
 printf "${GREEN_COLOR}%s${NO_COLOR}\n\n" "-----------------------"
 
-printf "${ORANGE_COLOR}VRS was installed here:${NO_COLOR}  %s\n"
+printf "${ORANGE_COLOR}VRS version installed:${NO_COLOR}\n"
+printf "   %s\n\n" "$VRS_VERSION"
+
+printf "${ORANGE_COLOR}VRS was installed here:${NO_COLOR}\n"
 printf "   %s\n\n" "$VRSINSTALLDIRECTORY"
 
 printf "${ORANGE_COLOR}All of VRS user custom files/directories may be found here:${NO_COLOR}\n"
