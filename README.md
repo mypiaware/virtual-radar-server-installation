@@ -10,7 +10,9 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to work with VRS version 2.4.4 (the latest official release) on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10 and Fedora 33.  This script may also install on other popular Linux distributions.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10 and Fedora 33.  This script may also install on other popular Linux distributions.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+
+For anyone interested in trying the preview version (ver 3.0.0 Beta), this installation script offers the choice to install the preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make the preview version the better choice.
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
@@ -32,6 +34,7 @@ Here is a very brief summary of what this script will do:
   * Database Writer Plugin
   * Tile Server Cache Plugin
   * Web Admin Plugin
+  * Feed Filter Plugin (only available with the preview version of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
   * Airline operator flags
@@ -65,10 +68,11 @@ This VRS installation script will install the following five VRS plugins. Note t
   * [Database Writer Plugin](http://www.virtualradarserver.co.uk/Documentation/DatabaseWriter/Default.aspx)
   * [Tile Server Cache Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-tileservercache)
   * [Web Admin Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin)
+  * Feed Filter Plugin (only available with the preview version of VRS)
 
 ## Language Packs
 
-This VRS installation script will download and install the language packs created for VRS.  Based on the current language set for the Linux operating system, the VRS server settings interface will automatically set the language for the VRS server settings interface.  Not all languages are supported. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-translations)
+This VRS installation script will download and install the language packs that will be used by the VRS server settings interface.  Based on the current language set for the Linux operating system, the VRS server settings interface will automatically set the language to be used.  Not all languages are supported. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-translations)
 
 ## Download Additional Files
 
@@ -80,7 +84,9 @@ This VRS installation script will also provide the option to download some sampl
 
 ## Server Port Number
 
-This VRS installation script will prompt the user for the port number the VRS server should use.  This is the port number that is necessary to be used by a web browser to view the VRS webpage.  By default, a typical installation of VRS will use port 8080 for the server port.  However, this VRS installation script will use 8090 as the default port number in the event the same system is running FlightAware's SkyAware (formerly called "Skyview") - which uses port 8080.  The user is free to choose any available port number.  However, this script will not check if the selected port number is available.
+To access the VRS webpage, the port number should be set, and the port number will need to be used in the URL that brings up the VRS webpage.  For example, the URL for a VRS webpage on a local network may appear as such:  `http://192.168.1.100:8090/VirtualRadar`
+
+This VRS installation script will prompt the user for the port number the VRS server should use.  By default, a typical installation of VRS will use port 8080 for the server port.  However, this VRS installation script will use 8090 as the default port number in the event the same system is running FlightAware's SkyAware (formerly called "Skyview") - which uses port 8080.  The user is free to choose any available port number.  However, this script will not check if the selected port number is available.
 
 ## Default Language
 
@@ -92,14 +98,14 @@ The user has an option of entering the GPS coordinates for the center of the VRS
 
 ## Enter a Receiver
 
-The user has an option of adding and entering the configuration information of the ADS-B receiver.  There are four critical parameters to enter for a receiver:
+The user has an option of adding and entering the configuration information of an ADS-B receiver.  There are four critical parameters to enter for a receiver:
 
   * Receiver name:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
   * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then the user may consider selecting "AVR or Beast Raw Feed".
   * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, the user should enter 127.0.0.1 as the IP address.
-  * Receiver IP port:  Enter the ADS-B receiver's port value of the source of aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
+  * Receiver IP port:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
 
-It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly configured in the VRS server settings after VRS is installed.  It should also be noted there are additional parameters the user may find necessary to change, and these changes may also be done in the VRS server settings after VRS is installed.
+It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly configured in the VRS server settings after VRS is installed.  It should also be noted there are additional parameters the user may find necessary to change for the receiver settings, and these changes may also be done in the VRS server settings after VRS is installed.
 
 This script will only ask the user to enter information for one receiver.  However, more receivers may be added in the VRS server settings after VRS is installed.  However, it is possible to run this script multiple times and add an additional receiver each time the script is ran.
 
@@ -147,11 +153,11 @@ This directory will store all of the *\*.bmp* airline operator flag files. If VR
 
 #### Pictures
 
-If the user has any personal pictures of any aircraft, those pictures may be placed in this `Pictures` directory.  The filename of each picture should simply be either the ICAO24 hex code or the registration number (tail number) of the aircraft.  When an aircraft is detected by VRS, VRS will display the picture of this aircraft from within this `Pictures` directory.  [More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#pictures-folder)
+If the user has any personal pictures of any aircraft, those pictures may be placed in this `Pictures` directory.  The filename of each picture should simply be either the ICAO24 hex code or the registration number (tail number) of the aircraft.  When an aircraft is detected by VRS, VRS will display the picture of this aircraft from within this `Pictures` directory on the VRS webpage.  [More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#pictures-folder)
 
 #### Silhouettes
 
-This directory may contain silhouette *\*.bmp* images of aircrafts. If a silhouette image for a particular type of aircraft is in this `Silhouettes` directory, and VRS sees an aircraft of this same type, then VRS will display the silhouette image of that aircraft in the list of aircrafts. The filename of each silhouette image should be the same as the ICAOTypeCode for the aircraft. ([More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#silhouettes-folder))
+This directory may contain silhouette *\*.bmp* images of aircrafts. If a silhouette image for a particular type of aircraft is in this `Silhouettes` directory, and VRS sees an aircraft of this same type, then VRS will display the silhouette image of that aircraft in the list of aircrafts on the VRS webpage. The filename of each silhouette image should be the same as the ICAO type code for the aircraft. ([More info](http://www.virtualradarserver.co.uk/Documentation/WebServer/DataSourcesOptions.aspx#silhouettes-folder))
 An example of a silhouette image named `B748.bmp` for a Boeing 747-800 aircraft:
 
 ![Boeing 747-800 silhouette](https://i.imgur.com/HuYWHFZ.png "Boeing 747-8 silhouette")
@@ -170,7 +176,7 @@ This VRS installation script will create a global command to allow the user to q
 
 `vrs`
 
-The `vrs` command will provide options on how a user may want to start VRS.  These are the options:
+The `vrs` command will provide options on how a user may want to start or stop VRS.  These are all the command options:
 
 | Command         | Description                                                     |
 | --------------- | --------------------------------------------------------------- |
@@ -188,15 +194,15 @@ The `vrs` command will provide options on how a user may want to start VRS.  The
 
 `vrs -gui` will start VRS with a GUI as long as the command is executed in a GUI desktop environment.  If `vrs -gui` is attempted in a command-line environment, VRS will fail to load.
 
-`vrs -nogui` will start VRS without the GUI.  VRS will start and operate fine in a command-line interface environment.  However, two things should be noted:
-  * To view a GUI webpage interface for the VRS server settings, the [Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) plugin should be utilized.  The Web Admin username and password may be created with the `vrs -webadmin` command.
-  * If using a SSH client (such as [PuTTY](https://www.putty.org "PuTTY's homepage")), the terminal window will need to remain open.  However, if wanting to close the terminal window, installing a utility such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial") will allow VRS to continue running even if the terminal window is closed.
+`vrs -nogui` will start VRS without the GUI.  VRS will start and operate fine in a command-line interface environment with this `-nogui` option.  However, two things should be noted:
+  * To view a GUI webpage interface for the VRS server settings, the [VRS Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) plugin should be utilized.  The Web Admin username and password may be created with the `vrs -webadmin` command.
+  * If using an SSH client (such as [PuTTY](https://www.putty.org "PuTTY's homepage")), the terminal window will need to remain open.  However, if wanting to close the terminal window, installing a utility such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial") will allow VRS to continue running even if the terminal window is closed.
 
-`vrs -startbg` will allow the user to quickly and easily start VRS as a background process. This can be especially useful if wanting to run VRS in a command-line environment and not wanting to bother with running a program such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial"). `vrs -stopbg` will stop VRS only if it has already been started as a background process.  Please read the same notes above for the `vrs -nogui` command on how to access the settings for VRS if VRS is chosen to be ran as a background process.
+`vrs -startbg` will allow the user to quickly and easily start VRS as a background process. This can be especially useful if wanting to run VRS in a command-line environment and not wanting to bother with running a program such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial"). `vrs -stopbg` will stop VRS only if it has already been started as a background process.  Just as with the `vrs -nogui` command, the [VRS Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) will need to be used to access all the VRS settings.
 
 `vrs -enable` will enable VRS to start at every system boot as a background process. `vrs -disable` will prevent VRS from starting at every system boot.
 
-`vrs -webadmin` will allow the user to create a username & password for accessing the VRS Web Admin webpage. Note that this will also start VRS without a GUI. If not wanting VRS to run, the user will simply need to wait until VRS has completely started and press `Q ` to quit VRS.
+`vrs -webadmin` will allow the user to create a username & password for accessing the VRS Web Admin webpage. Note that this will also start VRS without a GUI. If not wanting VRS to run, the user will simply need to wait until VRS has completely started and then press `Q ` to quit VRS.
 
 `vrs -log` will show the log of the previous instances of VRS running as a background process. The log will only show the records of the previous instances of VRS running as a background process. This includes any instance of VRS that may have started at system boot if the `vrs -enable` command was used to start VRS at every system boot.
 
@@ -218,17 +224,17 @@ When this VRS installation script finishes, some very useful information will be
 
 ## Ubuntu Fix
 
-When starting VRS in a few versions of Linux, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error.  However, this installation script installs `libcanberra-gtk-module` just to be safe.
+When starting VRS in a few versions of Linux, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error.  However, this installation script installs `libcanberra-gtk-module` just to be safe and to prevent this error message from appearing.
 
 ## Mono Issue
 
 This script will install VRS on most popular Linux distributions.  However, a number of the newer Debian-based operating systems (Ubuntu, Linux Mint, etc.) will install Mono with a version of 6.4 or higher, and the latest versions of Mono could cause an issue with VRS.
 
-The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions greater or equal to 6.4) on some Debian-based operating systems.  The issue is the plane icons and the altitude stalks will not appear on the VRS webpage.
+The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions equal to or greater than 6.4) on some Debian-based operating systems.  The issue is the plane icons and the altitude stalks will not appear on the VRS webpage.
 
 However, the preview version (ver 3.0.0 Beta) of VRS will not have this issue with the latest versions of Mono.  The drawback is that the preview version is under development.
 
-This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version or another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version is currently installed and then install the newly selected version.
+This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version to another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
 
 As of this writing, the versions of Mono that will get installed on the following operating systems are:
 
@@ -239,7 +245,7 @@ As of this writing, the versions of Mono that will get installed on the followin
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.1 LTS       | 6.8.0.105                      | :x:                 |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
-| Linux Mint 20.0          | 6.8.0.105                      | :x:                 |
+| Linux Mint 20.1          | 6.8.0.105                      | :x:                 |
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
 | Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
