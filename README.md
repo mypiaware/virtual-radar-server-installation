@@ -10,7 +10,15 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10 and Fedora 33.  This script may also install on other popular Linux distributions.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on:
+* Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
+* Debian 10
+* Fedora 33
+* openSUSE 15.2
+
+This script may also install VRS on other popular Linux distributions such as Ubuntu.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+
+If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
 For anyone interested in trying the preview version (ver 3.0.0 Beta), this installation script offers the choice to install the preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make the preview version the better choice.
 
@@ -58,7 +66,7 @@ Here is a very brief summary of what this script will do:
 ```
 bash -c "$(wget -O - https://github.com/mypiaware/virtual-radar-server-installation/raw/master/virtual_radar_server_install.sh)"
 ```
-Run the above one-line command to execute this VRS installation script. The vast majority of the installation time will involve installing Mono which is a prerequisite to installing VRS.
+Run the above one-line command to execute this VRS installation script. The vast majority of the installation time will involve installing Mono (if Mono is not already installed) which is a prerequisite to installing VRS.
 
 ## VRS Plugins
 
@@ -84,7 +92,7 @@ This VRS installation script will also provide the option to download some sampl
 
 ## Server Port Number
 
-To access the VRS webpage, the port number should be set, and the port number will need to be used in the URL that brings up the VRS webpage.  For example, the URL for a VRS webpage on a local network may appear as such:  `http://192.168.1.100:8090/VirtualRadar`
+The VRS server will use a port number.  This port number must be set and will be used in the URL to access the VRS webpage.  For example, the URL for a VRS webpage on a local network using port 8090 may appear as such:  `http://192.168.1.100:8090/VirtualRadar`
 
 This VRS installation script will prompt the user for the port number the VRS server should use.  By default, a typical installation of VRS will use port 8080 for the server port.  However, this VRS installation script will use 8090 as the default port number in the event the same system is running FlightAware's SkyAware (formerly called "Skyview") - which uses port 8080.  The user is free to choose any available port number.  However, this script will not check if the selected port number is available.
 
@@ -226,9 +234,13 @@ When this VRS installation script finishes, some very useful information will be
 
 When starting VRS in a few versions of Linux, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error.  However, this installation script installs `libcanberra-gtk-module` just to be safe and to prevent this error message from appearing.
 
+## Advanced Users
+
+If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will simply bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as fine as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.
+
 ## Mono Issue
 
-This script will install VRS on most popular Linux distributions.  However, a number of the newer Debian-based operating systems (Ubuntu, Linux Mint, etc.) will install Mono with a version of 6.4 or higher, and the latest versions of Mono could cause an issue with VRS.
+This script will install VRS on most popular Linux distributions.  However, VRS on a few operating systems could possibly have an issue with the latest versions of Mono.
 
 The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions equal to or greater than 6.4) on some Debian-based operating systems.  The issue is the plane icons and the altitude stalks will not appear on the VRS webpage.
 
@@ -236,7 +248,7 @@ However, the preview version (ver 3.0.0 Beta) of VRS will not have this issue wi
 
 This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version to another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
 
-As of this writing, the versions of Mono that will get installed on the following operating systems are:
+As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
 | Linux                    | Default Mono Version Installed |Stable Version Works?|
 | ------------------------ |:------------------------------:|:-------------------:|
@@ -249,5 +261,7 @@ As of this writing, the versions of Mono that will get installed on the followin
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
 | Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
+| openSUSE 15.2*           | 6.8.0.105                      | :heavy_check_mark:  |
 
-\* Stable version of VRS works fine on Fedora regardless of the version of Mono installed.
+
+\* Stable version of VRS works fine on Fedora and openSUSE regardless of the version of Mono installed.
