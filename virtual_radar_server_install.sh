@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 7.0)
+# Virtual Radar Server installation script (ver 7.1)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -13,7 +13,7 @@
 # As an option, the user may also enter a receiver.
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
-# This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10 and Fedora 33.
+# This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10, Fedora 33 and openSUSE 15.2.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 #
 # The author of this script has nothing to do with the creation, development or support of Virtual Radar Server.
@@ -119,7 +119,7 @@ VRSFILES_PREVIEW=(
 )
 
 
-# Declare a variable that will hold user's choice of whether to install the stable or preview version.
+# Declare a global variable that will hold user's choice of whether to install the stable or preview version.
 declare VRS_VERSION
 
 
@@ -166,6 +166,18 @@ ORANGE_COLOR='\033[0;33m'
 NO_COLOR='\033[0m'
 
 
+# Determine operating system.
+declare OPERATINGSYSTEMVERSION  # Declare a global variable that will hold the version of the operating system.
+if grep -qEi 'opensuse' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="opensuse"
+elif grep -qEi 'fedora|rhel' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="fedora"
+elif grep -qEi 'debian|buntu' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="debian"
+else OPERATINGSYSTEMVERSION="unknown"
+fi
+
+
 # Function ran after nearly every command in this script to report an error if one exists.
 function ERROREXIT {
    if [ $? -ne 0 ]; then
@@ -181,16 +193,20 @@ function ERROREXIT {
 ######################################################################################################
 
 
+# Immediately stop the script only if the operating system could not be determined AND Mono and/or other necessary software are not already installed.
+if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
+   if [[ $OPERATINGSYSTEMVERSION == "unknown" ]]; then
+      printf "FATAL ERROR! Could not determine operating system or this operating system is not yet supported!\n"
+      exit 1
+   fi
+fi
+
+
 # Check if this script is ran as root. (It should not be ran as root.)
 if [[ $EUID == 0 ]]; then
    printf "Do NOT run this script as root! (Do not use 'sudo' in the command.)\n"
    exit 2
 fi
-
-
-# Even though this script should not be ran as root, it will occasionally need root privileges.
-# Non-Raspbian operating systems will prompt user for sudo privilege here.
-sudo ls &> /dev/null  # Dummy command just to get a prompt for the user's password for the sake of using sudo.
 
 
 # Print welcome screen.
@@ -203,9 +219,9 @@ printf "  * Language Packs\n"
 printf "  * Custom Content Plugin\n"
 printf "  * Database Editor Plugin\n"
 printf "  * Database Writer Plugin\n"
-printf "  * Feed Filter Plugin (only with the preview version of VRS)\n"
 printf "  * Tile Server Cache Plugin\n"
-printf "  * Web Admin Plugin\n\n"
+printf "  * Web Admin Plugin\n"
+printf "  * Feed Filter Plugin (only with the preview version of VRS)\n\n"
 printf "Need help with this installation script?:\n"
 printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
 
@@ -223,11 +239,13 @@ elif [[ $VRS_CHOICE =~ 2 ]]; then
    VRS_VERSION="Preview"
    VRSFILES=("${VRSFILES_PREVIEW[@]}")
    printf "\n"
-   printf "${RED_COLOR}**************************** WARNING *****************************${NO_COLOR}\n"
-   printf "        ${RED_COLOR}The preview version has been selected to install.${NO_COLOR}\n"
-   printf "    ${RED_COLOR}The preview version is under testing and may contain bugs!${NO_COLOR}\n"
-   printf "${RED_COLOR}Please consider this when choosing to install the preview version!${NO_COLOR}\n"
-   printf "${RED_COLOR}**************************** WARNING *****************************${NO_COLOR}\n"
+   printf "${RED_COLOR}"
+   printf " **************************** WARNING *****************************\n"
+   printf "         The preview version has been selected to install.\n"
+   printf "     The preview version is under testing and may contain bugs!\n"
+   printf " Please consider this when choosing to install the preview version.\n"
+   printf " **************************** WARNING *****************************\n"
+   printf "${NO_COLOR}"
 fi
 printf "\n"
 
@@ -392,6 +410,12 @@ fi
 printf "\n"
 
 
+# Even though this script should not be ran as root, it will occasionally need root privileges.
+# Non-Raspbian operating systems will prompt user for sudo privilege here.
+sudo ls &> /dev/null  # Dummy command just to get a prompt for the user's password for the sake of using sudo.
+printf "\n"
+
+
 # User only needs to press [Enter] key to start the VRS installation.
 printf "No more user input necessary.\n"
 printf "${GREEN_COLOR}Press [ENTER] to begin the VRS installation...${NO_COLOR}"; read -p ""
@@ -403,26 +427,23 @@ printf "\n"
 #############################################################################################
 
 
-# Possibly install/update Mono and other necessary software on Debian-based operating systems.
-if which apt >/dev/null 2>&1; then
-   if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
-      ! which unzip >/dev/null 2>&1 ||
-      ! which mono >/dev/null 2>&1; then
-      sudo apt update
-      sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
-      sudo apt install -y unzip
-      sudo apt install -y mono-complete
-   fi
-fi
-
-
-# Possibly install/update Mono and other necessary software on Fedora.
-if which dnf >/dev/null 2>&1; then
-   if ! which unzip >/dev/null 2>&1; then
-      sudo dnf install -y unzip
-   fi
-   if ! which mono >/dev/null 2>&1; then
-      sudo dnf install -y mono-complete
+### Attempt to install Mono and/or other necessary software only if the software is not already installed.
+if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
+   if [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then      # Possibly install/update Mono and other necessary software on Fedora-like operating systems.
+      if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
+      if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
+   elif [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then  # Possibly install/update Mono and other necessary software on openSUSE.
+      if ! which unzip >/dev/null 2>&1; then sudo zypper install -y unzip; fi
+      if ! which mono  >/dev/null 2>&1; then sudo zypper install -y mono-complete; fi
+   elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then    # Possibly install/update Mono and other necessary software on Debian-based operating systems.
+      if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
+         ! which unzip >/dev/null 2>&1 ||
+         ! which mono >/dev/null 2>&1; then
+         sudo apt update
+         sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
+         sudo apt install -y unzip
+         sudo apt install -y mono-complete
+      fi
    fi
 fi
 
@@ -699,17 +720,18 @@ echo "exit"                                                           >> "$DATAB
 
 
 # Create service file to run VRS in the background.
+if which mono >/dev/null 2>&1; then MONOLOCATION="$(which mono)"; else MONOLOCATION="/usr/bin/mono"; fi  # Assume Mono is installed at '/usr/bin/mono' unless determined to be somewhere else.
 sudo touch $SERVICEFILE;        ERROREXIT 59 "Failed to create $SERVICEFILE!"
 sudo chmod 777 "$SERVICEFILE";  ERROREXIT 60 "The 'chmod' command failed on $SERVICEFILE!"
-echo "[Unit]"                                                            > "$SERVICEFILE";  ERROREXIT 61 "Failed to edit $SERVICEFILE!"
-echo "Description=VRS background process"                               >> "$SERVICEFILE";
-echo ""                                                                 >> "$SERVICEFILE";
-echo "[Service]"                                                        >> "$SERVICEFILE";
-echo "User=$USER"                                                       >> "$SERVICEFILE";
-echo "ExecStart=mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui"  >> "$SERVICEFILE";
-echo ""                                                                 >> "$SERVICEFILE";
-echo "[Install]"                                                        >> "$SERVICEFILE";
-echo "WantedBy=multi-user.target"                                       >> "$SERVICEFILE";
+echo "[Unit]"                                                                     > "$SERVICEFILE";  ERROREXIT 61 "Failed to edit $SERVICEFILE!"
+echo "Description=VRS background process"                                        >> "$SERVICEFILE";
+echo ""                                                                          >> "$SERVICEFILE";
+echo "[Service]"                                                                 >> "$SERVICEFILE";
+echo "User=$USER"                                                                >> "$SERVICEFILE";
+echo "ExecStart=$MONOLOCATION \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui"  >> "$SERVICEFILE";
+echo ""                                                                          >> "$SERVICEFILE";
+echo "[Install]"                                                                 >> "$SERVICEFILE";
+echo "WantedBy=multi-user.target"                                                >> "$SERVICEFILE";
 sudo chmod 755 "$SERVICEFILE";        ERROREXIT 62 "The 'chmod' command failed on $SERVICEFILE!"
 sudo chown root:root "$SERVICEFILE";  ERROREXIT 63 "The 'chown' command failed on $SERVICEFILE!"
 sudo systemctl daemon-reload;         ERROREXIT 64 "The 'systemctl daemon-reload' command failed"
@@ -834,10 +856,8 @@ printf "   %s\n\n" "$EXTRASDIRECTORY"
 if [ -f "$DATABASEBACKUPSCRIPT" ]; then
    printf "${ORANGE_COLOR}A cron job may be set to routinely backup the database file:${NO_COLOR}\n"
    printf "  Use this command to set up a cron job:   crontab -e\n"
-   printf "  The cron job will then utilize this following command:\n"
-   printf "    bash \"$DATABASEBACKUPSCRIPT\"\n\n"
-   printf "${ORANGE_COLOR}The database backup file will be:${NO_COLOR}\n"
-   printf "  %s\n\n" "$DATABASEBACKUPFILE"
+   printf "  Here is an example cronjob to use to backup at every 3:00AM:\n"
+   printf "    0 3 * * * bash \"$DATABASEBACKUPSCRIPT\"\n\n"
 fi
 
 printf "${ORANGE_COLOR}To view the VRS map:${NO_COLOR}\n"
@@ -864,7 +884,7 @@ printf -- "    -%-${ARGLENGTH}s  View history log of VRS running as a background
 printf -- "    -%-${ARGLENGTH}s  Display the help menu\n\n" "?"
 
 printf "${ORANGE_COLOR}More detailed information regarding this installation script here:${NO_COLOR}\n"
-printf "  https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md\n\n"
+printf "  https://github.com/mypiaware/virtual-radar-server-installation\n\n"
 
 # Script ends with reminder of using the 'vrs' command.
 printf "\n"
