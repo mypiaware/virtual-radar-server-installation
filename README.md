@@ -15,6 +15,7 @@ This script has been confirmed to work with VRS version 2.4.4 (the latest stable
 * Debian 10
 * Fedora 33
 * openSUSE 15.2
+* Arch Linux
 
 This script may also install VRS on other popular Linux distributions such as Ubuntu.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
 
@@ -262,6 +263,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
 | openSUSE 15.2*           | 6.8.0.105                      | :heavy_check_mark:  |
+| Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
-\* Stable version of VRS works fine on Fedora and openSUSE regardless of the version of Mono installed.
+\* Stable version of VRS works fine on Fedora, openSUSE and Arch Linux regardless of the version of Mono installed.
