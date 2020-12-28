@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 7.1)
+# Virtual Radar Server installation script (ver 7.2)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -13,7 +13,8 @@
 # As an option, the user may also enter a receiver.
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
-# This script has been confirmed to work with VRS version 2.4.4 on Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10, Fedora 33 and openSUSE 15.2.
+# This script has been confirmed to work with VRS version 2.4.4 on:
+# Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10, Fedora 33, openSUSE 15.2 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 #
 # The author of this script has nothing to do with the creation, development or support of Virtual Radar Server.
@@ -152,8 +153,12 @@ VRSCMD_LOG="log"
 
 
 # Get the local IP address of this machine.
-if [[ $(hostname -I) =~ ^([[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}) ]]; then
+declare LOCALIP
+LOCALIP=$(ip route get 1.2.3.4 | awk '{printf "%s",$7}')
+if [[ "$LOCALIP" =~ ([[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}) ]]; then
    LOCALIP=${BASH_REMATCH[1]}
+else
+   printf "\n\nWarning! Could not determine local IP address!\n"
 fi
 
 
@@ -172,6 +177,8 @@ if grep -qEi 'opensuse' /etc/os-release; then
    OPERATINGSYSTEMVERSION="opensuse"
 elif grep -qEi 'fedora|rhel' /etc/os-release; then
    OPERATINGSYSTEMVERSION="fedora"
+elif grep -qEi 'arch linux' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="archlinux"
 elif grep -qEi 'debian|buntu' /etc/os-release; then
    OPERATINGSYSTEMVERSION="debian"
 else OPERATINGSYSTEMVERSION="unknown"
@@ -429,13 +436,16 @@ printf "\n"
 
 ### Attempt to install Mono and/or other necessary software only if the software is not already installed.
 if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
-   if [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then      # Possibly install/update Mono and other necessary software on Fedora-like operating systems.
-      if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
-      if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
-   elif [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then  # Possibly install/update Mono and other necessary software on openSUSE.
+   if [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then     # Possibly install/update Mono and other necessary software on openSUSE.
       if ! which unzip >/dev/null 2>&1; then sudo zypper install -y unzip; fi
       if ! which mono  >/dev/null 2>&1; then sudo zypper install -y mono-complete; fi
-   elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then    # Possibly install/update Mono and other necessary software on Debian-based operating systems.
+   elif [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then     # Possibly install/update Mono and other necessary software on Fedora-like operating systems.
+      if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
+      if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
+   elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then  # Assume many things need to be installed on Arch Linux.
+      sudo pacman -Syyu
+      sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget
+   elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems.
       if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
          ! which unzip >/dev/null 2>&1 ||
          ! which mono >/dev/null 2>&1; then
