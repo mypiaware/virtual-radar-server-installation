@@ -52,7 +52,7 @@ Here is a very brief summary of what this script will do:
   * Sample database
 * Allow the user to select/enter the following:
   * [Which port number the VRS server should use](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#server-port-number)
-  * [Which default language the VRS webpage should display](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#default-language)
+  * [Which default language the VRS webpage should display](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#webpage-default-language)
   * [The latitude and longitude of the center of the VRS webpage map](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#center-location-of-the-vrs-map)
   * [Enter a receiver](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#enter-a-receiver)
 * [Create a set of directories to contain most of the user's custom files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#directory-structure)
@@ -97,7 +97,7 @@ The VRS server will use a port number.  This port number must be set and will be
 
 This VRS installation script will prompt the user for the port number the VRS server should use.  By default, a typical installation of VRS will use port 8080 for the server port.  However, this VRS installation script will use 8090 as the default port number in the event the same system is running FlightAware's SkyAware (formerly called "Skyview") - which uses port 8080.  The user is free to choose any available port number.  However, this script will not check if the selected port number is available.
 
-## Default Language
+## Webpage Default Language
 
 The default language for the VRS webpage from a typical installation of VRS is "English (United Kingdom)".  However, this script will allow the user to choose from a limited number of languages and regional locales.
 
@@ -114,9 +114,9 @@ The user has an option of adding and entering the configuration information of a
   * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, the user should enter 127.0.0.1 as the IP address.
   * Receiver IP port:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
 
-It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly configured in the VRS server settings after VRS is installed.  It should also be noted there are additional parameters the user may find necessary to change for the receiver settings, and these changes may also be done in the VRS server settings after VRS is installed.
+It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly modified in the VRS server settings after VRS is installed.
 
-This script will only ask the user to enter information for one receiver.  However, more receivers may be added in the VRS server settings after VRS is installed.  However, it is possible to run this script multiple times and add an additional receiver each time the script is ran.
+This script will only ask the user to enter information for one receiver.  However, more receivers may be added in the VRS server settings after VRS is installed.  It is possible to run this script multiple times and add an additional receiver each time the script is ran.
 
 ## Directory Structure
 
