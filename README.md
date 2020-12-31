@@ -44,6 +44,7 @@ Here is a very brief summary of what this script will do:
   * Tile Server Cache Plugin
   * Web Admin Plugin
   * Feed Filter Plugin (only available with the preview version of VRS)
+  * SQL Server Plugin (only available with the preview version of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
   * Airline operator flags
