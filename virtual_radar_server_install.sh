@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 7.2)
+# Virtual Radar Server installation script (ver 7.3)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -115,6 +115,7 @@ VRSFILES_PREVIEW=(
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-DatabaseEditor-3.0.0-preview-1.tar.gz"
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-DatabaseWriter-3.0.0-preview-1.tar.gz"
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-FeedFilter-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-SqlServer-3.0.0-preview-1.tar.gz"
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-TileServerCache-3.0.0-preview-1.tar.gz"
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-WebAdmin-3.0.0-preview-1.tar.gz"
 )
@@ -217,8 +218,12 @@ fi
 
 
 # Print welcome screen.
-printf "\n ${BLUE_COLOR}Virtual Radar Server${NO_COLOR}\n"
-printf " ${BLUE_COLOR}http://www.virtualradarserver.co.uk${NO_COLOR}\n\n"
+printf "\n${BLUE_COLOR}"
+printf "%0.s_" {1..62}
+printf "\n\n"
+printf " Virtual Radar Server\n"
+printf " http://www.virtualradarserver.co.uk\n\n"
+printf "${NO_COLOR}${BOLD_FONT}"
 printf "This script downloads & installs:\n"
 printf "  * Virtual Radar Server\n"
 printf "  * Mono (and VRS Mono fix)\n"
@@ -228,9 +233,15 @@ printf "  * Database Editor Plugin\n"
 printf "  * Database Writer Plugin\n"
 printf "  * Tile Server Cache Plugin\n"
 printf "  * Web Admin Plugin\n"
-printf "  * Feed Filter Plugin (only with the preview version of VRS)\n\n"
+printf "  * Feed Filter Plugin${NO_COLOR} (only with the preview version of VRS)${BOLD_FONT}\n"
+printf "  * SQLServer Plugin${NO_COLOR} (only with the preview version of VRS)\n\n"
 printf "Need help with this installation script?:\n"
 printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
+
+
+# User should press [Enter] key to begin.
+printf "${GREEN_COLOR}Press [ENTER] to continue...${NO_COLOR}"; read -p ""
+printf "\n\n"
 
 
 # Prompt user to either install the latest stable version for the preview version.
@@ -443,7 +454,7 @@ if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
       if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
       if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
    elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then  # Assume many things need to be installed on Arch Linux.
-      sudo pacman -Syyu
+      sudo pacman -Syyu --noconfirm
       sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget
    elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems.
       if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
