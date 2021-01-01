@@ -72,13 +72,14 @@ Run the above one-line command to execute this VRS installation script. The vast
 
 ## VRS Plugins
 
-This VRS installation script will install the following five VRS plugins. Note that many of the plugins are disabled by default.  Click on each for more information on the plugin.
+This VRS installation script will install the following VRS plugins. Note that many of the plugins are disabled by default.  Click on each for more information on the plugin.
   * [Custom Content Plugin](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx)
   * [Database Editor Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-database-editor)
   * [Database Writer Plugin](http://www.virtualradarserver.co.uk/Documentation/DatabaseWriter/Default.aspx)
   * [Tile Server Cache Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-tileservercache)
   * [Web Admin Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin)
   * Feed Filter Plugin (only available with the preview version of VRS)
+  * SQL Server Plugin (only available with the preview version of VRS)
 
 ## Language Packs
 
