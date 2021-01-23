@@ -253,7 +253,7 @@ However, the preview version (ver 3.0.0 Beta) of VRS will not have this issue wi
 
 This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version to another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
 
-Although installing the preview version of VRS may solve the Mono issue, the preview version may introduce additional unforseen issues.  Please choose caution when installing the preview version.
+Although installing the preview version of VRS may solve the Mono issue, the preview version may introduce additional unforseen issues.  Please use caution when installing the preview version.
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
