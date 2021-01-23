@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 7.3)
+# Virtual Radar Server installation script (ver 7.4)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -16,6 +16,7 @@
 # This script has been confirmed to work with VRS version 2.4.4 on:
 # Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10, Fedora 33, openSUSE 15.2 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
+# An option is available to download a preview version of VRS.
 #
 # The author of this script has nothing to do with the creation, development or support of Virtual Radar Server.
 # Script credit and more information here:
@@ -109,15 +110,15 @@ VRSFILES_STABLE=(
 
 # Declare an array of URLs for all the VRS files of the preview version of VRS.  Very important to know this preview version is under testing and may have bugs.
 VRSFILES_PREVIEW=(
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/VirtualRadar-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/LanguagePack-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-CustomContent-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-DatabaseEditor-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-DatabaseWriter-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-FeedFilter-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-SqlServer-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-TileServerCache-3.0.0-preview-1.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-1-mono/Plugin-WebAdmin-3.0.0-preview-1.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/VirtualRadar-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/LanguagePack-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-CustomContent-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-DatabaseEditor-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-DatabaseWriter-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-FeedFilter-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-SqlServer-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-TileServerCache-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-WebAdmin-3.0.0-preview-3.tar.gz"
 )
 
 
@@ -244,10 +245,10 @@ printf "${GREEN_COLOR}Press [ENTER] to continue...${NO_COLOR}"; read -p ""
 printf "\n\n"
 
 
-# Prompt user to either install the latest stable version for the preview version.
+# Prompt user to either install the latest stable version or the preview version.
 printf "Install stable or preview version of VRS?\n";
 printf "  1. Stable (ver 2.4.4)\n"
-printf "  2. Preview (ver 3.0.0 Beta)\n"
+printf "  2. Preview (ver 3.0.0-preview-3)\n"
 while ! [[ $VRS_CHOICE =~ ^[12]$ ]]; do printf "Choice [12]: "; read VRS_CHOICE; done
 if [[ $VRS_CHOICE =~ 1 ]]; then
    VRS_VERSION="Stable"
@@ -454,7 +455,7 @@ if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
       if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
       if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
    elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then  # Assume many things need to be installed on Arch Linux.
-      sudo pacman -Syyu --noconfirm
+      sudo pacman -Syy --noconfirm
       sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget
    elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems.
       if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
@@ -813,7 +814,7 @@ echo "      sudo systemctl stop $SERVICEFILENAME.service"                       
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to stop VRS!\n\"; exit 4"                                                                                                                                                                                             >> "$STARTCOMMAND";
 echo "      else                    printf \"VRS has stopped.\n\"; fi"                                                                                                                                                                                                           >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_LOG\" ]]; then"                                                                                                                                                                                                                               >> "$STARTCOMMAND";
-echo "      sudo journalctl -u $SERVICEFILENAME.service"                                                                                                                                                                                                                         >> "$STARTCOMMAND";
+echo "      journalctl -u $SERVICEFILENAME.service --no-pager"                                                                                                                                                                                                                         >> "$STARTCOMMAND";
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to get log of VRS!\n\"; exit 5; fi"                                                                                                                                                                                   >> "$STARTCOMMAND";
 echo "   elif ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                               >> "$STARTCOMMAND";
 echo "      if [[ \$1 == \"-$VRSCMD_GUI\" ]]; then"                                                                                                                                                                                                                              >> "$STARTCOMMAND";
@@ -839,13 +840,13 @@ echo "   fi"                                                                    
 echo "elif [[ \$# -ge 1 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "   printf \"Too many parameters!\n\n\"; COMMANDHELP; exit 8"                                                                                                                                                                                                               >> "$STARTCOMMAND";
 echo "elif [[ \$# -eq 0 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
-echo "   printf \"Status: \";"                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "   printf \"${BOLD_FONT}Status:${NO_COLOR} \";"                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
 echo "   if pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                   >> "$STARTCOMMAND";
-echo "      printf \"VRS is running.\n\n\""                                                                                                                                                                                                                                      >> "$STARTCOMMAND";
+echo "      printf \"${GREEN_COLOR}VRS is running.${NO_COLOR}\n\n\""                                                                                                                                                                                                                                      >> "$STARTCOMMAND";
 echo "   else"                                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
-echo "      printf \"VRS is not running.\n\n\""                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "      printf \"${RED_COLOR}VRS is not running.${NO_COLOR}\n\n\""                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
-echo "   COMMANDHELP; exit 0"                                                                                                                                                                                                                                                    >> "$STARTCOMMAND";
+echo "   COMMANDHELP; exit 0"                                                                                                                                                                                                                                                 >> "$STARTCOMMAND";
 echo "else printf \"Unknown error occurred! EXIT CODE: 9\n\"; exit 9"                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "fi"                                                                                                                                                                                                                                                                        >> "$STARTCOMMAND";
 echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
