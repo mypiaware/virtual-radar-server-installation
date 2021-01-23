@@ -2,7 +2,7 @@
 
 This script is a very helpful tool to easily install Virtual Radar Server on Linux.
 
-Virtual Radar Server (VRS) provides an amazing webpage display of any aircraft detected by an ADS-B receiver.  This script will help with the installation of VRS to those who are brand new to VRS.  With just a few keystrokes, VRS may be installed and operating with planes appearing on the VRS webpage.  This is assuming an ADS-B receiver has already been built and is operating properly.
+Virtual Radar Server (VRS) provides an amazing webpage display of any aircraft detected by an ADS-B receiver.  This script will help with the installation of VRS to those who are brand new to VRS.  With just a few keystrokes, VRS may be installed and operating with planes appearing on the VRS webpage.  This is assuming an ADS-B receiver has already been built and is operating properly.  (It is possible for VRS to also be installed on a ADS-B receiver device.)
 
 This script is only intended to get VRS installed, configured and running as quickly as possible for the novice user.  Many more options are left to the user for further customization of VRS.  Some research and experimenting is encouraged and expected to enhance and secure VRS.
 
@@ -21,7 +21,7 @@ This script may also install VRS on other popular Linux distributions such as Ub
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
-For anyone interested in trying the preview version (ver 3.0.0 Beta), this installation script offers the choice to install the preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make the preview version the better choice.
+For anyone interested in trying the preview version (ver 3.0.0 Beta), this installation script offers the choice to install the preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make the preview version the better choice under certain circumstances.
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
@@ -217,6 +217,8 @@ The `vrs` command will provide options on how a user may want to start or stop V
 
 `vrs -log` will show the log of the previous instances of VRS running as a background process. The log will only show the records of the previous instances of VRS running as a background process. This includes any instance of VRS that may have started at system boot if the `vrs -enable` command was used to start VRS at every system boot.
 
+`vrs` command just by itself will give you the current running status of VRS and the help menu.
+
 ## Script to Backup Database
 
 This VRS installation script will also create a script to backup the database file through a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial").  By default, the script is called `backupvrsdb.sh` and is located in the `Databases/DatabaseBackup` directory. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#databasesdatabasebackup)
@@ -250,6 +252,8 @@ The stable version of VRS (ver 2.4.4) appears to have an issue with the latest v
 However, the preview version (ver 3.0.0 Beta) of VRS will not have this issue with the latest versions of Mono.  The drawback is that the preview version is under development.
 
 This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version to another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
+
+Although installing the preview version of VRS may solve the Mono issue, the preview version may introduce additional unforseen issues.  Please choose caution when installing the preview version.
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
