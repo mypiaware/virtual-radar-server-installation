@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 7.4)
+# Virtual Radar Server installation script (ver 7.5)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -205,7 +205,10 @@ function ERROREXIT {
 # Immediately stop the script only if the operating system could not be determined AND Mono and/or other necessary software are not already installed.
 if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
    if [[ $OPERATINGSYSTEMVERSION == "unknown" ]]; then
-      printf "FATAL ERROR! Could not determine operating system or this operating system is not yet supported!\n"
+      printf "FATAL ERROR! This operating system is not yet supported or identified!\n"
+      printf "Try installing Mono and/or unzip manually and then rerun this script again.\n"
+      printf "More help:\n"
+      printf "https://github.com/mypiaware/virtual-radar-server-installation#advanced-users\n"
       exit 1
    fi
 fi
@@ -549,9 +552,9 @@ fi
 function EDITCONFIGFILE {
    local SETTINGID="$1"
    local DIRECTORYPATH="$2"
-   if grep -q "<$SETTINGID>.*</$SETTINGID>" "$CONFIGFILE"; then  # If SETTINGID already existing, modify its value.
+   if grep -q "<$SETTINGID>.*</$SETTINGID>" "$CONFIGFILE"; then  # If SETTINGID is already existing, modify its value.
       sed -i "s|<$SETTINGID>.*</$SETTINGID>|<$SETTINGID>$DIRECTORYPATH</$SETTINGID>|" "$CONFIGFILE";                       ERROREXIT 19 "Failed to edit $CONFIGFILE!"
-   else  # If SETTINGID not already existing, create it with the appropriate value.
+   else  # If SETTINGID is not already existing, create it with the appropriate value.
       sed -i "s|<BaseStationSettings>|<BaseStationSettings>\n    <$SETTINGID>$DIRECTORYPATH</$SETTINGID>|" "$CONFIGFILE";  ERROREXIT 20 "Failed to edit $CONFIGFILE!"
    fi
 }
@@ -810,11 +813,15 @@ echo "      sudo systemctl disable $SERVICEFILENAME.service >/dev/null 2>&1"    
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to disable VRS at boot!\n\"; exit 3"                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "      else                    printf \"VRS disabled from starting at every system boot.\n\"; fi"                                                                                                                                                                           >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_STOPPROCESS\" ]]; then"                                                                                                                                                                                                                       >> "$STARTCOMMAND";
-echo "      sudo systemctl stop $SERVICEFILENAME.service"                                                                                                                                                                                                                        >> "$STARTCOMMAND";
-echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to stop VRS!\n\"; exit 4"                                                                                                                                                                                             >> "$STARTCOMMAND";
-echo "      else                    printf \"VRS has stopped.\n\"; fi"                                                                                                                                                                                                           >> "$STARTCOMMAND";
+echo "      if ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "         printf \"VRS is already stopped.\n\""                                                                                                                                                                                                                             >> "$STARTCOMMAND";
+echo "      else"                                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "         sudo systemctl stop $SERVICEFILENAME.service"                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "         if [[ \$? -ne 0 ]]; then printf \"Error trying to stop VRS!\n\"; exit 4"                                                                                                                                                                                          >> "$STARTCOMMAND";
+echo "         else                    printf \"VRS has stopped.\n\"; fi"                                                                                                                                                                                                        >> "$STARTCOMMAND";
+echo "      fi"                                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_LOG\" ]]; then"                                                                                                                                                                                                                               >> "$STARTCOMMAND";
-echo "      journalctl -u $SERVICEFILENAME.service --no-pager"                                                                                                                                                                                                                         >> "$STARTCOMMAND";
+echo "      journalctl -u $SERVICEFILENAME.service --no-pager"                                                                                                                                                                                                                   >> "$STARTCOMMAND";
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to get log of VRS!\n\"; exit 5; fi"                                                                                                                                                                                   >> "$STARTCOMMAND";
 echo "   elif ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                               >> "$STARTCOMMAND";
 echo "      if [[ \$1 == \"-$VRSCMD_GUI\" ]]; then"                                                                                                                                                                                                                              >> "$STARTCOMMAND";
@@ -840,13 +847,13 @@ echo "   fi"                                                                    
 echo "elif [[ \$# -ge 1 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "   printf \"Too many parameters!\n\n\"; COMMANDHELP; exit 8"                                                                                                                                                                                                               >> "$STARTCOMMAND";
 echo "elif [[ \$# -eq 0 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
-echo "   printf \"${BOLD_FONT}Status:${NO_COLOR} \";"                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "   printf \"${BOLD_FONT}Status:${NO_COLOR} \";"                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "   if pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                   >> "$STARTCOMMAND";
-echo "      printf \"${GREEN_COLOR}VRS is running.${NO_COLOR}\n\n\""                                                                                                                                                                                                                                      >> "$STARTCOMMAND";
+echo "      printf \"${GREEN_COLOR}VRS is running.${NO_COLOR}\n\n\""                                                                                                                                                                                                             >> "$STARTCOMMAND";
 echo "   else"                                                                                                                                                                                                                                                                   >> "$STARTCOMMAND";
-echo "      printf \"${RED_COLOR}VRS is not running.${NO_COLOR}\n\n\""                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
+echo "      printf \"${RED_COLOR}VRS is not running.${NO_COLOR}\n\n\""                                                                                                                                                                                                           >> "$STARTCOMMAND";
 echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
-echo "   COMMANDHELP; exit 0"                                                                                                                                                                                                                                                 >> "$STARTCOMMAND";
+echo "   COMMANDHELP; exit 0"                                                                                                                                                                                                                                                    >> "$STARTCOMMAND";
 echo "else printf \"Unknown error occurred! EXIT CODE: 9\n\"; exit 9"                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "fi"                                                                                                                                                                                                                                                                        >> "$STARTCOMMAND";
 echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
