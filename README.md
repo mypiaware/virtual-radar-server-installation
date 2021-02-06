@@ -12,7 +12,7 @@ This script may be safely ran multiple times if wanting to change a few of the s
 
 This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
-* Debian 10
+* Debian 10.8
 * Fedora 33
 * openSUSE 15.2
 * Arch Linux
@@ -95,8 +95,10 @@ This VRS installation script will also provide the option to download some sampl
 
 ## Server Port Number
 
-The VRS server will use a port number.  This port number must be set and will be used in the URL to access the VRS webpage.  For example, the URL for a VRS webpage on a local network using port 8090 may appear as such:  `http://192.168.1.100:8090/VirtualRadar`
-
+The VRS server will use a port number.  This port number must be set and will be used in the URL to access the VRS webpage.  For example, the URL for a VRS webpage on a local network using port 8090 may appear as such:  
+```
+http://192.168.1.100:8090/VirtualRadar
+```
 This VRS installation script will prompt the user for the port number the VRS server should use.  By default, a typical installation of VRS will use port 8080 for the server port.  However, this VRS installation script will use 8090 as the default port number in the event the same system is running FlightAware's SkyAware (formerly called "Skyview") - which uses port 8080.  The user is free to choose any available port number.  However, this script will not check if the selected port number is available.
 
 ## Webpage Default Language
@@ -116,7 +118,7 @@ The user has an option of adding and entering the configuration information of a
   * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, the user should enter 127.0.0.1 as the IP address.
   * Receiver IP port:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
 
-It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be properly modified in the VRS server settings after VRS is installed.
+It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be further modified in the VRS server settings after VRS is installed.
 
 This script will only ask the user to enter information for one receiver.  However, more receivers may be added in the VRS server settings after VRS is installed.  It is possible to run this script multiple times and add an additional receiver each time the script is ran.
 
@@ -150,7 +152,7 @@ This `Database` directory will contain the one `BaseStation.sqb` database file u
 
 #### Databases/DatabaseBackup
 
-This VRS installation script will create a `backupvrsdb.sh` script in this `DatabaseBackup` directory that may be used by a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial") to routinely backup the `BaseStation.sqb` database file located in the `Database` directory.  Running this script will create a copy of the `BaseStation.sqb` database file and place the copy in this `DatabaseBackup` directory.  The copied database file will be named `BaseStation_BACKUP.sqb`.  Here is an example of a cron job utilizing the `backupvrsdb.sh` script to backup the database every day at 3:00 AM.  Note that the database should only be backed up at time when VRS is known to have the fewest planes visible.
+This VRS installation script will create a `backupvrsdb.sh` script in this `DatabaseBackup` directory that may be used by a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial") to routinely backup the `BaseStation.sqb` database file located in the `Database` directory.  Running this script will create a copy of the `BaseStation.sqb` database file and place the copy in this `DatabaseBackup` directory.  The copied database file will be named `BaseStation_BACKUP.sqb`.  Note that the database should only be backed up at time when VRS is known to have the fewest planes visible.  Here is an example of a cron job utilizing the `backupvrsdb.sh` script to backup the database every day at 3:00 AM.
 ```
 0 3 * * * bash /home/<username>/VirtualRadarServer/VRS-Extras/Databases/DatabaseBackup/backupvrsdb.sh
 ```
@@ -241,7 +243,7 @@ When starting VRS in a few versions of Linux, an error message may appear that r
 
 ## Advanced Users
 
-If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will simply bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as fine as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.
+If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will simply bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as fine as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.  Also note that a few Linux distributions do not have `unzip` already installed.  Therefore, it may also be necessary to manually install `unzip`.
 
 ## Mono Issue
 
@@ -260,9 +262,9 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Linux                    | Default Mono Version Installed |Stable Version Works?|
 | ------------------------ |:------------------------------:|:-------------------:|
 | Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
-| Debian 10                | 5.18.0.240                     | :heavy_check_mark:  |
+| Debian 10.8              | 5.18.0.240                     | :heavy_check_mark:  |
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
-| Ubuntu 20.04.1 LTS       | 6.8.0.105                      | :x:                 |
+| Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
 | Linux Mint 20.1          | 6.8.0.105                      | :x:                 |
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
@@ -272,4 +274,4 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
-\* Stable version of VRS works fine on Fedora, openSUSE and Arch Linux regardless of the version of Mono installed.
+\* Stable version of VRS works fine on Fedora, openSUSE and Arch Linux regardless of which version of Mono was installed.
