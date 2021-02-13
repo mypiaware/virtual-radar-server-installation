@@ -46,6 +46,7 @@ Here is a very brief summary of what this script will do:
   * Feed Filter Plugin (only available with the preview version of VRS)
   * SQL Server Plugin (only available with the preview version of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
+* [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
   * Airline operator flags
   * Aircraft silhouettes
@@ -84,6 +85,17 @@ This VRS installation script will install the following VRS plugins. Note that m
 ## Language Packs
 
 This VRS installation script will download and install the language packs that will be used by the VRS server settings interface.  Based on the current language set for the Linux operating system, the VRS server settings interface will automatically set the language to be used.  Not all languages are supported. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-translations)
+
+## Fix libpng warnings
+
+The stable version of VRS (ver 2.4.4) can produce "libpng warning" messages at the command line.  The problem resides with two image files in the `images/markers` directory used to display a generic airplane marker on the VRS webpage.  The following steps fix the issue:
+
+  * Filenames need to be changed:
+    * `Marker_Airplane.png` to `Airplane.png`
+    * `Marker_AirplaneSelected.png` to `AirplaneSelected.png`
+  * Each of these two image files also need to have its color profile converted.
+
+This VRS installation script will download and install two image files that have already been corrected to the `CustomWebFiles` directory to eliminate these messages from appearing.  The Custom Content Plugin will utilize these two corrected image files.  Therefore, the Custom Contenet Plugin should be enabled and the "Site root folder" field in the Custom Content Plugin should be properly set.  By default, this script will ensure these conditions are met.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
 
 ## Download Additional Files
 
