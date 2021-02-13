@@ -95,7 +95,7 @@ The stable version of VRS (ver 2.4.4) can produce "libpng warning" messages at t
     * `Marker_AirplaneSelected.png` to `AirplaneSelected.png`
   * Each of these two image files also need to have its color profile converted.
 
-This VRS installation script will download and install two image files that have already been corrected to the `CustomWebFiles` directory to eliminate these messages from appearing.  The Custom Content Plugin will utilize these two corrected image files.  Therefore, the Custom Contenet Plugin should be enabled and the "Site root folder" field in the Custom Content Plugin should be properly set.  By default, this script will ensure these conditions are met.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
+This VRS installation script will download and install two image files that have already been corrected to the `CustomWebFiles` directory to eliminate these messages from appearing.  The Custom Content Plugin will utilize these two corrected image files.  Therefore, the Custom Content Plugin should be enabled and the "Site root folder" field in the Custom Content Plugin should be properly set.  By default, this script will ensure these conditions are met.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
 
 ## Download Additional Files
 
