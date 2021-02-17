@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 8.0)
+# Virtual Radar Server installation script (ver 8.2)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -112,15 +112,15 @@ VRSFILES_STABLE=(
 
 # Declare an array of URLs for all the VRS files of the preview version of VRS.  Very important to know this preview version is under testing and may have bugs.
 VRSFILES_PREVIEW=(
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/VirtualRadar-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/LanguagePack-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-CustomContent-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-DatabaseEditor-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-DatabaseWriter-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-FeedFilter-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-SqlServer-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-TileServerCache-3.0.0-preview-3.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-3-mono/Plugin-WebAdmin-3.0.0-preview-3.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/VirtualRadar-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/LanguagePack-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-CustomContent-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-DatabaseEditor-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-DatabaseWriter-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-FeedFilter-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-SqlServer-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-TileServerCache-3.0.0-preview-4.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-WebAdmin-3.0.0-preview-4.tar.gz"
 )
 
 
@@ -258,7 +258,7 @@ printf "\n\n"
 # Prompt user to either install the latest stable version or the preview version.
 printf "Install stable or preview version of VRS?\n";
 printf "  1. Stable (ver 2.4.4)\n"
-printf "  2. Preview (ver 3.0.0-preview-3)\n"
+printf "  2. Preview (ver 3.0.0-preview-4)\n"
 while ! [[ $VRS_CHOICE =~ ^[12]$ ]]; do printf "Choice [12]: "; read VRS_CHOICE; done
 if [[ $VRS_CHOICE =~ 1 ]]; then
    VRS_VERSION="Stable"
@@ -478,7 +478,7 @@ if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
       if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
    elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then  # Assume many things need to be installed on Arch Linux.
       sudo pacman -Syy --noconfirm
-      sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget
+      sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget glibc  # GLIBC_2.33 necessary for 'tar' command.
    elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems.
       if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
          ! which unzip >/dev/null 2>&1 ||
