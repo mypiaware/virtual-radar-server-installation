@@ -21,7 +21,7 @@ This script may also install VRS on other popular Linux distributions such as Ub
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
-For anyone interested in trying the preview version (ver 3.0.0 Beta), this installation script offers the choice to install the preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make the preview version the better choice under certain circumstances.
+For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), this installation script offers the choice to install a preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make a preview version the better choice under certain circumstances.
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
@@ -36,15 +36,15 @@ Here is a very brief summary of what this script will do:
 * [Install VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-install-vrs)
   * Install Mono (necessary to run VRS on Linux)
   * Install VRS server files
-  * Install a small VRS Mono fix
+  * Install a small VRS Mono fix (only needed for the stable version)
 * [Download and install the following VRS plugins:](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#vrs-plugins)
   * Custom Content Plugin
   * Database Editor Plugin
   * Database Writer Plugin
   * Tile Server Cache Plugin
   * Web Admin Plugin
-  * Feed Filter Plugin (only available with the preview version of VRS)
-  * SQL Server Plugin (only available with the preview version of VRS)
+  * Feed Filter Plugin (only with a preview version of VRS)
+  * SQL Server Plugin (only with preview version 3.0.0 of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
 * [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
@@ -79,8 +79,8 @@ This VRS installation script will install the following VRS plugins. Note that m
   * [Database Writer Plugin](http://www.virtualradarserver.co.uk/Documentation/DatabaseWriter/Default.aspx)
   * [Tile Server Cache Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-tileservercache)
   * [Web Admin Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin)
-  * Feed Filter Plugin (only available with the preview version of VRS)
-  * SQL Server Plugin (only available with the preview version of VRS)
+  * Feed Filter Plugin (only with a preview version of VRS)
+  * SQL Server Plugin (only with preview version 3.0.0 of VRS)
 
 ## Language Packs
 
@@ -229,9 +229,9 @@ The `vrs` command will provide options on how a user may want to start or stop V
 
 `vrs -webadmin` will allow the user to create a username & password for accessing the VRS Web Admin webpage. Note that this will also start VRS without a GUI. If not wanting VRS to run, the user will simply need to wait until VRS has completely started and then press `Q ` to quit VRS.
 
-`vrs -log` will show the log of the previous instances of VRS running as a background process. The log will only show the records of the previous instances of VRS running as a background process. This includes any instance of VRS that may have started at system boot if the `vrs -enable` command was used to start VRS at every system boot.
+`vrs -log` will show the log of the previous instances of VRS running as a background process since the most recent system boot. The log will only show the records of the previous instances of VRS running as a background process. This includes any instance of VRS that may have started at system boot if the `vrs -enable` command was used to start VRS at every system boot.
 
-`vrs` command just by itself will give you the current running status of VRS and the help menu.
+`vrs` command just by itself will give the current running status of VRS and the help menu.
 
 ## Script to Backup Database
 
@@ -263,11 +263,13 @@ This script will install VRS on most popular Linux distributions.  However, VRS 
 
 The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions equal to or greater than 6.4) on some Debian-based operating systems.  The issue is the plane icons and the altitude stalks will not appear on the VRS webpage.
 
-However, the preview version (ver 3.0.0 Beta) of VRS will not have this issue with the latest versions of Mono.  The drawback is that the preview version is under development.
+However, the preview versions (versions 2.4.5 or 3.0.0) of VRS will not have this issue with the latest versions of Mono.  The drawback is that these preview versions are under development.
 
-This VRS installation script allows the user to choose to install either the latest stable version (ver 2.4.4) or the under-development preview version (ver 3.0.0 Beta).  If wanting to change from one version to another, simply run the script again and choose the other version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
+This VRS installation script allows the user to choose to install either the latest stable version or an under-development preview version.  If wanting to change from one version to another, simply run the script again and choose another version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
 
-Although installing the preview version of VRS may solve the Mono issue, the preview version may introduce additional unforseen issues.  Please use caution when installing the preview version.
+Although installing a preview version (versions 2.4.5 or 3.0.0) of VRS may solve the Mono issue, a preview version may introduce additional unforseen issues.  Please use caution when installing a preview version.
+
+If any method of downgrading Mono has been found for the operating systems that need to have Mono downgraded, please kindly post instructions in the Issues section of this GitHub project.  Thanks in advance!
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
@@ -277,6 +279,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Debian 10.8              | 5.18.0.240                     | :heavy_check_mark:  |
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
+| Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
 | Linux Mint 20.1          | 6.8.0.105                      | :x:                 |
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
