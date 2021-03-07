@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 8.2)
+# Virtual Radar Server installation script (ver 9.0)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -16,7 +16,7 @@
 # This script has been confirmed to work with VRS version 2.4.4 on:
 # Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.8, Fedora 33, openSUSE 15.2 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
-# An option is available to download a preview version of VRS.
+# An option is available to download and install a preview version of VRS.
 #
 # The author of this script has nothing to do with the creation, development or support of Virtual Radar Server.
 # Script credit and more information here:
@@ -110,17 +110,33 @@ VRSFILES_STABLE=(
 )
 
 
-# Declare an array of URLs for all the VRS files of the preview version of VRS.  Very important to know this preview version is under testing and may have bugs.
-VRSFILES_PREVIEW=(
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/VirtualRadar-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/LanguagePack-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-CustomContent-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-DatabaseEditor-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-DatabaseWriter-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-FeedFilter-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-SqlServer-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-TileServerCache-3.0.0-preview-4.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-4-mono/Plugin-WebAdmin-3.0.0-preview-4.tar.gz"
+# Declare an array of URLs for all the VRS files of the preview version (2.4.5) of VRS.  Very important to know this preview version is under testing and may have bugs.
+PREVIEW245="5"
+VRSFILES_PREVIEW245=(
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/VirtualRadar-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/LanguagePack-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-CustomContent-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-DatabaseEditor-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-DatabaseWriter-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-FeedFilter-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-TileServerCache-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-WebAdmin-2.4.5-preview-${PREVIEW245}.tar.gz"
+   "http://www.virtualradarserver.co.uk/Files/VirtualRadar.exe.config.tar.gz"
+)
+
+
+# Declare an array of URLs for all the VRS files of the preview version (3.0.0) of VRS.  Very important to know this preview version is under testing and may have bugs.
+PREVIEW300="5"
+VRSFILES_PREVIEW300=(
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/VirtualRadar-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/LanguagePack-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-CustomContent-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-DatabaseEditor-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-DatabaseWriter-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-FeedFilter-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-SqlServer-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-TileServerCache-3.0.0-preview-${PREVIEW300}.tar.gz"
+   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-WebAdmin-3.0.0-preview-${PREVIEW300}.tar.gz"
 )
 
 
@@ -244,8 +260,8 @@ printf "  * Database Editor Plugin\n"
 printf "  * Database Writer Plugin\n"
 printf "  * Tile Server Cache Plugin\n"
 printf "  * Web Admin Plugin\n"
-printf "  * Feed Filter Plugin${NO_COLOR} (only with the preview version of VRS)${BOLD_FONT}\n"
-printf "  * SQLServer Plugin${NO_COLOR} (only with the preview version of VRS)\n\n"
+printf "  * Feed Filter Plugin${NO_COLOR} (only with a preview version of VRS)${BOLD_FONT}\n"
+printf "  * SQLServer Plugin${NO_COLOR} (only with preview version 3.0.0 of VRS)\n\n"
 printf "Need help with this installation script?:\n"
 printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
 
@@ -256,17 +272,23 @@ printf "\n\n"
 
 
 # Prompt user to either install the latest stable version or the preview version.
-printf "Install stable or preview version of VRS?\n";
+printf "Install stable or a preview version of VRS?\n";
 printf "  1. Stable (ver 2.4.4)\n"
-printf "  2. Preview (ver 3.0.0-preview-4)\n"
-while ! [[ $VRS_CHOICE =~ ^[12]$ ]]; do printf "Choice [12]: "; read VRS_CHOICE; done
+printf "  2. Preview (ver 2.4.5-preview-5)\n"
+printf "  3. Preview (ver 3.0.0-preview-5)\n"
+while ! [[ $VRS_CHOICE =~ ^[123]$ ]]; do printf "Choice [123]: "; read VRS_CHOICE; done
 if [[ $VRS_CHOICE =~ 1 ]]; then
    VRS_VERSION="Stable"
    VRSFILES=("${VRSFILES_STABLE[@]}")
    printf "\nVersion set to install:  ${ORANGE_COLOR}Stable${NO_COLOR}\n"
-elif [[ $VRS_CHOICE =~ 2 ]]; then
-   VRS_VERSION="Preview"
-   VRSFILES=("${VRSFILES_PREVIEW[@]}")
+elif [[ $VRS_CHOICE =~ [23] ]]; then
+   if [[ $VRS_CHOICE =~ 2 ]]; then
+      VRS_VERSION="Preview (2.4.5)"
+      VRSFILES=("${VRSFILES_PREVIEW245[@]}")
+   elif [[ $VRS_CHOICE =~ 3 ]]; then
+      VRS_VERSION="Preview (3.0.0)"
+      VRSFILES=("${VRSFILES_PREVIEW300[@]}")
+   fi
    printf "\n"
    printf "${RED_COLOR}"
    printf " **************************** WARNING *****************************\n"
@@ -554,11 +576,11 @@ if [[ $LIBPNG_FIX =~ [Yy] ]]; then
    mkdir -p "$AIRCRAFTMARKERDIR"
    if ! [[ -f "$TEMPDIR/Airplane.png" ]];         then wget -P "$TEMPDIR" "$AIRCRAFTMARKERURL_1";  ERROREXIT 17 "Failed to download 'Airplane.png'!"; fi
    if ! [[ -f "$TEMPDIR/AirplaneSelected.png" ]]; then wget -P "$TEMPDIR" "$AIRCRAFTMARKERURL_2";  ERROREXIT 18 "Failed to download 'AirplaneSelected.png'!"; fi
-   cp "$TEMPDIR/Airplane.png"         "$AIRCRAFTMARKERDIR";  ERROREXIT 19 "Failed to delete 'Airplane.png'!"
-   cp "$TEMPDIR/AirplaneSelected.png" "$AIRCRAFTMARKERDIR";  ERROREXIT 20 "Failed to delete 'AirplaneSelected.png'!"
+   cp "$TEMPDIR/Airplane.png"         "$AIRCRAFTMARKERDIR";  ERROREXIT 19 "Failed to copy 'Airplane.png'!"
+   cp "$TEMPDIR/AirplaneSelected.png" "$AIRCRAFTMARKERDIR";  ERROREXIT 20 "Failed to copy 'AirplaneSelected.png'!"
 else
-   if [[ -f "$AIRCRAFTMARKERDIR/Airplane.png" ]];         then rm "$AIRCRAFTMARKERDIR/Airplane.png";         ERROREXIT 21 "Failed to delete 'Airplane.png'!"; fi
-   if [[ -f "$AIRCRAFTMARKERDIR/AirplaneSelected.png" ]]; then rm "$AIRCRAFTMARKERDIR/AirplaneSelected.png"; ERROREXIT 22 "Failed to delete 'AirplaneSelected.png'!"; fi
+   if [[ -f "$AIRCRAFTMARKERDIR/Airplane.png" ]];         then rm "$AIRCRAFTMARKERDIR/Airplane.png";          ERROREXIT 21 "Failed to delete 'Airplane.png'!"; fi
+   if [[ -f "$AIRCRAFTMARKERDIR/AirplaneSelected.png" ]]; then rm "$AIRCRAFTMARKERDIR/AirplaneSelected.png";  ERROREXIT 22 "Failed to delete 'AirplaneSelected.png'!"; fi
 fi
 
 
@@ -845,15 +867,17 @@ echo "      sudo systemctl disable $SERVICEFILENAME.service >/dev/null 2>&1"    
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to disable VRS at boot!\n\"; exit 3"                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "      else                    printf \"VRS disabled from starting at every system boot.\n\"; fi"                                                                                                                                                                           >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_STOPPROCESS\" ]]; then"                                                                                                                                                                                                                       >> "$STARTCOMMAND";
-echo "      if ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                              >> "$STARTCOMMAND";
-echo "         printf \"VRS is already stopped.\n\""                                                                                                                                                                                                                             >> "$STARTCOMMAND";
-echo "      else"                                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "      if systemctl is-active --quiet $SERVICEFILENAME.service; then"                                                                                                                                                                                                       >> "$STARTCOMMAND";
 echo "         sudo systemctl stop $SERVICEFILENAME.service"                                                                                                                                                                                                                     >> "$STARTCOMMAND";
 echo "         if [[ \$? -ne 0 ]]; then printf \"Error trying to stop VRS!\n\"; exit 4"                                                                                                                                                                                          >> "$STARTCOMMAND";
 echo "         else                    printf \"VRS has stopped.\n\"; fi"                                                                                                                                                                                                        >> "$STARTCOMMAND";
+echo "      elif pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "         printf \"Cannot stop VRS. VRS is running, but not as a service.\n\""                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "      elif ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                            >> "$STARTCOMMAND";
+echo "         printf \"VRS is already stopped.\n\""                                                                                                                                                                                                                             >> "$STARTCOMMAND";
 echo "      fi"                                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_LOG\" ]]; then"                                                                                                                                                                                                                               >> "$STARTCOMMAND";
-echo "      journalctl -u $SERVICEFILENAME.service --no-pager"                                                                                                                                                                                                                   >> "$STARTCOMMAND";
+echo "      sudo journalctl -u $SERVICEFILENAME.service --lines=all --no-hostname --no-pager"                                                                                                                                                                                    >> "$STARTCOMMAND";
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to get log of VRS!\n\"; exit 5; fi"                                                                                                                                                                                   >> "$STARTCOMMAND";
 echo "   elif ! pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                               >> "$STARTCOMMAND";
 echo "      if [[ \$1 == \"-$VRSCMD_GUI\" ]]; then"                                                                                                                                                                                                                              >> "$STARTCOMMAND";
@@ -872,7 +896,7 @@ echo "         mono \"$VRSINSTALLDIRECTORY/VirtualRadar.exe\" -nogui -createAdmi
 echo "      fi"                                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   elif pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                 >> "$STARTCOMMAND";
 echo "      if [[ \$1 == \"-$VRSCMD_GUI\" || \$1 == \"-$VRSCMD_NOGUI\" || \$1 == \"-$VRSCMD_STARTPROCESS\" || \$1 == \"-$VRSCMD_WEBADMIN\" ]]; then"                                                                                                                             >> "$STARTCOMMAND";
-echo "         printf \"VRS is already running!\n\"; exit 0"                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "         printf \"VRS is already running!\n\""                                                                                                                                                                                                                             >> "$STARTCOMMAND";
 echo "      fi"                                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   else printf \"Unknown error occurred! EXIT CODE: 7\n\"; exit 7"                                                                                                                                                                                                         >> "$STARTCOMMAND";
 echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
