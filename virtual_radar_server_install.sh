@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 9.0)
+# Virtual Radar Server installation script (ver 9.1)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -126,7 +126,7 @@ VRSFILES_PREVIEW245=(
 
 
 # Declare an array of URLs for all the VRS files of the preview version (3.0.0) of VRS.  Very important to know this preview version is under testing and may have bugs.
-PREVIEW300="5"
+PREVIEW300="6"
 VRSFILES_PREVIEW300=(
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/VirtualRadar-3.0.0-preview-${PREVIEW300}.tar.gz"
    "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/LanguagePack-3.0.0-preview-${PREVIEW300}.tar.gz"
@@ -274,8 +274,8 @@ printf "\n\n"
 # Prompt user to either install the latest stable version or the preview version.
 printf "Install stable or a preview version of VRS?\n";
 printf "  1. Stable (ver 2.4.4)\n"
-printf "  2. Preview (ver 2.4.5-preview-5)\n"
-printf "  3. Preview (ver 3.0.0-preview-5)\n"
+printf "  2. Preview (ver 2.4.5-preview-$PREVIEW245)\n"
+printf "  3. Preview (ver 3.0.0-preview-$PREVIEW300)\n"
 while ! [[ $VRS_CHOICE =~ ^[123]$ ]]; do printf "Choice [123]: "; read VRS_CHOICE; done
 if [[ $VRS_CHOICE =~ 1 ]]; then
    VRS_VERSION="Stable"
