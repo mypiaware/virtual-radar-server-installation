@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 9.1)
+# Virtual Radar Server installation script (ver 10.0)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -14,7 +14,7 @@
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
 # This script has been confirmed to work with VRS version 2.4.4 on:
-# Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.8, Fedora 33, openSUSE 15.2 and Arch Linux.
+# Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 33, openSUSE 15.2 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -110,38 +110,38 @@ VRSFILES_STABLE=(
 )
 
 
-# Declare an array of URLs for all the VRS files of the preview version (2.4.5) of VRS.  Very important to know this preview version is under testing and may have bugs.
-PREVIEW245="5"
-VRSFILES_PREVIEW245=(
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/VirtualRadar-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/LanguagePack-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-CustomContent-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-DatabaseEditor-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-DatabaseWriter-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-FeedFilter-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-TileServerCache-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-WebAdmin-2.4.5-preview-${PREVIEW245}.tar.gz"
-   "http://www.virtualradarserver.co.uk/Files/VirtualRadar.exe.config.tar.gz"
-)
-
-
-# Declare an array of URLs for all the VRS files of the preview version (3.0.0) of VRS.  Very important to know this preview version is under testing and may have bugs.
-PREVIEW300="6"
-VRSFILES_PREVIEW300=(
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/VirtualRadar-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/LanguagePack-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-CustomContent-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-DatabaseEditor-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-DatabaseWriter-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-FeedFilter-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-SqlServer-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-TileServerCache-3.0.0-preview-${PREVIEW300}.tar.gz"
-   "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-WebAdmin-3.0.0-preview-${PREVIEW300}.tar.gz"
-)
-
-
 declare VRS_VERSION  # Declare a global variable that will hold user's choice of whether to install the stable or preview version.
 declare LIBPNG_FIX   # Declare a global variable that will hold user's choice of whether or not to apply the 'libpng warning' fix.
+declare PREVIEW245   # Declare a global variable that will hold the VRS preview 2.4.5 sub-version.
+declare PREVIEW300   # Declare a global variable that will hold the VRS preview 3.0.0 sub-version.
+
+
+function PREVIEW_URLS {  # These arrays must be in a function because it is not until later in the script when the variables in these URLs will be defined.
+   # Declare an array of URLs for all the VRS files of the preview version (2.4.5) of VRS.  Very important to know this preview version is under testing and may have bugs.
+   VRSFILES_PREVIEW245=(
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/VirtualRadar-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/LanguagePack-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-CustomContent-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-DatabaseEditor-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-DatabaseWriter-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-FeedFilter-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-TileServerCache-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v2.4.5-preview-${PREVIEW245}-mono/Plugin-WebAdmin-2.4.5-preview-${PREVIEW245}.tar.gz"
+      "http://www.virtualradarserver.co.uk/Files/VirtualRadar.exe.config.tar.gz"
+   )
+   # Declare an array of URLs for all the VRS files of the preview version (3.0.0) of VRS.  Very important to know this preview version is under testing and may have bugs.
+   VRSFILES_PREVIEW300=(
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/VirtualRadar-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/LanguagePack-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-CustomContent-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-DatabaseEditor-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-DatabaseWriter-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-FeedFilter-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-SqlServer-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-TileServerCache-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-WebAdmin-3.0.0-preview-${PREVIEW300}.tar.gz"
+   )
+}
 
 
 # Declare URLs for operator flags, silhouettes and a database file. (Change any URL if better files are found elsewhere.)
@@ -151,7 +151,7 @@ DATABASEURL="https://github.com/mypiaware/virtual-radar-server-installation/raw/
 PICTURESURL="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/Pictures/Pictures.zip"
 
 
-# Declare URLs & filenames for updated aircraft markers.
+# Declare URLs for updated aircraft markers.
 AIRCRAFTMARKERURL_1="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/AircraftMarkers/Airplane.png"
 AIRCRAFTMARKERURL_2="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/AircraftMarkers/AirplaneSelected.png"
 
@@ -228,7 +228,7 @@ function ERROREXIT {
 # Immediately stop the script only if the operating system could not be determined AND Mono and/or other necessary software are not already installed.
 if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
    if [[ $OPERATINGSYSTEMVERSION == "unknown" ]]; then
-      printf "FATAL ERROR! This operating system is not yet supported or identified!\n"
+      printf "${RED_COLOR}FATAL ERROR! This operating system is not yet supported or identified!${NO_COLOR}\n"
       printf "Try installing Mono and/or unzip manually and then rerun this script again.\n"
       printf "More help:\n"
       printf "https://github.com/mypiaware/virtual-radar-server-installation#advanced-users\n"
@@ -260,7 +260,7 @@ printf "  * Database Editor Plugin\n"
 printf "  * Database Writer Plugin\n"
 printf "  * Tile Server Cache Plugin\n"
 printf "  * Web Admin Plugin\n"
-printf "  * Feed Filter Plugin${NO_COLOR} (only with a preview version of VRS)${BOLD_FONT}\n"
+printf "  * Feed Filter Plugin${NO_COLOR} (only with either preview version of VRS)${BOLD_FONT}\n"
 printf "  * SQLServer Plugin${NO_COLOR} (only with preview version 3.0.0 of VRS)\n\n"
 printf "Need help with this installation script?:\n"
 printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
@@ -268,35 +268,87 @@ printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
 
 # User should press [Enter] key to begin.
 printf "${GREEN_COLOR}Press [ENTER] to continue...${NO_COLOR}"; read -p ""
+printf "\n"
+
+
+# Check which - if any - preview versions are available.
+declare PREVIEW_AVAILABLE
+printf "Checking for the latest available preview versions of VRS..."
+if ! which wget >/dev/null 2>&1; then printf "\n${RED_COLOR}FATAL ERROR! The program 'wget' needs to be installed before continuing!${NO_COLOR}\n"; exit 3; fi
+LIMITCHECK=10  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
+INITIALCHECK=5
+for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
+   PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
+   URLTOCHECK="${VRSFILES_PREVIEW245[0]}"  # Checking just the first element in the array should suffice.
+   wget --spider $URLTOCHECK >/dev/null 2>&1  # Not downloading, but simply checking if the URL exists.
+   if [[ $? -eq 0 ]]; then PREVIEW_AVAILABLE=1; break; fi
+   if [[ $PREVIEW245 -eq $LIMITCHECK ]]; then PREVIEW_AVAILABLE=0; break; fi
+done
+if [[ $PREVIEW_AVAILABLE =~ [1] ]]; then  # Only check for the other preview version if the first preview version was found.
+   LIMITCHECK=11  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
+   INITIALCHECK=6
+   for (( PREVIEW300=$INITIALCHECK; PREVIEW300<=$LIMITCHECK; PREVIEW300++ )); do
+      PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
+      URLTOCHECK="${VRSFILES_PREVIEW300[0]}"  # Checking just the first element in the array should suffice.
+      wget --spider $URLTOCHECK >/dev/null 2>&1  # Not downloading, but simply checking if the URL exists.
+      if [[ $? -eq 0 ]]; then PREVIEW_AVAILABLE=1; break; fi
+      if [[ $PREVIEW300 -eq $LIMITCHECK ]]; then PREVIEW_AVAILABLE=0; break; fi
+   done
+fi
 printf "\n\n"
 
 
-# Prompt user to either install the latest stable version or the preview version.
-printf "Install stable or a preview version of VRS?\n";
-printf "  1. Stable (ver 2.4.4)\n"
-printf "  2. Preview (ver 2.4.5-preview-$PREVIEW245)\n"
-printf "  3. Preview (ver 3.0.0-preview-$PREVIEW300)\n"
-while ! [[ $VRS_CHOICE =~ ^[123]$ ]]; do printf "Choice [123]: "; read VRS_CHOICE; done
-if [[ $VRS_CHOICE =~ 1 ]]; then
-   VRS_VERSION="Stable"
+# This is used in two places below.
+function STABLE_CHOSEN {
+   VRS_VERSION="Stable (2.4.4)"
    VRSFILES=("${VRSFILES_STABLE[@]}")
-   printf "\nVersion set to install:  ${ORANGE_COLOR}Stable${NO_COLOR}\n"
-elif [[ $VRS_CHOICE =~ [23] ]]; then
-   if [[ $VRS_CHOICE =~ 2 ]]; then
-      VRS_VERSION="Preview (2.4.5)"
-      VRSFILES=("${VRSFILES_PREVIEW245[@]}")
-   elif [[ $VRS_CHOICE =~ 3 ]]; then
-      VRS_VERSION="Preview (3.0.0)"
-      VRSFILES=("${VRSFILES_PREVIEW300[@]}")
-   fi
+   printf "Version set to install:  ${ORANGE_COLOR}$VRS_VERSION${NO_COLOR}\n"
+}
+
+
+# Report and possibly end script if a preview version was unable to be determined.
+if [[ $PREVIEW_AVAILABLE =~ [0] ]]; then
+   printf "${RED_COLOR}Unable to determine available preview versions!${NO_COLOR}\n"
+   while ! [[ $ONLYSTABLE =~ ^[YyNn]$ ]]; do printf "Continue by installing the stable version? [y/n]: "; read ONLYSTABLE; done  # Use 'ONLYSTABLE' variable in a section below.
    printf "\n"
-   printf "${RED_COLOR}"
-   printf " **************************** WARNING *****************************\n"
-   printf "         The preview version has been selected to install.\n"
-   printf "     The preview version is under testing and may contain bugs!\n"
-   printf " Please consider this when choosing to install the preview version.\n"
-   printf " **************************** WARNING *****************************\n"
-   printf "${NO_COLOR}"
+   if   [[ $ONLYSTABLE =~ [Yy] ]]; then
+      STABLE_CHOSEN
+   elif [[ $ONLYSTABLE =~ [Nn] ]]; then
+      printf "Maybe wait later for preview versions to become available.\n"
+      printf "Or, wait until a fix to this script can be made.\n"
+      exit 4
+   fi
+fi
+
+
+# Prompt user to either install the latest stable version or the preview version.  (Only if preview versions are available.)
+if [[ $PREVIEW_AVAILABLE =~ [1] ]]; then  # Only run this portion if the preview versions have been identified.
+   PREVIEW_URLS  # Call the function above to complete the URLs for the preview files now that the preview sub-version variables ('PREVIEW245' & 'PREVIEW300') have been determined.
+   printf "Install a stable or a preview version of VRS?\n";
+   printf "  1. Stable (ver 2.4.4)\n"
+   printf "  2. Preview (ver 2.4.5-preview-$PREVIEW245)\n"
+   printf "  3. Preview (ver 3.0.0-preview-$PREVIEW300)\n"
+   while ! [[ $VRS_CHOICE =~ ^[123]$ ]]; do printf "Choice [123]: "; read VRS_CHOICE; done
+   printf "\n"
+   if [[ $VRS_CHOICE =~ 1 ]]; then
+      STABLE_CHOSEN
+   elif [[ $VRS_CHOICE =~ [23] ]]; then
+      if [[ $VRS_CHOICE =~ 2 ]]; then
+         VRS_VERSION="Preview (ver 2.4.5-preview-$PREVIEW245)"
+         VRSFILES=("${VRSFILES_PREVIEW245[@]}")
+      elif [[ $VRS_CHOICE =~ 3 ]]; then
+         VRS_VERSION="Preview (ver 3.0.0-preview-$PREVIEW300)"
+         VRSFILES=("${VRSFILES_PREVIEW300[@]}")
+      fi
+      printf "Version set to install:  ${ORANGE_COLOR}$VRS_VERSION${NO_COLOR}\n\n"
+      printf "${RED_COLOR}"
+      printf " *************************** WARNING ****************************\n"
+      printf "          A preview version has been selected to install.\n"
+      printf "     The preview version is under testing and may contain bugs!\n"
+      printf " Please consider this when choosing to install a preview version.\n"
+      printf " *************************** WARNING ****************************\n"
+      printf "${NO_COLOR}"
+   fi
 fi
 printf "\n"
 
@@ -327,7 +379,7 @@ fi
 # Prompt user for a port number VRS should use.
 printf "Enter a port number for the Virtual Radar Server to use.\n"
 printf "(Press [ENTER] to accept the default value of %s.)\n" $DEFAULTPORT
-printf "  Port Number [%s]: " $DEFAULTPORT; read VRSPORT;
+printf "  Port Number: "; read VRSPORT;
 until [[ $VRSPORT == "" || ( $VRSPORT =~ ^\s*([1-9][0-9]{1,4})\s*$ && $VRSPORT -le 65535 ) ]]; do printf "  Port Number [%s]: " $DEFAULTPORT; read -r VRSPORT; done
 VRSPORT=${BASH_REMATCH[1]}
 if [[ $VRSPORT == "" ]]; then VRSPORT=$DEFAULTPORT; fi
@@ -460,7 +512,7 @@ if [[ $ENTER_RECEIVER =~ [Yy] ]]; then
    printf "\n"
    printf "Receiver name:         ${ORANGE_COLOR}%s${NO_COLOR}\n" "$RECEIVER_NAME_ENTRY"
    printf "Receiver source type:  ${ORANGE_COLOR}%s${NO_COLOR}\n" "$RECEIVER_SOURCE_ENTRY"
-   printf "Receiver IP:           ${ORANGE_COLOR}%s${NO_COLOR}\n" "$RECEIVER_ADDRESS_ENTRY"
+   printf "Receiver address:      ${ORANGE_COLOR}%s${NO_COLOR}\n" "$RECEIVER_ADDRESS_ENTRY"
    printf "Receiver port:         ${ORANGE_COLOR}%s${NO_COLOR}\n" "$RECEIVER_PORT_ENTRY"
    # The "Configuration.xml" file will need the source type entered as such:
    if [[ $RECEIVER_SOURCE_SELECTION == 1 ]]; then RECEIVER_SOURCE_ENTRY="Beast"; fi
@@ -490,7 +542,7 @@ printf "\n"
 #############################################################################################
 
 
-### Attempt to install Mono and/or other necessary software only if the software is not already installed.
+# Attempt to install Mono and/or other necessary software only if the software is not already installed.
 if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
    if [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then     # Possibly install/update Mono and other necessary software on openSUSE.
       if ! which unzip >/dev/null 2>&1; then sudo zypper install -y unzip; fi
@@ -515,6 +567,7 @@ fi
 
 
 # In the event the user ran this script again and a different version of VRS was chosen to install.
+# Regardless, this should be safe to do as the files in the installation directory should never be altered in any way.
 rm -rf "$VRSINSTALLDIRECTORY"
 
 
@@ -528,7 +581,7 @@ done
 for URL in "${VRSFILES[@]}"; do
    REGEX="\/([^/]*)$"
    [[ $URL =~ $REGEX ]]
-   FILENAME=${BASH_REMATCH[1]}
+   FILENAME="${BASH_REMATCH[1]}"
    if [ ! -f "$TEMPDIR/$FILENAME" ]; then wget -P "$TEMPDIR" "$URL"; fi;  ERROREXIT 11 "Failed to download $FILENAME!"
    tar -xf "$TEMPDIR/$FILENAME" -C "$VRSINSTALLDIRECTORY";                ERROREXIT 12 "Failed to untar $FILENAME!"
 done
@@ -540,7 +593,7 @@ function UNPACK {
    local URL="$2"
    local DIRECTORYPATH="$3"
 
-   # Download and extract files to the appropriate directory.
+   # Download and extract files to the appropriate directory.  (There is a possibility some of these extraction commands may need to be altered based on the compressed file that is downloaded.)
    local REGEX="\/([^/]*)$"
    [[ $URL =~ $REGEX ]]
    local FILENAME=${BASH_REMATCH[1]}
@@ -602,7 +655,7 @@ if ! [ -f "$CONFIGFILE" ]; then
 fi
 
 
-# Function to fill in the directory/file paths in the initial "Configuration.xml" file created above (operator flags, silhouettes, pictures, sample database file).
+# Function to fill in the directory/file paths in the "Configuration.xml" file (operator flags, silhouettes, pictures, sample database file).
 function EDITCONFIGFILE {
    local SETTINGID="$1"
    local DIRECTORYPATH="$2"
@@ -798,7 +851,7 @@ echo "cp \"$DATABASEFILE\" \"$DATABASEBACKUPFILE\""                   >> "$DATAB
 echo "exit"                                                           >> "$DATABASEBACKUPSCRIPT";
 
 
-# Create service file to run VRS in the background.
+# Create a service file to run VRS in the background.
 if which mono >/dev/null 2>&1; then MONOLOCATION="$(which mono)"; else MONOLOCATION="/usr/bin/mono"; fi  # Assume Mono is installed at '/usr/bin/mono' unless determined to be somewhere else.
 sudo touch $SERVICEFILE;        ERROREXIT 65 "Failed to create $SERVICEFILE!"
 sudo chmod 777 "$SERVICEFILE";  ERROREXIT 66 "The 'chmod' command failed on $SERVICEFILE!"
@@ -947,7 +1000,7 @@ fi
 if [ -f "$DATABASEBACKUPSCRIPT" ]; then
    printf "${ORANGE_COLOR}A cron job may be set to routinely backup the database file:${NO_COLOR}\n"
    printf "  Use this command to set up a cron job:   crontab -e\n"
-   printf "  Here is an example cronjob to use to backup at every 3:00AM:\n"
+   printf "  Here is an example cronjob to use to backup at every 3:00 AM:\n"
    printf "    0 3 * * * bash \"$DATABASEBACKUPSCRIPT\"\n\n"
 fi
 
@@ -962,22 +1015,10 @@ fi
 printf "${ORANGE_COLOR}To access the optional Web Admin GUI on a local network device:${NO_COLOR}\n"
 printf "  http://%s:%s/VirtualRadar/WebAdmin/Index.html\n\n" $LOCALIP $VRSPORT
 
-printf "${ORANGE_COLOR}Use this command to start/stop VRS:${NO_COLOR}  %s\n" "$STARTCOMMANDFILENAME"
-printf    "  The 'vrs' command must be used with one of the following parameters:\n"
-printf -- "    -%-${ARGLENGTH}s  Start VRS with a GUI in a GUI desktop environment\n" "$VRSCMD_GUI"
-printf -- "    -%-${ARGLENGTH}s  Start VRS without a GUI\n" "$VRSCMD_NOGUI"
-printf -- "    -%-${ARGLENGTH}s  Start VRS as a background service\n" "$VRSCMD_STARTPROCESS"
-printf -- "    -%-${ARGLENGTH}s  Stop VRS if running as a background service\n" "$VRSCMD_STOPPROCESS"
-printf -- "    -%-${ARGLENGTH}s  Allow VRS to autorun at every system boot\n" "$VRSCMD_ENABLE"
-printf -- "    -%-${ARGLENGTH}s  Disable VRS from autorunning at every system boot\n" "$VRSCMD_DISABLE"
-printf -- "    -%-${ARGLENGTH}s  Create username & password for Web Admin & also start VRS\n" "$VRSCMD_WEBADMIN"
-printf -- "    -%-${ARGLENGTH}s  View history log of VRS running as a background service\n" "$VRSCMD_LOG"
-printf -- "    -%-${ARGLENGTH}s  Display the help menu\n\n" "?"
-
 printf "${ORANGE_COLOR}More detailed information regarding this installation script here:${NO_COLOR}\n"
 printf "  https://github.com/mypiaware/virtual-radar-server-installation\n\n"
 
-# Script ends with reminder of using the 'vrs' command.
+# Script ends with instructions on how to use the 'vrs' command.
 printf "\n"
 printf "${GREEN_COLOR}Virtual Radar Server installation is complete!${NO_COLOR}\n"
 printf "\n"
@@ -987,4 +1028,3 @@ eval "$STARTCOMMANDFILENAME" -?
 printf "\n"
 
 exit 0
-
