@@ -12,7 +12,7 @@ This script may be safely ran multiple times if wanting to change a few of the s
 
 This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
-* Debian 10.8
+* Debian 10.9
 * Fedora 33
 * openSUSE 15.2
 * Arch Linux
@@ -37,13 +37,14 @@ Here is a very brief summary of what this script will do:
   * Install Mono (necessary to run VRS on Linux)
   * Install VRS server files
   * Install a small VRS Mono fix (only needed for the stable version)
+  * Options may be given to install the latest editions of the preview versions
 * [Download and install the following VRS plugins:](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#vrs-plugins)
   * Custom Content Plugin
   * Database Editor Plugin
   * Database Writer Plugin
   * Tile Server Cache Plugin
   * Web Admin Plugin
-  * Feed Filter Plugin (only with a preview version of VRS)
+  * Feed Filter Plugin (only with either preview version of VRS)
   * SQL Server Plugin (only with preview version 3.0.0 of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
 * [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings)
@@ -64,12 +65,15 @@ Here is a very brief summary of what this script will do:
 * [Provide an easy method of displaying an announcement at the top of the VRS webpage](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#display-an-announcement-on-the-webpage)
 
 ---
+<br/><br/>
 
 ## How to Install VRS
 ```
 bash -c "$(wget -O - https://github.com/mypiaware/virtual-radar-server-installation/raw/master/virtual_radar_server_install.sh)"
 ```
 Run the above one-line command to execute this VRS installation script. The vast majority of the installation time will involve installing Mono (if Mono is not already installed) which is a prerequisite to installing VRS.
+
+This VRS installation script will try to determine the latest editions of the preview versions.  If unable to do so for any reason, the user will only be given the opportunity to install the stable version.
 
 ## VRS Plugins
 
@@ -255,7 +259,7 @@ When starting VRS in a few versions of Linux, an error message may appear that r
 
 ## Advanced Users
 
-If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will simply bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as fine as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.  Also note that a few Linux distributions do not have `unzip` already installed.  Therefore, it may also be necessary to manually install `unzip`.
+If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.  Also note that a few Linux distributions do not have `unzip` already installed.  Therefore, it may also be necessary to manually install `unzip`.
 
 ## Mono Issue
 
@@ -267,7 +271,7 @@ However, the preview versions (versions 2.4.5 or 3.0.0) of VRS will not have thi
 
 This VRS installation script allows the user to choose to install either the latest stable version or an under-development preview version.  If wanting to change from one version to another, simply run the script again and choose another version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
 
-Although installing a preview version (versions 2.4.5 or 3.0.0) of VRS may solve the Mono issue, a preview version may introduce additional unforseen issues.  Please use caution when installing a preview version.
+Although installing a preview version (versions 2.4.5 or 3.0.0) of VRS may solve the Mono issue, a preview version may introduce additional unforseen issues.  Please use caution when deciding to install a preview version.
 
 If any method of downgrading Mono has been found for the operating systems that need to have Mono downgraded, please kindly post instructions in the Issues section of this GitHub project.  Thanks in advance!
 
@@ -276,7 +280,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Linux                    | Default Mono Version Installed |Stable Version Works?|
 | ------------------------ |:------------------------------:|:-------------------:|
 | Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
-| Debian 10.8              | 5.18.0.240                     | :heavy_check_mark:  |
+| Debian 10.9              | 5.18.0.240                     | :heavy_check_mark:  |
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
 | Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
