@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 10.0)
+# Virtual Radar Server installation script (ver 10.1)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -14,7 +14,7 @@
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
 # This script has been confirmed to work with VRS version 2.4.4 on:
-# Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 33, openSUSE 15.2 and Arch Linux.
+# Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -910,7 +910,7 @@ echo ""                                                                         
 echo "if [[ \$# -eq 1 ]]; then"                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   if [[ \$1 == \"-h\" || \$1 == \"-help\" || \$1 == \"-?\" ]]; then COMMANDHELP; exit 0"                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   elif ! [[ \$1 == \"-$VRSCMD_GUI\" || \$1 == \"-$VRSCMD_NOGUI\" || \$1 == \"-$VRSCMD_STARTPROCESS\" || \$1 == \"-$VRSCMD_STOPPROCESS\" || \$1 == \"-$VRSCMD_ENABLE\" || \$1 == \"-$VRSCMD_DISABLE\" || \$1 == \"-$VRSCMD_WEBADMIN\" || \$1 == \"-$VRSCMD_LOG\" ]]; then" >> "$STARTCOMMAND";
-echo "      printf \"Invalid parameter!\n\n\"; COMMANDHELP; exit 1"                                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "      printf \"${BOLD_FONT}ERROR: Invalid parameter!${NO_COLOR}\n\n\"; COMMANDHELP; exit 1"                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_ENABLE\" ]]; then"                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "      sudo systemctl enable $SERVICEFILENAME.service >/dev/null 2>&1"                                                                                                                                                                                                      >> "$STARTCOMMAND";
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to enable VRS at boot!\n\"; exit 2"                                                                                                                                                                                   >> "$STARTCOMMAND";
@@ -954,7 +954,7 @@ echo "      fi"                                                                 
 echo "   else printf \"Unknown error occurred! EXIT CODE: 7\n\"; exit 7"                                                                                                                                                                                                         >> "$STARTCOMMAND";
 echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
 echo "elif [[ \$# -ge 1 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
-echo "   printf \"Too many parameters!\n\n\"; COMMANDHELP; exit 8"                                                                                                                                                                                                               >> "$STARTCOMMAND";
+echo "   printf \"${BOLD_FONT}ERROR: Too many parameters!${NO_COLOR}\n\n\"; COMMANDHELP; exit 8"                                                                                                                                                                                 >> "$STARTCOMMAND";
 echo "elif [[ \$# -eq 0 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "   printf \"${BOLD_FONT}Status:${NO_COLOR} \";"                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "   if pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                   >> "$STARTCOMMAND";
