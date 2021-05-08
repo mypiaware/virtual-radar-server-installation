@@ -13,7 +13,7 @@ This script may be safely ran multiple times if wanting to change a few of the s
 This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Debian 10.9
-* Fedora 33
+* Fedora 34
 * openSUSE 15.2
 * Arch Linux
 
@@ -36,7 +36,7 @@ Here is a very brief summary of what this script will do:
 * [Install VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-install-vrs)
   * Install Mono (necessary to run VRS on Linux)
   * Install VRS server files
-  * Install a small VRS Mono fix (only needed for the stable version)
+  * Install a small VRS Mono fix (only needed for the 2.* versions)
   * Options may be given to install the latest editions of the preview versions
 * [Download and install the following VRS plugins:](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#vrs-plugins)
   * Custom Content Plugin
@@ -130,9 +130,9 @@ The user has an option of entering the GPS coordinates for the center of the VRS
 The user has an option of adding and entering the configuration information of an ADS-B receiver.  There are four critical parameters to enter for a receiver:
 
   * Receiver name:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
-  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then the user may consider selecting "AVR or Beast Raw Feed".
-  * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, the user should enter 127.0.0.1 as the IP address.
-  * Receiver IP port:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, the user may consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
+  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then consider selecting "AVR or Beast Raw Feed".
+  * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, enter 127.0.0.1 as the IP address.
+  * Receiver IP port:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, then consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
 
 It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be further modified in the VRS server settings after VRS is installed.
 
@@ -284,11 +284,13 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
 | Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
+| Ubuntu 21.04             | 6.8.0.105                      | :x:                 |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
 | Linux Mint 20.1          | 6.8.0.105                      | :x:                 |
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
 | Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
+| Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
 | openSUSE 15.2*           | 6.8.0.105                      | :heavy_check_mark:  |
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
