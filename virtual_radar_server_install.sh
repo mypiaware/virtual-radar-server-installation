@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 10.1)
+# Virtual Radar Server installation script (ver 10.2)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -14,7 +14,7 @@
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
 # This script has been confirmed to work with VRS version 2.4.4 on:
-# Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2 and Arch Linux.
+#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2, MX Linux 19.4 (if systemd is enabled), Manjaro 21.0.5 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -41,7 +41,7 @@ HOMEDIR=$( getent passwd "$USER" | cut -d: -f6 )  # Find the home directory of t
 
 VRSROOTDIRECTORY="$HOMEDIR/VirtualRadarServer"        # An arbitrary directory to hold the installation and extras for VRS.
 VRSINSTALLDIRECTORY="$VRSROOTDIRECTORY/Installation"  # An arbitrary directory to hold the installation of VRS.
-EXTRASDIRECTORY="$VRSROOTDIRECTORY/VRS-Extras"        # An arbitrary root directory for all extra VRS files (custom web files, database file, operator flags, silhouettes.)
+EXTRASDIRECTORY="$VRSROOTDIRECTORY/VRS-Extras"        # An arbitrary root directory for all extra VRS files (custom web files, database file, operator flags, silhouettes, tile cache, etc.)
 
 SHAREDIRECTORY="$HOMEDIR/.local/share/VirtualRadar"        # The location and name of the directory to hold customization files.  (This value should not be changed.)
 CONFIGFILE="$SHAREDIRECTORY/$CONFIGURATIONFILENAME"        # The location and name of the main configuration file.  (This value should not be changed.)
@@ -202,6 +202,8 @@ if grep -qEi 'opensuse' /etc/os-release; then
    OPERATINGSYSTEMVERSION="opensuse"
 elif grep -qEi 'fedora|rhel' /etc/os-release; then
    OPERATINGSYSTEMVERSION="fedora"
+elif grep -qEi 'manjaro' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="manjaro"
 elif grep -qEi 'arch linux' /etc/os-release; then
    OPERATINGSYSTEMVERSION="archlinux"
 elif grep -qEi 'debian|buntu' /etc/os-release; then
@@ -550,10 +552,14 @@ if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
    elif [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then     # Possibly install/update Mono and other necessary software on Fedora-like operating systems.
       if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
       if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
+   elif [[ $OPERATINGSYSTEMVERSION == "manjaro" ]]; then    # Possibly install/update Mono and other necessary software on Manjaro.
+      sudo pacman -Syy --noconfirm
+      sudo pacman -S --noconfirm gtk-engine-murrine  # Prevents `Unable to locate theme engine in module_path: "murrine"` error message from appearing.
+      sudo pacman -S --noconfirm mono
    elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then  # Assume many things need to be installed on Arch Linux.
       sudo pacman -Syy --noconfirm
       sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget glibc  # GLIBC_2.33 necessary for 'tar' command.
-   elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems.
+   elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems. (Includes Raspberry Pi OS, Ubuntu and MX Linux.)
       if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
          ! which unzip >/dev/null 2>&1 ||
          ! which mono >/dev/null 2>&1; then
@@ -843,12 +849,12 @@ sed -i -e "s/'en-GB'/'$LOCALIZATION'/g" "$CUSTOMWEBFILESDIRECTORY/fsx.html";    
 
 
 # Create a script to help backup the database file. (A cron job can later be set to automatically run the script at any time interval.)
-touch "$DATABASEBACKUPSCRIPT";                                                                     ERROREXIT 63 "Failed to create $DATABASEBACKUPSCRIPT!"
-echo "#!/bin/bash"                                                     > "$DATABASEBACKUPSCRIPT";  ERROREXIT 64 "Failed to edit $DATABASEBACKUPSCRIPT!"
-echo "# Use this script to routinely backup the VRS database file.\n" >> "$DATABASEBACKUPSCRIPT";
-echo "mkdir -p \"$DATABASEBACKUPDIRECTORY\""                          >> "$DATABASEBACKUPSCRIPT";
-echo "cp \"$DATABASEFILE\" \"$DATABASEBACKUPFILE\""                   >> "$DATABASEBACKUPSCRIPT";
-echo "exit"                                                           >> "$DATABASEBACKUPSCRIPT";
+touch "$DATABASEBACKUPSCRIPT";                                                                   ERROREXIT 63 "Failed to create $DATABASEBACKUPSCRIPT!"
+echo "#!/bin/bash"                                                   > "$DATABASEBACKUPSCRIPT";  ERROREXIT 64 "Failed to edit $DATABASEBACKUPSCRIPT!"
+echo "# Use this script to routinely backup the VRS database file." >> "$DATABASEBACKUPSCRIPT";
+echo "mkdir -p \"$DATABASEBACKUPDIRECTORY\""                        >> "$DATABASEBACKUPSCRIPT";
+echo "cp \"$DATABASEFILE\" \"$DATABASEBACKUPFILE\""                 >> "$DATABASEBACKUPSCRIPT";
+echo "exit"                                                         >> "$DATABASEBACKUPSCRIPT";
 
 
 # Create a service file to run VRS in the background.
