@@ -13,8 +13,10 @@ This script may be safely ran multiple times if wanting to change a few of the s
 This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Debian 10.9
+* MX Linux 19.4 *(only if systemd is enabled)*
 * Fedora 34
 * openSUSE 15.2
+* Manjaro 21.0.5
 * Arch Linux
 
 This script may also install VRS on other popular Linux distributions such as Ubuntu.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
@@ -111,7 +113,7 @@ This VRS installation script will also provide the option to download some sampl
 
 ## Server Port Number
 
-The VRS server will use a port number.  This port number must be set and will be used in the URL to access the VRS webpage.  For example, the URL for a VRS webpage on a local network using port 8090 may appear as such:  
+The VRS server will use a port number.  This port number must be set and will be used in the URL to access the VRS webpage.  For example, the URL for a VRS webpage on a local network using port 8090 may appear as such:
 ```
 http://192.168.1.100:8090/VirtualRadar
 ```
@@ -227,7 +229,7 @@ The `vrs` command will provide options on how a user may want to start or stop V
   * To view a GUI webpage interface for the VRS server settings, the [VRS Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) plugin should be utilized.  The Web Admin username and password may be created with the `vrs -webadmin` command.
   * If using an SSH client (such as [PuTTY](https://www.putty.org "PuTTY's homepage")), the terminal window will need to remain open.  However, if wanting to close the terminal window, installing a utility such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial") will allow VRS to continue running even if the terminal window is closed.
 
-`vrs -startbg` will allow the user to quickly and easily start VRS as a background process. This can be especially useful if wanting to run VRS in a command-line environment and not wanting to bother with running a program such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial"). `vrs -stopbg` will stop VRS only if it has already been started as a background process.  Just as with the `vrs -nogui` command, the [VRS Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) will need to be used to access all the VRS settings.
+`vrs -startbg` will allow the user to quickly and easily start VRS as a background process. This can be especially useful if wanting to run VRS in a command-line environment and not wanting to bother with running a program such as [screen](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ "Good screen tutorial"). `vrs -stopbg` will stop VRS only if it has already been started as a background process.  Just as with the `vrs -nogui` command, the [VRS Web Admin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin) plugin will need to be used to access all the VRS settings.
 
 `vrs -enable` will enable VRS to start at every system boot as a background process. `vrs -disable` will prevent VRS from starting at every system boot.
 
@@ -253,10 +255,6 @@ As already described above in the ["CustomInjectedFiles"](https://github.com/myp
 
 When this VRS installation script finishes, some very useful information will be displayed specific to that particular installation. It will be useful to read and record this information.
 
-## Ubuntu Fix
-
-When starting VRS in a few versions of Linux, an error message may appear that reads: `Failed to load module "canberra-gtk-module"`.  No known issue with VRS has come from this error.  However, this installation script installs `libcanberra-gtk-module` just to be safe and to prevent this error message from appearing.
-
 ## Advanced Users
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.  Also note that a few Linux distributions do not have `unzip` already installed.  Therefore, it may also be necessary to manually install `unzip`.
@@ -281,6 +279,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | ------------------------ |:------------------------------:|:-------------------:|
 | Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
 | Debian 10.9              | 5.18.0.240                     | :heavy_check_mark:  |
+| MX Linux 19.4            | 5.18.0.240                     | :heavy_check_mark:  |
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
 | Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
@@ -292,7 +291,8 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
 | Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
 | openSUSE 15.2*           | 6.8.0.105                      | :heavy_check_mark:  |
+| Manjaro 21.0.5*          | 6.12.0                         | :heavy_check_mark:  |
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
-\* Stable version of VRS works fine on Fedora, openSUSE and Arch Linux regardless of which version of Mono was installed.
+\* Stable version of VRS works fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono was installed.
