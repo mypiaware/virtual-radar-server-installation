@@ -10,10 +10,11 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to work with VRS version 2.4.4 (the latest stable release) on:
+This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Debian 10.9
 * MX Linux 19.4 *(only if systemd is enabled)*
+* elementary OS 5.1.7
 * Fedora 34
 * openSUSE 15.2
 * Manjaro 21.0.5
@@ -284,8 +285,10 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
 | Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
 | Ubuntu 21.04             | 6.8.0.105                      | :x:                 |
+| elementary OS 5.1.7      | 4.6.2                          | :heavy_check_mark:  |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
 | Linux Mint 20.1          | 6.8.0.105                      | :x:                 |
+| CentOS Stream 8          | 6.12.0.107                     | :x:                 |
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
 | Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
