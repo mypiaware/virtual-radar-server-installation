@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 10.2)
+# Virtual Radar Server installation script (ver 10.3)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -13,8 +13,8 @@
 # As an option, the user may also enter a receiver.
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
-# This script has been confirmed to work with VRS version 2.4.4 on:
-#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2, MX Linux 19.4 (if systemd is enabled), Manjaro 21.0.5 and Arch Linux.
+# This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
+#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2, MX Linux 19.4 (if systemd is enabled), elementary OS 5.1.7, Manjaro 21.0.5 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -200,12 +200,16 @@ NO_COLOR='\033[0m'
 declare OPERATINGSYSTEMVERSION  # Declare a global variable that will hold the version of the operating system.
 if grep -qEi 'opensuse' /etc/os-release; then
    OPERATINGSYSTEMVERSION="opensuse"
-elif grep -qEi 'fedora|rhel' /etc/os-release; then
+elif grep -qEi 'CentOS Stream 8' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="centos8"
+elif grep -qEi 'fedora' /etc/os-release; then
    OPERATINGSYSTEMVERSION="fedora"
 elif grep -qEi 'manjaro' /etc/os-release; then
    OPERATINGSYSTEMVERSION="manjaro"
 elif grep -qEi 'arch linux' /etc/os-release; then
    OPERATINGSYSTEMVERSION="archlinux"
+elif grep -qEi 'elementary OS' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="elementaryos"
 elif grep -qEi 'debian|buntu' /etc/os-release; then
    OPERATINGSYSTEMVERSION="debian"
 else OPERATINGSYSTEMVERSION="unknown"
@@ -248,7 +252,7 @@ fi
 
 # Print welcome screen.
 printf "\n${BLUE_COLOR}"
-printf "%0.s_" {1..62}
+printf "%0.s_" {1..64}
 printf "\n\n"
 printf " Virtual Radar Server\n"
 printf " http://www.virtualradarserver.co.uk\n\n"
@@ -523,6 +527,7 @@ if [[ $ENTER_RECEIVER =~ [Yy] ]]; then
    if [[ $RECEIVER_SOURCE_SELECTION == 4 ]]; then RECEIVER_SOURCE_ENTRY="AircraftListJson"; fi
    if [[ $RECEIVER_SOURCE_SELECTION == 5 ]]; then RECEIVER_SOURCE_ENTRY="PlaneFinder"; fi
    if [[ $RECEIVER_SOURCE_SELECTION == 6 ]]; then RECEIVER_SOURCE_ENTRY="Sbs3"; fi
+   printf "\nNote: More receivers may be added in the VRS settings after VRS is installed.\n"
 fi
 printf "\n"
 
@@ -545,29 +550,61 @@ printf "\n"
 
 
 # Attempt to install Mono and/or other necessary software only if the software is not already installed.
-if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
-   if [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then     # Possibly install/update Mono and other necessary software on openSUSE.
-      if ! which unzip >/dev/null 2>&1; then sudo zypper install -y unzip; fi
-      if ! which mono  >/dev/null 2>&1; then sudo zypper install -y mono-complete; fi
-   elif [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then     # Possibly install/update Mono and other necessary software on Fedora-like operating systems.
-      if ! which unzip >/dev/null 2>&1; then sudo dnf install -y unzip; fi
-      if ! which mono  >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
-   elif [[ $OPERATINGSYSTEMVERSION == "manjaro" ]]; then    # Possibly install/update Mono and other necessary software on Manjaro.
-      sudo pacman -Syy --noconfirm
-      sudo pacman -S --noconfirm gtk-engine-murrine  # Prevents `Unable to locate theme engine in module_path: "murrine"` error message from appearing.
-      sudo pacman -S --noconfirm mono
-   elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then  # Assume many things need to be installed on Arch Linux.
-      sudo pacman -Syy --noconfirm
-      sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget glibc  # GLIBC_2.33 necessary for 'tar' command.
-   elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then     # Possibly install/update Mono and other necessary software on Debian-based operating systems. (Includes Raspberry Pi OS, Ubuntu and MX Linux.)
-      if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
-         ! which unzip >/dev/null 2>&1 ||
-         ! which mono >/dev/null 2>&1; then
+if [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then        # Possibly install/update Mono and other necessary software on openSUSE.
+   if ! rpm -q unzip          >/dev/null 2>&1; then sudo zypper install -y unzip; fi
+   if ! rpm -q mono-complete  >/dev/null 2>&1; then sudo zypper install -y mono-complete; fi
+elif [[ $OPERATINGSYSTEMVERSION == "centos8" ]]; then       # Possibly install/update Mono and other necessary software on CentOS 8 Stream.
+   if ! rpm -q libcanberra-gtk2 >/dev/null 2>&1; then sudo dnf install -y libcanberra-gtk2; fi
+   if ! rpm -q unzip            >/dev/null 2>&1; then sudo dnf install -y unzip; fi
+   if ! rpm -q mono-complete    >/dev/null 2>&1; then
+      sudo rpm --import 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef'
+      sudo dnf config-manager --add-repo https://download.mono-project.com/repo/centos8-stable.repo
+      sudo dnf install -y mono-complete
+   fi
+elif [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then        # Possibly install/update Mono and other necessary software on Fedora.
+   if ! rpm -q unzip         >/dev/null 2>&1; then sudo dnf install -y unzip; fi
+   if ! rpm -q mono-complete >/dev/null 2>&1; then sudo dnf install -y mono-complete; fi
+elif [[ $OPERATINGSYSTEMVERSION == "manjaro" ]]; then       # Possibly install/update Mono and other necessary software on Manjaro.
+   if ! pacman -Q gtk-engine-murrine >/dev/null 2>&1 ||
+      ! pacman -Q unzip              >/dev/null 2>&1 ||
+      ! pacman -Q mono               >/dev/null 2>&1; then
+         sudo pacman -Syy --noconfirm
+         sudo pacman -S --noconfirm gtk-engine-murrine  # Prevents `Unable to locate theme engine in module_path: "murrine"` error message from appearing.
+         sudo pacman -S --noconfirm unzip
+         sudo pacman -S --noconfirm mono
+   fi
+elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then     # Assume many things need to be installed on Arch Linux.
+   if ! pacman -Q mono     >/dev/null 2>&1 ||
+      ! pacman -Q gtk2     >/dev/null 2>&1 ||
+      ! pacman -Q iproute2 >/dev/null 2>&1 ||
+      ! pacman -Q sed      >/dev/null 2>&1 ||
+      ! pacman -Q tar      >/dev/null 2>&1 ||
+      ! pacman -Q unzip    >/dev/null 2>&1 ||
+      ! pacman -Q which    >/dev/null 2>&1 ||
+      ! pacman -Q wget     >/dev/null 2>&1 ||
+      ! pacman -Q glibc    >/dev/null 2>&1; then
+         sudo pacman -Syy --noconfirm
+         sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget glibc  # GLIBC_2.33 necessary for 'tar' command.
+   fi
+elif [[ $OPERATINGSYSTEMVERSION == "elementaryos" ]]; then  # Possibly install/update Mono and other necessary software on elementary OS.
+   if ! dpkg -s gtk2-engines-pixbuf    >/dev/null 2>&1 ||
+      ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
+      ! dpkg -s unzip                  >/dev/null 2>&1 ||
+      ! dpkg -s mono-complete          >/dev/null 2>&1; then
+         sudo apt update
+         sudo apt install -y gtk2-engines-pixbuf     # Prevents `Unable to locate theme engine in module_path: "pixmap"` error message from appearing.
+         sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
+         sudo apt install -y mono-complete
+         # export MONO_WINFORMS_XIM_STYLE=disabled   # Prevents `Could not get XIM` error message from appearing.  Must be executed outside of this script.
+   fi
+elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then        # Possibly install/update Mono and other necessary software on Debian-based operating systems. (Includes Raspberry Pi OS, Ubuntu and MX Linux.)
+   if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
+      ! dpkg -s unzip                  >/dev/null 2>&1 ||
+      ! dpkg -s mono-complete          >/dev/null 2>&1; then
          sudo apt update
          sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
          sudo apt install -y unzip
          sudo apt install -y mono-complete
-      fi
    fi
 fi
 
