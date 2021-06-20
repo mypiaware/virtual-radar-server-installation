@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 10.3)
+# Virtual Radar Server installation script (ver 10.4)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -14,7 +14,7 @@
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
 # This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
-#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2, MX Linux 19.4 (if systemd is enabled), elementary OS 5.1.7, Manjaro 21.0.5 and Arch Linux.
+#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2, MX Linux 19.4 (if systemd is enabled), elementary OS 5.1.7, Manjaro 21.0.7 and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -386,7 +386,7 @@ fi
 printf "Enter a port number for the Virtual Radar Server to use.\n"
 printf "(Press [ENTER] to accept the default value of %s.)\n" $DEFAULTPORT
 printf "  Port Number: "; read VRSPORT;
-until [[ $VRSPORT == "" || ( $VRSPORT =~ ^\s*([1-9][0-9]{1,4})\s*$ && $VRSPORT -le 65535 ) ]]; do printf "  Port Number [%s]: " $DEFAULTPORT; read -r VRSPORT; done
+until [[ $VRSPORT == "" || ( $VRSPORT =~ ^\s*([1-9][0-9]{1,4})\s*$ && $VRSPORT -le 65535 ) ]]; do printf "  Port Number: "; read -r VRSPORT; done
 VRSPORT=${BASH_REMATCH[1]}
 if [[ $VRSPORT == "" ]]; then VRSPORT=$DEFAULTPORT; fi
 printf "\nPort Number Selected: ${ORANGE_COLOR}%s${NO_COLOR}\n\n" $VRSPORT
@@ -574,17 +574,17 @@ elif [[ $OPERATINGSYSTEMVERSION == "manjaro" ]]; then       # Possibly install/u
          sudo pacman -S --noconfirm mono
    fi
 elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then     # Assume many things need to be installed on Arch Linux.
-   if ! pacman -Q mono     >/dev/null 2>&1 ||
-      ! pacman -Q gtk2     >/dev/null 2>&1 ||
+   if ! pacman -Q gtk2     >/dev/null 2>&1 ||
       ! pacman -Q iproute2 >/dev/null 2>&1 ||
       ! pacman -Q sed      >/dev/null 2>&1 ||
       ! pacman -Q tar      >/dev/null 2>&1 ||
       ! pacman -Q unzip    >/dev/null 2>&1 ||
       ! pacman -Q which    >/dev/null 2>&1 ||
       ! pacman -Q wget     >/dev/null 2>&1 ||
-      ! pacman -Q glibc    >/dev/null 2>&1; then
+      ! pacman -Q glibc    >/dev/null 2>&1 ||
+      ! pacman -Q mono     >/dev/null 2>&1; then
          sudo pacman -Syy --noconfirm
-         sudo pacman -S --noconfirm mono gtk2 iproute2 sed tar unzip which wget glibc  # GLIBC_2.33 necessary for 'tar' command.
+         sudo pacman -S --noconfirm gtk2 iproute2 sed tar unzip which wget glibc mono  # GLIBC_2.33 necessary for 'tar' command.
    fi
 elif [[ $OPERATINGSYSTEMVERSION == "elementaryos" ]]; then  # Possibly install/update Mono and other necessary software on elementary OS.
    if ! dpkg -s gtk2-engines-pixbuf    >/dev/null 2>&1 ||
