@@ -2,7 +2,7 @@
 
 This script is a very helpful tool to easily install Virtual Radar Server on Linux.
 
-Virtual Radar Server (VRS) provides an amazing webpage display of any aircraft detected by an ADS-B receiver.  This script will help with the installation of VRS to those who are brand new to VRS.  With just a few keystrokes, VRS may be installed and operating with planes appearing on the VRS webpage.  This is assuming an ADS-B receiver has already been built and is operating properly.  (It is possible for VRS to also be installed on a ADS-B receiver device.)
+Virtual Radar Server (VRS) provides an amazing webpage display of any aircraft detected by an ADS-B receiver.  This script will help with the installation of VRS to those who are brand new to VRS.  With just a few keystrokes, VRS may be installed and operating with planes appearing on the VRS webpage.  This is assuming an ADS-B receiver has already been built and is operating properly.  (It is possible for VRS to also be installed simultaneously on a ADS-B receiver device.)
 
 This script is only intended to get VRS installed, configured and running as quickly as possible for the novice user.  Many more options are left to the user for further customization of VRS.  Some research and experimenting is encouraged and expected to enhance and secure VRS.
 
@@ -17,10 +17,10 @@ This script has been confirmed to allow VRS version 2.4.4 (the latest stable rel
 * elementary OS 5.1.7
 * Fedora 34
 * openSUSE 15.2
-* Manjaro 21.0.5
+* Manjaro 21.0.7
 * Arch Linux
 
-This script may also install VRS on other popular Linux distributions such as Ubuntu.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+This script may also install VRS on other popular Linux distributions such as Ubuntu and Linux Mint.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage.  Note that "Raspberry Pi OS" was recently known as "Raspbian".
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
@@ -95,14 +95,7 @@ This VRS installation script will download and install the language packs that w
 
 ## Fix libpng warnings
 
-The stable version of VRS (ver 2.4.4) can produce "libpng warning" messages at the command line.  The problem resides with two image files in the `images/markers` directory used to display a generic airplane marker on the VRS webpage.  The following steps fix the issue:
-
-  * Filenames need to be changed:
-    * `Marker_Airplane.png` to `Airplane.png`
-    * `Marker_AirplaneSelected.png` to `AirplaneSelected.png`
-  * Each of these two image files also need to have its color profile converted.
-
-This VRS installation script will download and install two image files that have already been corrected to the `CustomWebFiles` directory to eliminate these messages from appearing.  The Custom Content Plugin will utilize these two corrected image files.  Therefore, the Custom Content Plugin should be enabled and the "Site root folder" field in the Custom Content Plugin should be properly set.  By default, this script will ensure these conditions are met.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
+The stable version of VRS (ver 2.4.4) can produce "libpng warning" messages at the command line.  The problem resides with two image files used to display a generic airplane marker on the VRS webpage.  This script may automatically fix the issue by downloading and installing two image files that have been corrected to the `CustomWebFiles` directory.  The Custom Content Plugin will then utilize these two corrected image files.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
 
 ## Download Additional Files
 
@@ -264,19 +257,19 @@ If this scripts fails to install because it is reporting that the operating syst
 
 This script will install VRS on most popular Linux distributions.  However, VRS on a few operating systems could possibly have an issue with the latest versions of Mono.
 
-The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions equal to or greater than 6.4) on some Debian-based operating systems.  The issue is the plane icons and the altitude stalks will not appear on the VRS webpage.
+The stable version of VRS (ver 2.4.4) appears to have an issue with the latest versions of Mono (versions equal to or greater than 6.4) on some Debian-based operating systems.  The issue is that the aircraft icons and the altitude stalks will not appear on the VRS webpage.
 
 However, the preview versions (versions 2.4.5 or 3.0.0) of VRS will not have this issue with the latest versions of Mono.  The drawback is that these preview versions are under development.
 
 This VRS installation script allows the user to choose to install either the latest stable version or an under-development preview version.  If wanting to change from one version to another, simply run the script again and choose another version to install.  This script will cleanly remove whichever version was already installed by this script and then install the newly selected version.
 
-Although installing a preview version (versions 2.4.5 or 3.0.0) of VRS may solve the Mono issue, a preview version may introduce additional unforseen issues.  Please use caution when deciding to install a preview version.
+Although installing a preview version (versions 2.4.5 or 3.0.0) of VRS may allow the aircraft icons and altitude stalks to appear on the VRS webpage on systems with the latests versions of Mono, a preview version may introduce additional unforseen issues.  Please use caution when deciding to install a preview version.
 
 If any method of downgrading Mono has been found for the operating systems that need to have Mono downgraded, please kindly post instructions in the Issues section of this GitHub project.  Thanks in advance!
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
-| Linux                    | Default Mono Version Installed |Stable Version Works?|
+| Linux                    | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|
 | ------------------------ |:------------------------------:|:-------------------:|
 | Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
 | Debian 10.9              | 5.18.0.240                     | :heavy_check_mark:  |
@@ -294,7 +287,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
 | Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
 | openSUSE 15.2*           | 6.8.0.105                      | :heavy_check_mark:  |
-| Manjaro 21.0.5*          | 6.12.0                         | :heavy_check_mark:  |
+| Manjaro 21.0.7*          | 6.12.0                         | :heavy_check_mark:  |
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
