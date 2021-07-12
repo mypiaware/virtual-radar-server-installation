@@ -65,7 +65,7 @@ Here is a very brief summary of what this script will do:
 * [Auto-fill the directory/file paths in the VRS server settings for a few of the custom directories/files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#auto-fill-directory--file-paths)
 * [Create a global command to start VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#global-command-to-start-vrs)
 * [Create a script to routinely backup the database file](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#script-to-backup-database)
-* [Create a watchdog script to routinely check if VRS needs to be restarted](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog)
+* [Create a watchdog script to routinely check if VRS needs to be restarted](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-1)
 * [Provide an easy method of displaying an announcement at the top of the VRS webpage](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#display-an-announcement-on-the-webpage)
 
 ---
@@ -194,7 +194,7 @@ This directory will hold cached copies of map tiles from the tile servers if the
 
 #### Watchdog
 
-This directory will hold a convenient watchdog script to ensure VRS is running in the event VRS stops running for any reason. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog)
+This directory will hold a convenient watchdog script to ensure VRS is running in the event VRS stops running for any reason. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-1)
 
 ## Auto-fill Directory & File Paths
 
