@@ -12,11 +12,11 @@ This script may be safely ran multiple times if wanting to change a few of the s
 
 This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
-* Debian 10.9
+* Debian 10.10
 * MX Linux 19.4 *(only if systemd is enabled)*
 * elementary OS 5.1.7
 * Fedora 34
-* openSUSE 15.2
+* openSUSE 15.3
 * Manjaro 21.0.7
 * Arch Linux
 
@@ -65,6 +65,7 @@ Here is a very brief summary of what this script will do:
 * [Auto-fill the directory/file paths in the VRS server settings for a few of the custom directories/files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#auto-fill-directory--file-paths)
 * [Create a global command to start VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#global-command-to-start-vrs)
 * [Create a script to routinely backup the database file](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#script-to-backup-database)
+* [Create a watchdog script to routinely check if VRS needs to be restarted](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog)
 * [Provide an easy method of displaying an announcement at the top of the VRS webpage](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#display-an-announcement-on-the-webpage)
 
 ---
@@ -140,7 +141,7 @@ This VRS installation script will create a directory structure to conveniently c
 
 Here is a visual of the default directory structure:
 
-![VRS Directory Structure](https://i.imgur.com/YUKq8bl.png "VRS Directory Structure")
+![VRS Directory Structure](https://i.imgur.com/UVBS0rG.png "VRS Directory Structure")
 
 ### Installation
 
@@ -191,6 +192,10 @@ An example of a silhouette image named `B748.bmp` for a Boeing 747-800 aircraft:
 
 This directory will hold cached copies of map tiles from the tile servers if the Tile Server Cache Plugin is enabled.  This may improve the load time of the map tiles appearing on the VRS webpage. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-tileservercache)
 
+#### Watchdog
+
+This directory will hold a convenient watchdog script to ensure VRS is running in the event VRS stops running for any reason. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog)
+
 ## Auto-fill Directory & File Paths
 
 This VRS installation script will auto-fill the paths of directories and files in the VRS server settings for the simple sake of convenience.
@@ -237,6 +242,41 @@ The `vrs` command will provide options on how a user may want to start or stop V
 
 This VRS installation script will also create a script to backup the database file through a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial").  By default, the script is called `backupvrsdb.sh` and is located in the `Databases/DatabaseBackup` directory. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#databasesdatabasebackup)
 
+## Watchdog
+
+This VRS installation script will produce a script referred to as a watchdog script.  A watchdog script is a script that is routinely ran to check if a particular program is running or not.  If the program has been found to not be running, the watchdog script will start the program automatically.
+
+VRS is fairly stable and should be able to run for long periods of time without an issue.  However, anything may cause VRS to suddenly stop working.  A watchdog script that is routinely ran as a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial") may be able to identify an instance when VRS is not running and automatically start VRS again as a background process.
+
+By default, the VRS watchdog script will be named `vrs_watchdog.sh` and may be found in the `VRS-Extras/Watchdog` directory.  Also located in the same directory will be a `README` file.  This text file will conveniently provide the custom cron job that could be used to routinely run the watchdog script every minute.
+
+If the cron entry is used exactly as it is from the `README` file, the VRS watchdog script will run once every minute to check if VRS is running.  At any minute, if the VRS watchdog script detects that VRS is not running, it will begin to continually check the status of VRS every second for 2 minutes (120 seconds).  At the end of the 2 minutes, if VRS has been determined to still not be running, the VRS watchdog script will start VRS.  If the 2-minute wait time is desired to be changed, simply open the `vrs_watchdog.sh` file and edit the `WAITSECS` variable to some other length of time in seconds.
+
+By default, in the same `VRS-Extras/Watchdog` directory, a `vrs_watchdog.log` log file will be produced to record any time VRS was started by the VRS watchdog script. The log file is created the very first time the `vrs_watchdog.sh` script is ran. If a log file has not been produced, then there is some error that needs to be fixed as it is an indication that this watchdog script may not be doing its job of making sure VRS is running. In the `vrs_watchdog.sh` file, it is possible to change the name and location of the log file by editing the values for the `LOG_NAME` and `LOG_DIR` variables.
+
+Do not forget that VRS will automatically get started by this watchdog script if VRS is ever intentially shut down.  The watchdog cron job may be temporarily disabled by simply typing a `#` at the beginning of the cron job entry in the crontab file. (The `#` comments out the cron job entry.)
+
+It is purely optional to use this VRS watchdog script.
+
+### Tips on creating the VRS watchdog
+
+* Enter this command: `sudo crontab -e`
+* (If this is the first time setting up a cron job, a prompt may be given to set the default editor.)
+* Cron has now opened a simple text file that may possibly contain mostly commented lines beginning with a `#`.
+* From the `README` file, copy the cron job entry and paste it at the bottom line in this crontab file.
+* Save and close the crontab file.
+* If the cron job was entered successfully, the following will be printed to the screen: `crontab: installing new crontab`.
+
+### Notes for advanced users:
+
+* If the Linux operating system is configured to not require a password when using the `sudo` command, the following may be used instead to create a cron job: `crontab -e`.  Raspberry Pi OS is configured to not require a password when using the `sudo` command.
+* Some Linux operating systems distributions do not come with cron installed.  Please find documentation on how to routinely run scripts on that particular Linux operating system distribution.  Here is one *possible* method:
+  * Try installing a package called `cronie`
+  * Make sure the cron service is running with possibly one of these commands:
+    * `sudo systemctl enable --now crond`
+    * `sudo systemctl enable --now cronie`
+
+
 ## Display an Announcement on the Webpage
 
 As already described above in the ["CustomInjectedFiles"](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#customcontentcustominjectedfiles) description, a template HTML file will be created by this VRS installation script to help display an announcement at the top of the VRS webpage.  Simply edit the existing `Announcement.html` file in the `CustomContent/CustomInjectedFiles` directory to display whatever text deemed necessary at the top of the VRS webpage.
@@ -272,7 +312,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Linux                    | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|
 | ------------------------ |:------------------------------:|:-------------------:|
 | Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
-| Debian 10.9              | 5.18.0.240                     | :heavy_check_mark:  |
+| Debian 10.10             | 5.18.0.240                     | :heavy_check_mark:  |
 | MX Linux 19.4            | 5.18.0.240                     | :heavy_check_mark:  |
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
@@ -280,15 +320,15 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 21.04             | 6.8.0.105                      | :x:                 |
 | elementary OS 5.1.7      | 4.6.2                          | :heavy_check_mark:  |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
-| Linux Mint 20.1          | 6.8.0.105                      | :x:                 |
+| Linux Mint 20.2          | 6.8.0.105                      | :x:                 |
 | CentOS Stream 8          | 6.12.0.107                     | :x:                 |
 | Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
 | Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
 | Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
-| openSUSE 15.2*           | 6.8.0.105                      | :heavy_check_mark:  |
+| openSUSE 15.3*           | 6.8.0.105                      | :heavy_check_mark:  |
 | Manjaro 21.0.7*          | 6.12.0                         | :heavy_check_mark:  |
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
-\* Stable version of VRS works fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono was installed.
+\* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
