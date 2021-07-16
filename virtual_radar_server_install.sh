@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.0)
+# Virtual Radar Server installation script (ver 11.1)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -15,7 +15,7 @@
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
 # This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
-#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian 10.9, Fedora 34, openSUSE 15.2, MX Linux 19.4 (if systemd is enabled), elementary OS 5.1.7, Manjaro 21.0.7 and Arch Linux.
+#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian, Fedora, openSUSE, MX Linux (if systemd is enabled), elementary OS, Manjaro and Arch Linux.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -174,7 +174,7 @@ if [ -f "$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME" ]; then
 fi
 
 
-# Parameters for the VRS command.
+# Options for the VRS command.
 VRSCMD_GUI="gui"
 VRSCMD_NOGUI="nogui"
 VRSCMD_STARTPROCESS="startbg"
@@ -227,6 +227,10 @@ elif grep -qEi 'debian|buntu' /etc/os-release; then
    OPERATINGSYSTEMVERSION="debian"
 else OPERATINGSYSTEMVERSION="unknown"
 fi
+
+
+# If VRS is installed on Raspberry Pi OS, then it is not necessary to use 'sudo crontab -e', but 'crontab -e' can simply be used instead.
+if grep -qEi 'ID=raspb' /etc/os-release; then CRONCMD="crontab -e"; else CRONCMD="sudo crontab -e"; fi
 
 
 # Function ran after nearly every command in this script to report an error if one exists.
@@ -407,7 +411,7 @@ printf "\nPort Number Selected: ${ORANGE_COLOR}%s${NO_COLOR}\n\n" $VRSPORT
 
 # Offer a choice for localization of the VRS webpages.
 printf "Select the default language to be displayed in the VRS webpages:\n\n"
-PS3='Please choose your language of preference: '
+PS3='Please choose the language of preference: '
 LOCALE_CHOICES=("Chinese (China)" "English (Australia)" "English (Belize)" "English (Canada)" "English (Caribbean)" "English (India)"
 "English (Ireland)" "English (Jamaica)" "English (Malaysia)" "English (New Zealand)" "English (Singapore)" "English (South Africa)"
 "English (Trinidad and Tobago)" "English (United Kingdom)" "English (United States)" "French (Belgium)" "French (Canada)" "French (France)"
@@ -928,7 +932,7 @@ sudo chown root:root "$SERVICEFILE";  ERROREXIT 69 "The 'chown' command failed o
 sudo systemctl daemon-reload;         ERROREXIT 70 "The 'systemctl daemon-reload' command failed"
 
 
-# Find largest length of the VRS command parameters.
+# Find largest length of the VRS command options.
 VRSCMD_GUI_LEN=${#VRSCMD_GUI}
 VRSCMD_NOGUI_LEN=${#VRSCMD_NOGUI}
 VRSCMD_STARTPROCESS_LEN=${#VRSCMD_STARTPROCESS}
@@ -948,97 +952,94 @@ if [[ $VRSCMD_LOG_LEN          -gt $ARGLENGTH        ]]; then ARGLENGTH=${#VRSCM
 
 # Create the VRS watchdog script to be used by a cron job and an accompanying README file.
 touch "$TEMPDIR/$VRSWATCHDOGFILENAME";  ERROREXIT 71 "Failed to create $TEMPDIR/$VRSWATCHDOGFILENAME!"
-echo "#!/bin/bash"                                                                                                                                                        > "$TEMPDIR/$VRSWATCHDOGFILENAME";  ERROREXIT 72 "Failed to edit $TEMPDIR/$VRSWATCHDOGFILENAME!"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Virtual Radar Server (VRS) watchdog script to be ran as a cron job."                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# An example of a cron job running this script every minute:"                                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "#    */1 * * * * $BASHLOCATION \"$VRSWATCHDOGDIRECTORY/$VRSWATCHDOGFILENAME\""                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Change the following three variables as desired."                                                                                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "LOG_DIR=\"$VRSWATCHDOGLOGDIRECTORY\"  # Directory to contain the log file (gets created if not already existing)."                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "LOG_NAME=\"$VRSWATCHDOGLOGFILENAME\"  # Name of the log file."                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "WAITSECS=120  # Amount of time (in seconds) after first detecting VRS is not running before starting VRS again."                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "              # To be safe, the value of 'WAITSECS' should never be less than 60."                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "##############################################################################################################################"                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Do not alter any part of the script below."                                                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "##############################################################################################################################"                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "VRS_EXE=\"$VRSINSTALLDIRECTORY/VirtualRadar.exe\"  # Full path of the VRS executable."                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "VRS_START=\"$STARTCOMMANDDIR/$STARTCOMMANDFILENAME -$VRSCMD_STARTPROCESS\"  # The command to start VRS as a background process."                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "JOURNAL_FILE=\"$DATABASEDIRECTORY/$DATABASEFILENAME-journal\"  # A temp file for the $DATABASEFILENAME file."                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "LOG_FILE=\"\$LOG_DIR/\$LOG_NAME\"  # Full path of the VRS watchdog log file."                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "PID_DIR=\"$TEMPDIR\"  # Temp directory to store the PID file."                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "PID_FILE=\"\$PID_DIR/watchdog.pid\"  # A temp file used to know if this VRS watchdog script is already running."                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "MYUSERNAME=\"$USER\"  # The username of the account running VRS."                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Exit if the VRS executable is not found."                                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "if ! [ -f \"\$VRS_EXE\" ]; then exit; fi"                                                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Exit from this VRS watchdog script if another instance of this script is already running."                                                                       >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "if [ -f \"\$PID_FILE\" ]; then exit; fi"                                                                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Create the directory to contain the VRS watchdog log file if it is not already existing."                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "if ! [ -d \"\$LOG_DIR\" ]; then mkdir -p \"\$LOG_DIR\"; fi"                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Create the VRS watchdog log file if it is not already existing."                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "if ! [ -f \"\$LOG_FILE\" ]; then"                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   touch \"\$LOG_FILE\""                                                                                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   sudo chown \$MYUSERNAME:users \"\$LOG_FILE\"  # Prevents log file being owned by root if 'sudo crontab -e' is used."                                            >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   printf \"%s - VRS watchdog log file was successfully created.\n\" \"\$DATE_TIME\" > \"\$LOG_FILE\""                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "fi"                                                                                                                                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Check for the rare situation of an empty VRS watchdog log file getting created."                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "if ! [ -s \"\$LOG_FILE\" ]; then"                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   printf \"%s - VRS watchdog log file was successfully created.\n\" \"\$DATE_TIME\" > \"\$LOG_FILE\""                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "fi"                                                                                                                                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "# Check if VRS needs to be started again, and note it in the VRS watchdog log file if VRS is started again."                                                       >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "if ! pgrep -f \"\$VRS_EXE\"; then"                                                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   trap \"rm -f \$PID_FILE\" INT TERM EXIT  # Delete the PID file whenever this script exits."                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   mkdir -p \"\$PID_DIR\""                                                                                                                                         >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   sudo chown \$MYUSERNAME:users \"\$PID_DIR\"  # Prevents the PID directory being owned by root if 'sudo crontab -e' is used."                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   touch \"\$PID_FILE\""                                                                                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   sudo chown \$MYUSERNAME:users \"\$PID_FILE\"  # Prevents PID file being owned by root if 'sudo crontab -e' is used."                                            >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   printf \"%s - PID: %s\n\" \"\$DATE_TIME\" \"$(echo \$\$)\" > \"\$PID_FILE\""                                                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   printf \"%s - VRS watchdog script has detected that VRS is not running. (Will keep checking for %s seconds.)\n\" \"\$DATE_TIME\" \$WAITSECS >> \"\$LOG_FILE\""  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   LIMIT_REACHED=0"                                                                                                                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   STARTTIME=\$(date +%s)  # Epoch time"                                                                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   while ! pgrep -f \"\$VRS_EXE\"; do"                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "      if [ \$((\$(date +%s)-STARTTIME)) -ge \$WAITSECS ]; then"                                                                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         LIMIT_REACHED=1"                                                                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                         >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         rm -f \"\$JOURNAL_FILE\"  # Make sure this file (if existing) is deleted otherwise the $DATABASEFILENAME file will not update."                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         eval \"\$VRS_START\""                                                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         if [[ \$? -eq 0 ]]; then"                                                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "            printf \"%s - VRS watchdog script has started VRS.\n\" \"\$DATE_TIME\" >> \"\$LOG_FILE\""                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         else"                                                                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "            printf \"%s - ERROR! VRS watchdog script was not able to start VRS!\n\" \"\$DATE_TIME\" >> \"\$LOG_FILE\""                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         fi"                                                                                                                                                       >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "         break"                                                                                                                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "      fi"                                                                                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "      sleep 1"                                                                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   done"                                                                                                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   if pgrep -f \"\$VRS_EXE\" && [[ \$LIMIT_REACHED -eq 0 ]]; then"                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "      DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                            >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "      printf \"%s - VRS was started, but not by the VRS watchdog script.\n\" \"\$DATE_TIME\" >> \"\$LOG_FILE\""                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "   fi"                                                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "fi"                                                                                                                                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo ""                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "exit"                                                                                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "#!/bin/bash"                                                                                                                                                                     > "$TEMPDIR/$VRSWATCHDOGFILENAME";  ERROREXIT 72 "Failed to edit $TEMPDIR/$VRSWATCHDOGFILENAME!"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Virtual Radar Server (VRS) watchdog script to be ran as a cron job."                                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Change the following three variables as desired."                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "LOG_DIR=\"$VRSWATCHDOGLOGDIRECTORY\"  # Directory to contain the log file (gets created if not already existing)."                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "LOG_NAME=\"$VRSWATCHDOGLOGFILENAME\"  # Name of the log file."                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "WAITSECS=120  # Amount of time (in seconds) after first detecting VRS is not running before starting VRS again."                                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "              # To be safe, the value of 'WAITSECS' should never be less than 60."                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "##############################################################################################################################"                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Do not alter any part of the script below."                                                                                                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "##############################################################################################################################"                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "VRS_EXE=\"$VRSINSTALLDIRECTORY/VirtualRadar.exe\"  # Full path of the VRS executable."                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "VRS_START=\"$STARTCOMMANDDIR/$STARTCOMMANDFILENAME -$VRSCMD_STARTPROCESS\"  # The command to start VRS as a background process."                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "JOURNAL_FILE=\"$DATABASEDIRECTORY/$DATABASEFILENAME-journal\"  # A temp file for the $DATABASEFILENAME file."                                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "LOG_FILE=\"\$LOG_DIR/\$LOG_NAME\"  # Full path of the VRS watchdog log file."                                                                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_DIR=\"$TEMPDIR\"  # Temp directory to store the PID file."                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_FILE=\"\$PID_DIR/watchdog.pid\"  # A temp file used to determine if this VRS watchdog script is already running."                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "MYUSERNAME=\"$USER\"  # The username of the account running VRS."                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Exit if the VRS executable is not found."                                                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "if ! [ -f \"\$VRS_EXE\" ]; then exit; fi"                                                                                                                                       >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Exit from this VRS watchdog script if another instance of this script is already running."                                                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "if [ -f \"\$PID_FILE\" ]; then exit; fi"                                                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Create the directory to contain the VRS watchdog log file if it is not already existing."                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "if ! [ -d \"\$LOG_DIR\" ]; then mkdir -p \"\$LOG_DIR\"; fi"                                                                                                                     >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Create the VRS watchdog log file if it is not already existing."                                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "if ! [ -f \"\$LOG_FILE\" ]; then"                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   touch \"\$LOG_FILE\""                                                                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   sudo chown \$MYUSERNAME:users \"\$LOG_FILE\"  # Prevents log file being owned by root if 'sudo crontab -e' is used."                                                         >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   printf \"%s - VRS watchdog log file was successfully created.\n\" \"\$DATE_TIME\" > \"\$LOG_FILE\""                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "fi"                                                                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Check for the rare situation of an empty VRS watchdog log file getting created."                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "if ! [ -s \"\$LOG_FILE\" ]; then"                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   printf \"%s - VRS watchdog log file was successfully created.\n\" \"\$DATE_TIME\" > \"\$LOG_FILE\""                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "fi"                                                                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "# Check if VRS needs to be started again, and note it in the VRS watchdog log file if VRS is started again."                                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "if ! pgrep -f \"\$VRS_EXE\"; then"                                                                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   trap \"rm -f \$PID_FILE\" INT TERM EXIT  # Delete the PID file whenever this script exits."                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   mkdir -p \"\$PID_DIR\""                                                                                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   sudo chown \$MYUSERNAME:users \"\$PID_DIR\"  # Prevents the PID directory being owned by root if 'sudo crontab -e' is used."                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   touch \"\$PID_FILE\""                                                                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   sudo chown \$MYUSERNAME:users \"\$PID_FILE\"  # Prevents PID file being owned by root if 'sudo crontab -e' is used."                                                         >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   printf \"%s - PID: %s\n\" \"\$DATE_TIME\" \"$(echo \$\$)\" > \"\$PID_FILE\""                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   printf \"%s - VRS watchdog script has detected that VRS is not running. (Will keep checking every second for %s seconds.)\n\" \"\$DATE_TIME\" \$WAITSECS >> \"\$LOG_FILE\""  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   LIMIT_REACHED=0"                                                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   STARTTIME=\$(date +%s)  # Epoch time"                                                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   while ! pgrep -f \"\$VRS_EXE\"; do"                                                                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "      if [ \$((\$(date +%s)-STARTTIME)) -ge \$WAITSECS ]; then"                                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         LIMIT_REACHED=1"                                                                                                                                                       >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         rm -f \"\$JOURNAL_FILE\"  # Make sure this file (if existing) is deleted otherwise the $DATABASEFILENAME file will not update."                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         eval \"\$VRS_START\""                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         if [[ \$? -eq 0 ]]; then"                                                                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "            printf \"%s - VRS watchdog script has started VRS.\n\" \"\$DATE_TIME\" >> \"\$LOG_FILE\""                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         else"                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "            printf \"%s - ERROR! VRS watchdog script was not able to start VRS!\n\" \"\$DATE_TIME\" >> \"\$LOG_FILE\""                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         fi"                                                                                                                                                                    >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "         break"                                                                                                                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "      fi"                                                                                                                                                                       >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "      sleep 1"                                                                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   done"                                                                                                                                                                        >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   if pgrep -f \"\$VRS_EXE\" && [[ \$LIMIT_REACHED -eq 0 ]]; then"                                                                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "      DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                                         >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "      printf \"%s - VRS was started, but not by the VRS watchdog script.\n\" \"\$DATE_TIME\" >> \"\$LOG_FILE\""                                                                 >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "   fi"                                                                                                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "fi"                                                                                                                                                                             >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "exit"                                                                                                                                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 cp "$TEMPDIR/$VRSWATCHDOGFILENAME" "$VRSWATCHDOGDIRECTORY" >/dev/null 2>&1;
 if [[ $? -ne 0 ]]; then sudo cp "$TEMPDIR/$VRSWATCHDOGFILENAME" "$VRSWATCHDOGDIRECTORY"; fi;    ERROREXIT 73 "Failed to copy $TEMPDIR/$VRSWATCHDOGFILENAME!"  # Use 'sudo' only if necessary."
 touch "$TEMPDIR/Watchdog_README";                                                               ERROREXIT 74 "Failed to create $TEMPDIR/Watchdog_README!"
-echo "Command to create a cron job entry:"                                                               > "$TEMPDIR/Watchdog_README";  ERROREXIT 75 "Failed to edit $TEMPDIR/Watchdog_README!"
-echo "   sudo crontab -e"                                                                               >> "$TEMPDIR/Watchdog_README"
-echo ""                                                                                                 >> "$TEMPDIR/Watchdog_README"
-echo "Example of a cron job entry to run the '$VRSWATCHDOGFILENAME' script every minute:"               >> "$TEMPDIR/Watchdog_README"
-echo "   */1 * * * * $BASHLOCATION \"$VRSWATCHDOGDIRECTORY/$VRSWATCHDOGFILENAME\""                      >> "$TEMPDIR/Watchdog_README"
-echo ""                                                                                                 >> "$TEMPDIR/Watchdog_README"
-echo "For further instructions and help regarding this VRS watchdog script, please visit:"              >> "$TEMPDIR/Watchdog_README"
-echo "https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-1"  >> "$TEMPDIR/Watchdog_README"
+echo "Command to create a cron job entry:"                                                                    > "$TEMPDIR/Watchdog_README";  ERROREXIT 75 "Failed to edit $TEMPDIR/Watchdog_README!"
+echo "$CRONCMD"                                                                                              >> "$TEMPDIR/Watchdog_README"
+echo ""                                                                                                      >> "$TEMPDIR/Watchdog_README"
+echo "Example of a cron job entry to run the '$VRSWATCHDOGFILENAME' script every minute:"                    >> "$TEMPDIR/Watchdog_README"
+echo "*/1 * * * * $BASHLOCATION \"$VRSWATCHDOGDIRECTORY/$VRSWATCHDOGFILENAME\""                              >> "$TEMPDIR/Watchdog_README"
+echo ""                                                                                                      >> "$TEMPDIR/Watchdog_README"
+echo "For further instructions and help regarding this VRS watchdog script, please visit:"                   >> "$TEMPDIR/Watchdog_README"
+echo "https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-script"  >> "$TEMPDIR/Watchdog_README"
 cp "$TEMPDIR/Watchdog_README" "$VRSWATCHDOGDIRECTORY/README" >/dev/null 2>&1;
 if [[ $? -ne 0 ]]; then sudo cp "$TEMPDIR/Watchdog_README" "$VRSWATCHDOGDIRECTORY/README"; fi;  ERROREXIT 76 "Failed to copy $TEMPDIR/$VRSWATCHDOGFILENAME!"  # Use 'sudo' only if necessary."
 
@@ -1051,8 +1052,8 @@ echo "#!/bin/bash"                                                              
 echo "# Use this script as a global command to start/stop VRS."                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
 echo "function COMMANDHELP {"                                                                                                                                                                                                                                                    >> "$STARTCOMMAND";
-echo "   printf \"Usage: vrs -parameter\n\""                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
-echo "   printf -- \"Parameters:\n\""                                                                                                                                                                                                                                            >> "$STARTCOMMAND";
+echo "   printf \"Usage: vrs -option\n\""                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
+echo "   printf -- \"Options:\n\""                                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS with a GUI in a GUI desktop environment\n\" \"$VRSCMD_GUI\""                                                                                                                                                                   >> "$STARTCOMMAND";
 echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS without a GUI\n\" \"$VRSCMD_NOGUI\""                                                                                                                                                                                           >> "$STARTCOMMAND";
 echo "   printf -- \" -%-${ARGLENGTH}s  Start VRS as a background service\n\" \"$VRSCMD_STARTPROCESS\""                                                                                                                                                                          >> "$STARTCOMMAND";
@@ -1067,7 +1068,7 @@ echo ""                                                                         
 echo "if [[ \$# -eq 1 ]]; then"                                                                                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   if [[ \$1 == \"-h\" || \$1 == \"-help\" || \$1 == \"-?\" ]]; then COMMANDHELP; exit 0"                                                                                                                                                                                  >> "$STARTCOMMAND";
 echo "   elif ! [[ \$1 == \"-$VRSCMD_GUI\" || \$1 == \"-$VRSCMD_NOGUI\" || \$1 == \"-$VRSCMD_STARTPROCESS\" || \$1 == \"-$VRSCMD_STOPPROCESS\" || \$1 == \"-$VRSCMD_ENABLE\" || \$1 == \"-$VRSCMD_DISABLE\" || \$1 == \"-$VRSCMD_WEBADMIN\" || \$1 == \"-$VRSCMD_LOG\" ]]; then" >> "$STARTCOMMAND";
-echo "      printf \"${BOLD_FONT}ERROR: Invalid parameter!${NO_COLOR}\n\n\"; COMMANDHELP; exit 1"                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "      printf \"${BOLD_FONT}ERROR: Invalid option!${NO_COLOR}\n\n\"; COMMANDHELP; exit 1"                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "   elif [[ \$1 == \"-$VRSCMD_ENABLE\" ]]; then"                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "      sudo systemctl enable $SERVICEFILENAME.service >/dev/null 2>&1"                                                                                                                                                                                                      >> "$STARTCOMMAND";
 echo "      if [[ \$? -ne 0 ]]; then printf \"Error trying to enable VRS at boot!\n\"; exit 2"                                                                                                                                                                                   >> "$STARTCOMMAND";
@@ -1113,7 +1114,7 @@ echo "      fi"                                                                 
 echo "   else printf \"Unknown error occurred! EXIT CODE: 9\n\"; exit 9"                                                                                                                                                                                                         >> "$STARTCOMMAND";
 echo "   fi"                                                                                                                                                                                                                                                                     >> "$STARTCOMMAND";
 echo "elif [[ \$# -ge 1 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
-echo "   printf \"${BOLD_FONT}ERROR: Too many parameters!${NO_COLOR}\n\n\"; COMMANDHELP; exit 10"                                                                                                                                                                                >> "$STARTCOMMAND";
+echo "   printf \"${BOLD_FONT}ERROR: Too many options!${NO_COLOR}\n\n\"; COMMANDHELP; exit 10"                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "elif [[ \$# -eq 0 ]]; then"                                                                                                                                                                                                                                                >> "$STARTCOMMAND";
 echo "   printf \"${BOLD_FONT}Status:${NO_COLOR} \";"                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "   if pgrep -f '$VRSINSTALLDIRECTORY/VirtualRadar.exe' >/dev/null; then"                                                                                                                                                                                                   >> "$STARTCOMMAND";
@@ -1164,7 +1165,7 @@ if [ -f "$DATABASEBACKUPSCRIPT" ]; then
 fi
 
 printf "${ORANGE_COLOR}A cron job may be set to check status of VRS and restart VRS if necessary:${NO_COLOR}\n"
-printf "  Use this command to enter a cron job:   sudo crontab -e\n"
+printf "  Use this command to enter a cron job:   $CRONCMD\n"
 printf "  Here is an example cron job to check the status of VRS every minute:\n"
 printf "    */1 * * * * $BASHLOCATION \"%s\"\n\n" "$VRSWATCHDOGDIRECTORY/$VRSWATCHDOGFILENAME"
 
