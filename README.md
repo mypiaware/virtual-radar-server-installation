@@ -65,7 +65,7 @@ Here is a very brief summary of what this script will do:
 * [Auto-fill the directory/file paths in the VRS server settings for a few of the custom directories/files](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#auto-fill-directory--file-paths)
 * [Create a global command to start VRS](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#global-command-to-start-vrs)
 * [Create a script to routinely backup the database file](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#script-to-backup-database)
-* [Create a watchdog script to routinely check if VRS needs to be restarted](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-1)
+* [Create a watchdog script to routinely check if VRS needs to be restarted](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-script)
 * [Provide an easy method of displaying an announcement at the top of the VRS webpage](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#display-an-announcement-on-the-webpage)
 
 ---
@@ -153,7 +153,7 @@ This directory contains many of the user's custom files used to enhance and supp
 
 #### CustomContent/CustomInjectedFiles
 
-VRS webpage files simply can not be removed or edited in any way, otherwise VRS will not start. However, it is possible to make small additions (also known as "injections") to the HTML files used by VRS found in the `Installation/Web` directory and any possible subdirectories. The Custom Content Plugin is a tool to allow such injections, and the Custom Content Plugin will utilize files in this `CustomInjectedFiles` directory. This directory can contain files with HTML code to be injected into any existing VRS HTML file. By default, an `Announcement.html` file is already created in this directory to be injected into both the `Installation/Web/desktop.html` and `Installation/Web/mobile.html` files. This `Announcement.html` file may be used to produce a small announcement bar at the top of the VRS webpage.  This could be useful to make an announcement that the server will be under maintenance for a short amount of time, for example. Even if this `Announcement.html` is never utilized, it does provide a decent example to the novice user of how the Custom Content Plugin utilizes the Custom Injected Files.  [More info](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx#inject-file)
+VRS webpage files simply can not be removed or edited in any way, otherwise VRS will not start. However, it is possible to make small additions (also known as "injections") to the HTML files used by VRS found in the `Installation/Web` directory and any possible subdirectories. The Custom Content Plugin is a tool to allow such injections, and the Custom Content Plugin will utilize files in this `CustomInjectedFiles` directory. This directory can contain files with HTML code to be injected into any existing VRS HTML file. By default, an `Announcement.html` file is already created in this directory to be injected into both the `Installation/Web/desktop.html` and `Installation/Web/mobile.html` files. This `Announcement.html` file may be used to produce a small announcement bar at the top of the VRS webpage.  This could be useful to make an announcement that the server will be under maintenance for a short amount of time, for example. Although it is highly unlikely this `Announcement.html` will be utilized by the average user, it does provide a decent example to the novice user of how the Custom Content Plugin utilizes the Custom Injected Files.  [More info](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx#inject-file)
 
 #### CustomContent/CustomWebFiles
 
@@ -194,7 +194,7 @@ This directory will hold cached copies of map tiles from the tile servers if the
 
 #### Watchdog
 
-This directory will hold a convenient watchdog script to ensure VRS is running in the event VRS stops running for any reason. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-1)
+This directory will hold a convenient watchdog script to ensure VRS is running in the event VRS stops running for any reason. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-script)
 
 ## Auto-fill Directory & File Paths
 
@@ -206,19 +206,19 @@ This VRS installation script will create a global command to allow the user to q
 
 `vrs`
 
-The `vrs` command will provide options on how a user may want to start or stop VRS.  These are all the command options:
+The `vrs` command will provide the VRS status and options on how a user may want to start or stop VRS.  These are all the command options:
 
-| Command         | Description                                                     |
-| --------------- | --------------------------------------------------------------- |
-| `vrs -gui`      | Start VRS with a GUI in a GUI desktop environment               |
-| `vrs -nogui`    | Start VRS without a GUI                                         |
-| `vrs -startbg`  | Start VRS as a background service                               |
-| `vrs -stopbg`   | Stop VRS if running as a background service                     |
-| `vrs -enable`   | Allow VRS to start at every system boot as a background service |
-| `vrs -disable`  | Disable VRS from starting at every system boot                  |
-| `vrs -webadmin` | Create username & password for Web Admin & also start VRS       |
-| `vrs -log`      | View history log of VRS running as a background service         |
-| `vrs -?`        | Display the help menu                                           |
+| Command & Option | Description                                                     |
+| ---------------- | --------------------------------------------------------------- |
+| `vrs -gui`       | Start VRS with a GUI in a GUI desktop environment               |
+| `vrs -nogui`     | Start VRS without a GUI                                         |
+| `vrs -startbg`   | Start VRS as a background service                               |
+| `vrs -stopbg`    | Stop VRS if running as a background service                     |
+| `vrs -enable`    | Allow VRS to start at every system boot as a background service |
+| `vrs -disable`   | Disable VRS from starting at every system boot                  |
+| `vrs -webadmin`  | Create username & password for Web Admin & also start VRS       |
+| `vrs -log`       | View history log of VRS running as a background service         |
+| `vrs -?`         | Display the help menu                                           |
 
 #### Further notes on using the `vrs` command:
 
@@ -242,17 +242,17 @@ The `vrs` command will provide options on how a user may want to start or stop V
 
 This VRS installation script will also create a script to backup the database file through a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial").  By default, the script is called `backupvrsdb.sh` and is located in the `Databases/DatabaseBackup` directory. [More info](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#databasesdatabasebackup)
 
-## Watchdog
+## Watchdog Script
 
 This VRS installation script will produce a script referred to as a watchdog script.  A watchdog script is a script that is routinely ran to check if a particular program is running or not.  If the program has been found to not be running, the watchdog script will start the program automatically.
 
 VRS is fairly stable and should be able to run for long periods of time without an issue.  However, anything may cause VRS to suddenly stop working.  A watchdog script that is routinely ran as a [cron job](https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/ "Good cron job tutorial") may be able to identify an instance when VRS is not running and automatically start VRS again as a background process.
 
-By default, the VRS watchdog script will be named `vrs_watchdog.sh` and may be found in the `VRS-Extras/Watchdog` directory.  Also located in the same directory will be a `README` file.  This text file will conveniently provide the custom cron job that could be used to routinely run the watchdog script every minute.
+The VRS watchdog script will be named `vrs_watchdog.sh` and may be found in the `VRS-Extras/Watchdog` directory.  Also located in the same directory will be a `README` file.  This text file will conveniently provide the custom cron job that could be used to routinely run the watchdog script every minute.
 
-If the cron entry is used exactly as it is from the `README` file, the VRS watchdog script will run once every minute to check if VRS is running.  At any minute, if the VRS watchdog script detects that VRS is not running, it will begin to continually check the status of VRS every second for 2 minutes (120 seconds).  At the end of the 2 minutes, if VRS has been determined to still not be running, the VRS watchdog script will start VRS.  If the 2-minute wait time is desired to be changed, simply open the `vrs_watchdog.sh` file and edit the `WAITSECS` variable to some other length of time in seconds.
+If the cron entry is used exactly as it is from the `README` file, the VRS watchdog script will run once every minute to check if VRS is running.  At any minute, if the VRS watchdog script detects that VRS is not running, it will begin to continually check the status of VRS every second for 2 minutes (120 seconds).  At the end of the 2 minutes, if VRS has been determined to still not be running, the VRS watchdog script will start VRS.  If the 2-minute wait time is desired to be changed, simply open the `vrs_watchdog.sh` file and edit the `WAITSECS` variable to some other length of time in seconds.  Also, if it is desired to run this `vrs_watchdog.sh` script every *x* minutes instead of every single minute, then simply change the first part of the cron entry from `*/1` to `*/x` with *x* being the new minute interval. (For example: `*/5` for running every 5 minutes.)
 
-By default, in the same `VRS-Extras/Watchdog` directory, a `vrs_watchdog.log` log file will be produced to record any time VRS was started by the VRS watchdog script. The log file is created the very first time the `vrs_watchdog.sh` script is ran. If a log file has not been produced, then there is some error that needs to be fixed as it is an indication that this watchdog script may not be doing its job of making sure VRS is running. In the `vrs_watchdog.sh` file, it is possible to change the name and location of the log file by editing the values for the `LOG_NAME` and `LOG_DIR` variables.
+By default, in the same `VRS-Extras/Watchdog` directory, a `vrs_watchdog.log` log file will be produced to record any time VRS was started by the VRS watchdog script. The log file is created the very first time the `vrs_watchdog.sh` script is ran. If a log file has not been produced, then there is some error that needs to be fixed as it is an indication that this watchdog script may not be working properly. In the `vrs_watchdog.sh` file, it is possible to change the name and location of the log file by editing the values for the `LOG_NAME` and `LOG_DIR` variables.
 
 Do not forget that VRS will automatically get started by this watchdog script if VRS is ever intentially shut down.  The watchdog cron job may be temporarily disabled by simply typing a `#` at the beginning of the cron job entry in the crontab file. (The `#` comments out the cron job entry.)
 
