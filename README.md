@@ -2,7 +2,7 @@
 
 This script is a very helpful tool to easily install Virtual Radar Server on Linux.
 
-Virtual Radar Server (VRS) provides an amazing webpage display of any aircraft detected by an ADS-B receiver.  This script will help with the installation of VRS to those who are brand new to VRS.  With just a few keystrokes, VRS may be installed and operating with planes appearing on the VRS webpage.  This is assuming an ADS-B receiver has already been built and is operating properly.  (It is possible for VRS to also be installed simultaneously on a ADS-B receiver device.)
+Virtual Radar Server (VRS) provides an amazing webpage display of any aircraft detected by an ADS-B receiver.  This script will help with the installation of VRS to those who are brand new to VRS or even to Linux.  With just a few keystrokes, VRS may be installed and operating with planes appearing on the VRS webpage.  This is assuming an ADS-B receiver has already been built and is operating properly.  (It is possible for VRS to also be installed simultaneously on a ADS-B receiver device.)
 
 This script is only intended to get VRS installed, configured and running as quickly as possible for the novice user.  Many more options are left to the user for further customization of VRS.  Some research and experimenting is encouraged and expected to enhance and secure VRS.
 
@@ -17,14 +17,16 @@ This script has been confirmed to allow VRS version 2.4.4 (the latest stable rel
 * elementary OS 5.1.7
 * Fedora 34
 * openSUSE 15.3
-* Manjaro 21.0.7
+* Manjaro 21.1.0
 * Arch Linux
 
-This script may also install VRS on other popular Linux distributions such as Ubuntu and Linux Mint.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage.  Note that "Raspberry Pi OS" was recently known as "Raspbian".
+This script may also install VRS on other popular Linux distributions such as the latest versions of Ubuntu and Linux Mint.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage. Using a slightly older LTS (Long Term Support) version of an operating system may also remedy the Mono issue. Note that "Raspberry Pi OS" was recently known as "Raspbian".
+
+For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), this installation script offers the choice to install a preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make a preview version the better choice under certain circumstances.
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
-For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), this installation script offers the choice to install a preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make a preview version the better choice under certain circumstances.
+The latest version of this VRS installation script was released on 2021-08-22. Any installation of VRS from this script prior to 2021-08-22 should be updated as soon as possible. Here are instructions to [perform an update](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-perform-an-update).
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
@@ -50,12 +52,12 @@ Here is a very brief summary of what this script will do:
   * Feed Filter Plugin (only with either preview version of VRS)
   * SQL Server Plugin (only with preview version 3.0.0 of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
-* [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
   * Airline operator flags
   * Aircraft silhouettes
   * Aircraft pictures
   * Sample database
+* [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings)
 * Allow the user to select/enter the following:
   * [Which port number the VRS server should use](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#server-port-number)
   * [Which default language the VRS webpage should display](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#webpage-default-language)
@@ -67,6 +69,8 @@ Here is a very brief summary of what this script will do:
 * [Create a script to routinely backup the database file](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#script-to-backup-database)
 * [Create a watchdog script to routinely check if VRS needs to be restarted](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#watchdog-script)
 * [Provide an easy method of displaying an announcement at the top of the VRS webpage](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#display-an-announcement-on-the-webpage)
+
+Please also read [Other Information](https://github.com/mypiaware/virtual-radar-server-installation#other-information).
 
 ---
 <br/><br/>
@@ -94,10 +98,6 @@ This VRS installation script will install the following VRS plugins. Note that m
 
 This VRS installation script will download and install the language packs that will be used by the VRS server settings interface.  Based on the current language set for the Linux operating system, the VRS server settings interface will automatically set the language to be used.  Not all languages are supported. [More info](http://www.virtualradarserver.co.uk/Download.aspx#panel-translations)
 
-## Fix libpng warnings
-
-The stable version of VRS (ver 2.4.4) can produce "libpng warning" messages at the command line.  The problem resides with two image files used to display a generic airplane marker on the VRS webpage.  This script may automatically fix the issue by downloading and installing two image files that have been corrected to the `CustomWebFiles` directory.  The Custom Content Plugin will then utilize these two corrected image files.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
-
 ## Download Additional Files
 
 This VRS installation script will also provide the option to download some sample files to help enhance the VRS webpage if the user does not already have any of these files. These files will be downloaded to the directories described below. These additional files include:
@@ -105,6 +105,10 @@ This VRS installation script will also provide the option to download some sampl
   * Aircraft silhouettes (downloaded to the `Silhouettes` directory)
   * Aircraft pictures (downloaded to the `Pictures` directory)
   * A sample database (downloaded to the `Databases/Database` directory)
+
+## Fix libpng warnings
+
+The stable version of VRS (ver 2.4.4) can produce "libpng warning" messages at the command line.  The problem resides with two image files used to display a generic airplane marker on the VRS webpage.  This script may automatically fix the issue by downloading and installing two image files that have been corrected to the `CustomWebFiles` directory.  The Custom Content Plugin will then utilize these two corrected image files.  It is recommended to apply this fix as there is no known reason why this fix should not be applied.
 
 ## Server Port Number
 
@@ -153,7 +157,7 @@ This directory contains many of the user's custom files used to enhance and supp
 
 #### CustomContent/CustomInjectedFiles
 
-VRS webpage files simply can not be removed or edited in any way, otherwise VRS will not start. However, it is possible to make small additions (also known as "injections") to the HTML files used by VRS found in the `Installation/Web` directory and any possible subdirectories. The Custom Content Plugin is a tool to allow such injections, and the Custom Content Plugin will utilize files in this `CustomInjectedFiles` directory. This directory can contain files with HTML code to be injected into any existing VRS HTML file. By default, an `Announcement.html` file is already created in this directory to be injected into both the `Installation/Web/desktop.html` and `Installation/Web/mobile.html` files. This `Announcement.html` file may be used to produce a small announcement bar at the top of the VRS webpage.  This could be useful to make an announcement that the server will be under maintenance for a short amount of time, for example. Although it is highly unlikely this `Announcement.html` will be utilized by the average user, it does provide a decent example to the novice user of how the Custom Content Plugin utilizes the Custom Injected Files.  [More info](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx#inject-file)
+VRS webpage files simply can not be removed or edited in any way, otherwise VRS will not start. However, it is possible to make small additions (also known as "injections") to the HTML files used by VRS found in the `Installation/Web` directory and any possible subdirectories. The Custom Content Plugin is a tool to allow such injections, and the Custom Content Plugin will utilize files in this `CustomInjectedFiles` directory. This directory can contain files with HTML code to be injected into any existing VRS HTML file. By default, an `Announcement.html` file is already created in this directory to be injected into both the `Installation/Web/desktop.html` and `Installation/Web/mobile.html` files. This `Announcement.html` file may be used to produce a small announcement bar at the top of the VRS webpage.  This could be useful to make an announcement that the server will be under maintenance for a short amount of time, for example. Although it is highly unlikely this `Announcement.html` will ever be utilized by the average user, the real reason for this option is to provide a decent example to the novice user of how the Custom Content Plugin utilizes the Custom Injected Files.  [More info](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx#inject-file)
 
 #### CustomContent/CustomWebFiles
 
@@ -236,7 +240,7 @@ The `vrs` command will provide the VRS status and options on how a user may want
 
 `vrs -log` will show the log of the previous instances of VRS running as a background process since the most recent system boot. The log will only show the records of the previous instances of VRS running as a background process. This includes any instance of VRS that may have started at system boot if the `vrs -enable` command was used to start VRS at every system boot.
 
-`vrs` command just by itself will give the current running status of VRS and the help menu.
+`vrs` command just by itself will give the current running status of VRS and the help menu. It will also display two helpful URLs - one for the VRS webpage and one for the VRS WebAdmin webpage.
 
 ## Script to Backup Database
 
@@ -293,6 +297,19 @@ When this VRS installation script finishes, some very useful information will be
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try to manually install Mono on the operating system first and then running this VRS installation script only after Mono is installed.  For any Linux operating system, if Mono is already installed, this script will bypass any attempt to install Mono and simply install the VRS files.  VRS will get installed just as with any other supported Linux operating system.  However, the user will need to fully test if VRS works as expected on that particular operating system.  Also note that a few Linux distributions do not have `unzip` already installed.  Therefore, it may also be necessary to manually install `unzip`.
 
+## How to Perform an Update
+
+This VRS installation script project will occassionally be updated to either add features or fix bugs.  Performing an update is fairly easy.  Simply run the [installation command](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-install-vrs) again.
+
+  * Choose the desired VRS version
+  * For the first yes/no questions regarding Operator Flags, Silhouettes, Pictures (and possibly Database), simply type: `n`
+  * For the "libpng warning" fix question, choose whether or not to apply the fix
+  * For the port number question, simply hit `[Enter]`
+  * For the language question, choose the desired language
+  * For the remaining two yes/no questions, simply type: `n`
+
+The script will run again keeping the same settings as before. The only thing to notice is that the VRS server installation files may get downloaded again and reinstalled. This will not cause any issue as all of the VRS server installation files should have never been modified in any way. It is safe to choose a different version of VRS when updating.
+
 ## Mono Issue
 
 This script will install VRS on most popular Linux distributions.  However, VRS on a few operating systems could possibly have an issue with the latest versions of Mono.
@@ -313,12 +330,14 @@ As of this writing, the default versions of Mono that will get installed on the 
 | ------------------------ |:------------------------------:|:-------------------:|
 | Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
 | Debian 10.10             | 5.18.0.240                     | :heavy_check_mark:  |
+| Debian 11.0              | 6.8.0.105                      | :x:                 |
 | MX Linux 19.4            | 5.18.0.240                     | :heavy_check_mark:  |
 | Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
 | Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
 | Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
 | Ubuntu 21.04             | 6.8.0.105                      | :x:                 |
 | elementary OS 5.1.7      | 4.6.2                          | :heavy_check_mark:  |
+| elementary OS 6.0        | 6.8.0.105                      | :x:                 |
 | Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
 | Linux Mint 20.2          | 6.8.0.105                      | :x:                 |
 | CentOS Stream 8          | 6.12.0.107                     | :x:                 |
@@ -327,7 +346,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
 | Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
 | openSUSE 15.3*           | 6.8.0.105                      | :heavy_check_mark:  |
-| Manjaro 21.0.7*          | 6.12.0                         | :heavy_check_mark:  |
+| Manjaro 21.1.0*          | 6.12.0                         | :heavy_check_mark:  |
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
