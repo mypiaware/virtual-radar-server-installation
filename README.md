@@ -17,7 +17,7 @@ This script has been confirmed to allow VRS version 2.4.4 (the latest stable rel
 * elementary OS 5.1.7
 * Fedora 34
 * openSUSE 15.3
-* Manjaro 21.1.0
+* Manjaro 21.1.4
 * Arch Linux
 
 This script may also install VRS on other popular Linux distributions such as the latest versions of Ubuntu and Linux Mint.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage. Using a slightly older LTS (Long Term Support) version of an operating system may also remedy the Mono issue. Note that "Raspberry Pi OS" was recently known as "Raspbian".
@@ -26,7 +26,7 @@ For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), thi
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
-The latest version of this VRS installation script was released on 2021-08-22. Any installation of VRS from this script prior to 2021-08-22 should be updated as soon as possible. Here are instructions to [perform an update](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-perform-an-update).
+Any installation of this VRS script prior to 2021-08-22 should be updated as soon as possible. Here are instructions to [perform an update](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-perform-an-update).
 
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
@@ -77,7 +77,7 @@ Please also read [Other Information](https://github.com/mypiaware/virtual-radar-
 
 ## How to Install VRS
 ```
-bash -c "$(wget -O - https://github.com/mypiaware/virtual-radar-server-installation/raw/master/virtual_radar_server_install.sh)"
+bash -c "$(wget -qO - https://github.com/mypiaware/virtual-radar-server-installation/raw/master/virtual_radar_server_install.sh)"
 ```
 Run the above one-line command to execute this VRS installation script. The vast majority of the installation time will involve installing Mono (if Mono is not already installed) which is a prerequisite to installing VRS.
 
@@ -346,7 +346,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
 | Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
 | openSUSE 15.3*           | 6.8.0.105                      | :heavy_check_mark:  |
-| Manjaro 21.1.0*          | 6.12.0                         | :heavy_check_mark:  |
+| Manjaro 21.1.4*          | 6.12.0                         | :heavy_check_mark:  |
 | Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
 
 
