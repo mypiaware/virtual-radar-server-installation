@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.2)
+# Virtual Radar Server installation script (ver 11.3)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -609,7 +609,7 @@ elif [[ $OPERATINGSYSTEMVERSION == "elementaryos" ]]; then  # Possibly install/u
       ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
       ! dpkg -s unzip                  >/dev/null 2>&1 ||
       ! dpkg -s mono-complete          >/dev/null 2>&1; then
-         sudo apt update
+         sudo apt update -y
          sudo apt install -y gtk2-engines-pixbuf     # Prevents `Unable to locate theme engine in module_path: "pixmap"` error message from appearing.
          sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
          sudo apt install -y mono-complete
@@ -619,7 +619,7 @@ elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then        # Possibly install/u
    if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
       ! dpkg -s unzip                  >/dev/null 2>&1 ||
       ! dpkg -s mono-complete          >/dev/null 2>&1; then
-         sudo apt update
+         sudo apt update -y
          sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
          sudo apt install -y unzip
          sudo apt install -y mono-complete
