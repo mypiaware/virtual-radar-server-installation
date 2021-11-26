@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.3)
+# Virtual Radar Server installation script (ver 11.4)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -14,8 +14,7 @@
 # A watchdog script will be created as an option to ensure VRS is always running.
 # A directory structure will be created for the convenience of those who wish to enhance the appearance and performance of VRS.
 #
-# This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
-#   Raspberry Pi OS Buster (32-bit -- Desktop & Lite), Debian, Fedora, openSUSE, MX Linux (if systemd is enabled), elementary OS, Manjaro and Arch Linux.
+# This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on multiple Linux operating systems.
 # Note that Raspberry Pi OS was recently known as Raspbian.
 # An option is available to download and install a preview version of VRS.
 #
@@ -953,10 +952,11 @@ echo "##########################################################################
 echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "VRS_EXE=\"$VRSINSTALLDIRECTORY/VirtualRadar.exe\"  # Full path of the VRS executable."                                                                                          >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "VRS_START=\"$STARTCOMMANDDIR/$STARTCOMMANDFILENAME -$VRSCMD_STARTPROCESS\"  # The command to start VRS as a background process."                                                >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "JOURNAL_FILE=\"$DATABASEDIRECTORY/$DATABASEFILENAME-journal\"  # A temp file for the $DATABASEFILENAME file."                                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "JOURNAL_FILE=\"$DATABASEDIRECTORY/$DATABASEFILENAME-journal\"  # A temporary file for the $DATABASEFILENAME file."                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "LOG_FILE=\"\$LOG_DIR/\$LOG_NAME\"  # Full path of the VRS watchdog log file."                                                                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "PID_DIR=\"$TEMPDIR\"  # Temp directory to store the PID file."                                                                                                                  >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "PID_FILE=\"\$PID_DIR/watchdog.pid\"  # A temp file used to determine if this VRS watchdog script is already running."                                                           >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_DIR=\"$TEMPDIR\"  # Temporary directory to store the temporary VRS watchdog PID file."                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_FILENAME=\"watchdog.pid\"  # Name of the temporary PID file used to determine if this VRS watchdog script is already running."                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_FILE=\"\$PID_DIR/\$PID_FILENAME\"  # Full path of the VRS watchdog PID file."                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "MYUSERNAME=\"$USER\"  # The username of the account running VRS."                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
@@ -1022,7 +1022,9 @@ echo "exit"                                                                     
 cp "$TEMPDIR/$VRSWATCHDOGFILENAME" "$VRSWATCHDOGDIRECTORY" >/dev/null 2>&1;
 if [[ $? -ne 0 ]]; then sudo cp "$TEMPDIR/$VRSWATCHDOGFILENAME" "$VRSWATCHDOGDIRECTORY"; fi;    ERROREXIT 73 "Failed to copy $TEMPDIR/$VRSWATCHDOGFILENAME!"  # Use 'sudo' only if necessary."
 touch "$TEMPDIR/Watchdog_README";                                                               ERROREXIT 74 "Failed to create $TEMPDIR/Watchdog_README!"
-echo "Command to create a cron job entry:"                                                                    > "$TEMPDIR/Watchdog_README";  ERROREXIT 75 "Failed to edit $TEMPDIR/Watchdog_README!"
+echo "To enable the '$VRSWATCHDOGFILENAME' watchdog script to continually ensure VRS is running."             > "$TEMPDIR/Watchdog_README";  ERROREXIT 75 "Failed to edit $TEMPDIR/Watchdog_README!"
+echo ""                                                                                                      >> "$TEMPDIR/Watchdog_README"
+echo "Command to create a cron job entry:"                                                                   >> "$TEMPDIR/Watchdog_README"
 echo "$CRONCMD"                                                                                              >> "$TEMPDIR/Watchdog_README"
 echo ""                                                                                                      >> "$TEMPDIR/Watchdog_README"
 echo "Example of a cron job entry to run the '$VRSWATCHDOGFILENAME' script every minute:"                    >> "$TEMPDIR/Watchdog_README"
