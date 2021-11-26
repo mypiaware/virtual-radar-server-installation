@@ -10,17 +10,21 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script has been confirmed to allow VRS version 2.4.4 (the latest stable release) to successfully run on:
-* Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
-* Debian 10.10
-* MX Linux 19.4 *(only if systemd is enabled)*
-* elementary OS 5.1.7
-* Fedora 34
+This script should be able to install all versions of VRS on most popular Linux distributions.  However, the current stable version of VRS (version 2.4.4) has an [issue with Mono](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) on the newer versions of a few Linux operating systems.  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage.  The solution is to use either an older version of the Linux operating system, or use a preview version of VRS which will always display aircraft icons and altitude stalks.
+
+VRS version 2.4.4 (the latest stable release) will have aircraft icons and altitude stalks on these *latest* operating systems:
+* Fedora 35
 * openSUSE 15.3
-* Manjaro 21.1.4
+* Manjaro 21.2.0
 * Arch Linux
 
-This script may also install VRS on other popular Linux distributions such as the latest versions of Ubuntu and Linux Mint.  However, please read the important note below regarding other operating systems and the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage. Using a slightly older LTS (Long Term Support) version of an operating system may also remedy the Mono issue. Note that "Raspberry Pi OS" was recently known as "Raspbian".
+VRS version 2.4.4 (the latest stable release) will have aircraft icons and altitude stalks on these *older* operating systems:
+* Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
+* Ubuntu 18.04.6 LTS
+* Debian 10.10
+* Linux Mint 19.3
+* MX Linux 19.4 *(only if systemd is enabled)*
+* elementary OS 5.1.7
 
 For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), this installation script offers the choice to install a preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make a preview version the better choice under certain circumstances.
 
@@ -130,10 +134,10 @@ The user has an option of entering the GPS coordinates for the center of the VRS
 
 The user has an option of adding and entering the configuration information of an ADS-B receiver.  There are four critical parameters to enter for a receiver:
 
-  * Receiver name:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
-  * Receiver source type:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then consider selecting "AVR or Beast Raw Feed".
-  * Receiver IP address:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, enter 127.0.0.1 as the IP address.
-  * Receiver IP port:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, then consider using port 30005 for non-MLAT messages, or port 30105 for MLAT messages.
+  * **Receiver name**:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
+  * **Receiver source type**:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then consider selecting "AVR or Beast Raw Feed".
+  * **Receiver IP address**:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, enter `127.0.0.1` as the IP address.
+  * **Receiver IP port**:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, then consider using port `30005` for non-MLAT messages, or port `30105` for MLAT messages.
 
 It is possible the receiver parameters set by this installation script may not be adequate for some receivers. For those rare occasions, the receiver can always still be further modified in the VRS server settings after VRS is installed.
 
@@ -207,9 +211,9 @@ This VRS installation script will auto-fill the paths of directories and files i
 ## Global Command to Start VRS
 
 This VRS installation script will create a global command to allow the user to quickly and easily start VRS. This `vrs` command will provide options as to how VRS is started as well as providing an option of having VRS start at every system boot.  After this VRS installation script is finished, simply run this command:
-
-`vrs`
-
+```
+vrs
+```
 The `vrs` command will provide the VRS status and options on how a user may want to start or stop VRS.  These are all the command options:
 
 | Command & Option | Description                                                     |
@@ -326,28 +330,32 @@ If any method of downgrading Mono has been found for the operating systems that 
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
-| Linux                    | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|
-| ------------------------ |:------------------------------:|:-------------------:|
-| Raspberry Pi OS (Buster) | 5.18.0.240                     | :heavy_check_mark:  |
-| Debian 10.10             | 5.18.0.240                     | :heavy_check_mark:  |
-| Debian 11.0              | 6.8.0.105                      | :x:                 |
-| MX Linux 19.4            | 5.18.0.240                     | :heavy_check_mark:  |
-| Ubuntu 18.04.5 LTS       | 4.6.2.7                        | :heavy_check_mark:  |
-| Ubuntu 20.04.2 LTS       | 6.8.0.105                      | :x:                 |
-| Ubuntu 20.10             | 6.8.0.105                      | :x:                 |
-| Ubuntu 21.04             | 6.8.0.105                      | :x:                 |
-| elementary OS 5.1.7      | 4.6.2                          | :heavy_check_mark:  |
-| elementary OS 6.0        | 6.8.0.105                      | :x:                 |
-| Linux Mint 19.3          | 4.6.2.7                        | :heavy_check_mark:  |
-| Linux Mint 20.2          | 6.8.0.105                      | :x:                 |
-| CentOS Stream 8          | 6.12.0.107                     | :x:                 |
-| Fedora 31*               | 5.20.1.34                      | :heavy_check_mark:  |
-| Fedora 32*               | 6.6.0.166                      | :heavy_check_mark:  |
-| Fedora 33*               | 6.8.0.123                      | :heavy_check_mark:  |
-| Fedora 34*               | 6.12.0.122                     | :heavy_check_mark:  |
-| openSUSE 15.3*           | 6.8.0.105                      | :heavy_check_mark:  |
-| Manjaro 21.1.4*          | 6.12.0                         | :heavy_check_mark:  |
-| Arch Linux*              | 6.12.0                         | :heavy_check_mark:  |
+| Linux                      | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|
+| -------------------------- |:------------------------------:|:-------------------:|
+| Raspberry Pi OS (Buster)   | 5.18.0.240                     | :heavy_check_mark:  |
+| Raspberry Pi OS (Bullseye) | 6.8.0.105                      | :x:                 |
+| Debian 10.10               | 5.18.0.240                     | :heavy_check_mark:  |
+| Debian 11.0                | 6.8.0.105                      | :x:                 |
+| Debian 11.1                | 6.8.0.105                      | :x:                 |
+| MX Linux 19.4              | 5.18.0.240                     | :heavy_check_mark:  |
+| MX Linux 21.0              | 6.8.0.105                      | :x:                 |
+| Ubuntu 18.04.6 LTS         | 4.6.2.7                        | :heavy_check_mark:  |
+| Ubuntu 20.04.2 LTS         | 6.8.0.105                      | :x:                 |
+| Ubuntu 20.10               | 6.8.0.105                      | :x:                 |
+| Ubuntu 21.04               | 6.8.0.105                      | :x:                 |
+| elementary OS 5.1.7        | 4.6.2                          | :heavy_check_mark:  |
+| elementary OS 6.0          | 6.8.0.105                      | :x:                 |
+| Linux Mint 19.3            | 4.6.2.7                        | :heavy_check_mark:  |
+| Linux Mint 20.2            | 6.8.0.105                      | :x:                 |
+| CentOS Stream 8            | 6.12.0.107                     | :x:                 |
+| Fedora 31*                 | 5.20.1.34                      | :heavy_check_mark:  |
+| Fedora 32*                 | 6.6.0.166                      | :heavy_check_mark:  |
+| Fedora 33*                 | 6.8.0.123                      | :heavy_check_mark:  |
+| Fedora 34*                 | 6.12.0.122                     | :heavy_check_mark:  |
+| Fedora 35*                 | 6.12.0.122                     | :heavy_check_mark:  |
+| openSUSE 15.3*             | 6.8.0.105                      | :heavy_check_mark:  |
+| Manjaro 21.2.0*            | 6.12.0.122                     | :heavy_check_mark:  |
+| Arch Linux*                | 6.12.0                         | :heavy_check_mark:  |
 
 
 \* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
