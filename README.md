@@ -10,21 +10,21 @@ When this VRS installation script finishes, some very useful information will be
 
 This script may be safely ran multiple times if wanting to change a few of the settings from the original installation.
 
-This script should be able to install all versions of VRS on most popular Linux distributions.  However, the current stable version of VRS (version 2.4.4) has an [issue with Mono](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) on the newer versions of a few Linux operating systems.  The Mono issue may prevent aircraft icons and altitude stalks from appearing on the VRS webpage.  The solution is to use either an older version of the Linux operating system, or use a preview version of VRS which will always display aircraft icons and altitude stalks.
+This script should be able to install all versions (stable or preview) of VRS on most popular Linux distributions:
 
-VRS version 2.4.4 (the latest stable release) will have aircraft icons and altitude stalks on these *latest* operating systems:
-* Fedora 35
-* openSUSE 15.3
-* Manjaro 21.2.0
-* Arch Linux
-
-VRS version 2.4.4 (the latest stable release) will have aircraft icons and altitude stalks on these *older* operating systems:
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
-* Ubuntu 18.04.6 LTS
-* Debian 10.10
-* Linux Mint 19.3
-* MX Linux 19.4 *(only if systemd is enabled)*
-* elementary OS 5.1.7
+* Raspberry Pi OS Bullseye (32-bit -- Desktop & Lite)
+* Ubuntu
+* Debian
+* Linux Mint
+* Fedora
+* openSUSE
+* Manjaro
+* elementary OS
+* Arch Linux
+* MX Linux *(systemd should be enabled)*
+
+When deciding on which operating sytem to use with VRS, it is very important to read about the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).
 
 For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), this installation script offers the choice to install a preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make a preview version the better choice under certain circumstances.
 
@@ -270,9 +270,9 @@ It is purely optional to use this VRS watchdog script.
 
 * Enter this command: `sudo crontab -e`
 * (If this is the first time setting up a cron job, a prompt may be given to set the default editor.)
-* Cron has now opened a simple text file that may possibly contain mostly commented lines beginning with a `#`.
-* From the `README` file, copy the cron job entry and paste it at the bottom line in this crontab file.
-* Save and close the crontab file.
+* Cron has now opened a simple crontab text file that may possibly contain mostly commented lines beginning with a `#`.
+* From the `README` file, copy the cron job entry and paste it at the bottom line in this crontab text file.
+* Save and close the crontab text file.
 * If the cron job was entered successfully, the following will be printed to the screen: `crontab: installing new crontab`.
 
 ### Notes for advanced users:
@@ -330,32 +330,32 @@ If any method of downgrading Mono has been found for the operating systems that 
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
-| Linux                      | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|
-| -------------------------- |:------------------------------:|:-------------------:|
-| Raspberry Pi OS (Buster)   | 5.18.0.240                     | :heavy_check_mark:  |
-| Raspberry Pi OS (Bullseye) | 6.8.0.105                      | :x:                 |
-| Debian 10.10               | 5.18.0.240                     | :heavy_check_mark:  |
-| Debian 11.0                | 6.8.0.105                      | :x:                 |
-| Debian 11.1                | 6.8.0.105                      | :x:                 |
-| MX Linux 19.4              | 5.18.0.240                     | :heavy_check_mark:  |
-| MX Linux 21.0              | 6.8.0.105                      | :x:                 |
-| Ubuntu 18.04.6 LTS         | 4.6.2.7                        | :heavy_check_mark:  |
-| Ubuntu 20.04.2 LTS         | 6.8.0.105                      | :x:                 |
-| Ubuntu 20.10               | 6.8.0.105                      | :x:                 |
-| Ubuntu 21.04               | 6.8.0.105                      | :x:                 |
-| elementary OS 5.1.7        | 4.6.2                          | :heavy_check_mark:  |
-| elementary OS 6.0          | 6.8.0.105                      | :x:                 |
-| Linux Mint 19.3            | 4.6.2.7                        | :heavy_check_mark:  |
-| Linux Mint 20.2            | 6.8.0.105                      | :x:                 |
-| CentOS Stream 8            | 6.12.0.107                     | :x:                 |
-| Fedora 31*                 | 5.20.1.34                      | :heavy_check_mark:  |
-| Fedora 32*                 | 6.6.0.166                      | :heavy_check_mark:  |
-| Fedora 33*                 | 6.8.0.123                      | :heavy_check_mark:  |
-| Fedora 34*                 | 6.12.0.122                     | :heavy_check_mark:  |
-| Fedora 35*                 | 6.12.0.122                     | :heavy_check_mark:  |
-| openSUSE 15.3*             | 6.8.0.105                      | :heavy_check_mark:  |
-| Manjaro 21.2.0*            | 6.12.0.122                     | :heavy_check_mark:  |
-| Arch Linux*                | 6.12.0                         | :heavy_check_mark:  |
+| Linux                      | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|Preview Versions Display Aircraft Icons?|
+| -------------------------- |:------------------------------:|:-------------------------------------:|:---------------------------------------:
+| Raspberry Pi OS (Buster)   | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bullseye) | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 10.10               | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Debian 11.0                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.1                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| MX Linux 19.4              | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| MX Linux 21.0              | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 18.04.6 LTS         | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 20.04.2 LTS         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 20.10               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 21.04               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 5.1.7        | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| elementary OS 6.0          | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 19.3            | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Linux Mint 20.2            | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| CentOS Stream 8            | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
+| Fedora 31*                 | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 32*                 | 6.6.0.166                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 33*                 | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 34*                 | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 35*                 | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.3*             | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 21.2.0*            | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Arch Linux*                | 6.12.0                         | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
 \* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
