@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.4)
+# Virtual Radar Server installation script (ver 11.5)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -215,6 +215,8 @@ if grep -qEi 'opensuse' /etc/os-release; then
    OPERATINGSYSTEMVERSION="opensuse"
 elif grep -qEi 'CentOS Stream 8' /etc/os-release; then
    OPERATINGSYSTEMVERSION="centos8"
+elif grep -qEi 'CentOS Stream 9' /etc/os-release; then
+   OPERATINGSYSTEMVERSION="centos9"
 elif grep -qEi 'fedora' /etc/os-release; then
    OPERATINGSYSTEMVERSION="fedora"
 elif grep -qEi 'manjaro' /etc/os-release; then
@@ -576,6 +578,14 @@ elif [[ $OPERATINGSYSTEMVERSION == "centos8" ]]; then       # Possibly install/u
    if ! rpm -q mono-complete    >/dev/null 2>&1; then
       sudo rpm --import 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef'
       sudo dnf config-manager --add-repo https://download.mono-project.com/repo/centos8-stable.repo
+      sudo dnf install -y mono-complete
+   fi
+elif [[ $OPERATINGSYSTEMVERSION == "centos9" ]]; then       # Possibly install/update Mono and other necessary software on CentOS 9 Stream.
+   if ! rpm -q libcanberra-gtk2 >/dev/null 2>&1; then sudo dnf install -y libcanberra-gtk2; fi
+   if ! rpm -q unzip            >/dev/null 2>&1; then sudo dnf install -y unzip; fi
+   if ! rpm -q mono-complete    >/dev/null 2>&1; then
+      sudo rpm --import 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef'
+      sudo dnf config-manager --add-repo https://download.mono-project.com/repo/centos8-stable.repo  # Confirmed to work on CentOS 9 Stream.
       sudo dnf install -y mono-complete
    fi
 elif [[ $OPERATINGSYSTEMVERSION == "fedora" ]]; then        # Possibly install/update Mono and other necessary software on Fedora.
@@ -1080,7 +1090,7 @@ echo "if [[ \"\$LOCALIP\" =~ ([[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,
 echo "   LOCALIP=\${BASH_REMATCH[1]}"                                                                                                                                                                                                                                            >> "$STARTCOMMAND";
 echo "fi"                                                                                                                                                                                                                                                                        >> "$STARTCOMMAND";
 echo ""                                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
-echo "VRSPORT=8080"                                                                                                                                                                                                                                                              >> "$STARTCOMMAND";
+echo "VRSPORT=$VRSPORT"                                                                                                                                                                                                                                                          >> "$STARTCOMMAND";
 echo "if [ -f \"$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME\" ]; then"                                                                                                                                                                                                              >> "$STARTCOMMAND";
 echo "   XMLTEXT=\$(<\"$SHAREDIRECTORY/$INSTALLERCONFIGFILENAME\")"                                                                                                                                                                                                              >> "$STARTCOMMAND";
 echo "   if [[ \$XMLTEXT =~ \<WebServerPort\>([[:digit:]]+)\</WebServerPort\> ]]; then"                                                                                                                                                                                          >> "$STARTCOMMAND";
