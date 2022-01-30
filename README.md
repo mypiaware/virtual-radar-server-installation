@@ -337,24 +337,29 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Debian 10.10               | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 11.0                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Debian 11.1                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.2                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | MX Linux 19.4              | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 21.0              | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 18.04.6 LTS         | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 20.04.2 LTS         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 20.10               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 21.04               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 21.10               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 5.1.7        | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 6.0          | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 6.1          | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 19.3            | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Linux Mint 20.2            | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 20.3            | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | CentOS Stream 8            | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
+| CentOS Stream 9            | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | Fedora 31*                 | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 32*                 | 6.6.0.166                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 33*                 | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 34*                 | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 35*                 | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.3*             | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 21.2.0*            | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 21.2.2*            | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Arch Linux*                | 6.12.0                         | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
