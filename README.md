@@ -18,6 +18,7 @@ This script should be able to install all versions (stable or preview) of VRS on
 * Debian
 * Linux Mint
 * Fedora
+* CentOS Stream
 * openSUSE
 * Manjaro
 * elementary OS
@@ -105,8 +106,8 @@ This VRS installation script will download and install the language packs that w
 ## Download Additional Files
 
 This VRS installation script will also provide the option to download some sample files to help enhance the VRS webpage if the user does not already have any of these files. These files will be downloaded to the directories described below. These additional files include:
-  * Airline operator flags (downloaded to the `OperatorFlags` directory)
-  * Aircraft silhouettes (downloaded to the `Silhouettes` directory)
+  * Airline operator flags (downloaded to the `OperatorFlags` directory) &nbsp;&nbsp; *Images credit: Bones (http://www.woodair.net)*
+  * Aircraft silhouettes (downloaded to the `Silhouettes` directory) &nbsp;&nbsp; *Images credit: rikgale  (https://github.com/rikgale)*
   * Aircraft pictures (downloaded to the `Pictures` directory)
   * A sample database (downloaded to the `Databases/Database` directory)
 
