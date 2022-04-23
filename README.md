@@ -14,6 +14,7 @@ This script should be able to install all versions (stable or preview) of VRS on
 
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Raspberry Pi OS Bullseye (32-bit -- Desktop & Lite)
+* Raspberry Pi OS Bullseye (64-bit -- Desktop & Lite)
 * Ubuntu
 * Debian
 * Linux Mint
@@ -106,8 +107,10 @@ This VRS installation script will download and install the language packs that w
 ## Download Additional Files
 
 This VRS installation script will also provide the option to download some sample files to help enhance the VRS webpage if the user does not already have any of these files. These files will be downloaded to the directories described below. These additional files include:
-  * Airline operator flags (downloaded to the `OperatorFlags` directory) &nbsp;&nbsp; *Images credit: Bones (http://www.woodair.net)*
-  * Aircraft silhouettes (downloaded to the `Silhouettes` directory) &nbsp;&nbsp; *Images credit: rikgale  (https://github.com/rikgale)*
+  * Airline operator flags (downloaded to the `OperatorFlags` directory)
+    * Images credit: Bones (http://www.woodair.net)
+  * Aircraft silhouettes (downloaded to the `Silhouettes` directory)
+    * Images credit: rikgale  (https://github.com/rikgale)
   * Aircraft pictures (downloaded to the `Pictures` directory)
   * A sample database (downloaded to the `Databases/Database` directory)
 
@@ -154,7 +157,7 @@ Here is a visual of the default directory structure:
 
 ### Installation
 
-This directory contains the main installation of VRS. There should never be any need to edit the contents of this directory.
+This directory contains the main installation of VRS. There should never be any need to edit the contents of this directory. Any custom files in this directory will be permanently deleted if any upgrade/downgrade of VRS is performed.
 
 ### VRS-Extras
 
@@ -331,37 +334,41 @@ If any method of downgrading Mono has been found for the operating systems that 
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
-| Linux                      | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|Preview Versions Display Aircraft Icons?|
-| -------------------------- |:------------------------------:|:-------------------------------------:|:---------------------------------------:
-| Raspberry Pi OS (Buster)   | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Raspberry Pi OS (Bullseye) | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 10.10               | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Debian 11.0                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.1                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.2                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| MX Linux 19.4              | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| MX Linux 21.0              | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 18.04.6 LTS         | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu 20.04.2 LTS         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 20.10               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 21.04               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 21.10               | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| elementary OS 5.1.7        | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| elementary OS 6.0          | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| elementary OS 6.1          | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Linux Mint 19.3            | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Linux Mint 20.2            | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Linux Mint 20.3            | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| CentOS Stream 8            | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
-| CentOS Stream 9            | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
-| Fedora 31*                 | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 32*                 | 6.6.0.166                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 33*                 | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 34*                 | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 35*                 | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| openSUSE 15.3*             | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 21.2.2*            | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Arch Linux*                | 6.12.0                         | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Linux                             | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|Preview Versions Display Aircraft Icons?|
+| --------------------------------- |:------------------------------:|:-------------------------------------:|:---------------------------------------:
+| Raspberry Pi OS (Buster)          | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bullseye 32-bit) | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bullseye 64-bit) | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 10.10                      | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Debian 11.0                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.1                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.2                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.3                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| MX Linux 19.4                     | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| MX Linux 21.0                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| MX Linux 21.1                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 18.04.6 LTS                | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 20.04.2 LTS                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 20.10                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 21.04                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 21.10                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 22.04                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 5.1.7               | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| elementary OS 6.0                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 6.1                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 19.3                   | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Linux Mint 20.2                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 20.3                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| CentOS Stream 8                   | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
+| CentOS Stream 9                   | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
+| Fedora 31*                        | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 32*                        | 6.6.0.166                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 33*                        | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 34*                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 35*                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.3*                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 21.2.6*                   | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Arch Linux*                       | 6.12.0                         | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
 \* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
