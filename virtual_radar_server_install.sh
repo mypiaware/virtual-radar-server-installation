@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.51)
+# Virtual Radar Server installation script (ver 11.52)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -967,8 +967,8 @@ echo "VRS_START=\"$STARTCOMMANDDIR/$STARTCOMMANDFILENAME -$VRSCMD_STARTPROCESS\"
 echo "JOURNAL_FILE=\"$DATABASEDIRECTORY/$DATABASEFILENAME-journal\"  # A temporary file for the $DATABASEFILENAME file."                                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "LOG_FILE=\"\$LOG_DIR/\$LOG_NAME\"  # Full path of the VRS watchdog log file."                                                                                                   >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "PID_DIR=\"$TEMPDIR\"  # Temporary directory to store the temporary VRS watchdog PID file."                                                                                      >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "PID_FILENAME=\"watchdog.pid\"  # Name of the temporary PID file used to determine if this VRS watchdog script is already running."                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
-echo "PID_FILE=\"\$PID_DIR/\$PID_FILENAME\"  # Full path of the VRS watchdog PID file."                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_NAME=\"watchdog.pid\"  # Name of the temporary PID file used to determine if this VRS watchdog script is already running."                                              >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
+echo "PID_FILE=\"\$PID_DIR/\$PID_NAME\"  # Full path of the VRS watchdog PID file."                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "MYUSERNAME=\"$USER\"  # The username of the account running VRS."                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo "DATE_TIME=\$(date \"+%Y-%m-%d %H:%M:%S\")  # YYYY-MM-DD HH:MM:SS"                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
 echo ""                                                                                                                                                                               >> "$TEMPDIR/$VRSWATCHDOGFILENAME"
