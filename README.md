@@ -15,16 +15,16 @@ This script should be able to install all versions (stable or preview) of VRS on
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Raspberry Pi OS Bullseye (32-bit -- Desktop & Lite)
 * Raspberry Pi OS Bullseye (64-bit -- Desktop & Lite)
-* Ubuntu
-* Debian
-* Linux Mint
-* Fedora
-* CentOS Stream
-* openSUSE
-* Manjaro
-* elementary OS
 * Arch Linux
+* CentOS Stream
+* Debian
+* elementary OS
+* Fedora
+* Linux Mint
+* Manjaro
 * MX Linux *(systemd should be enabled)*
+* openSUSE
+* Ubuntu
 
 When deciding on which operating sytem to use with VRS, it is very important to read about the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).
 
@@ -366,9 +366,11 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 33*                        | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 34*                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 35*                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 36*                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.3*                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 21.2.6*                   | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Arch Linux*                       | 6.12.0                         | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.4*                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 21.2.6*                   | 6.12.0.177                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Arch Linux*                       | 6.12.0.177                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
 \* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
