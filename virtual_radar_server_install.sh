@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.6)
+# Virtual Radar Server installation script (ver 11.7)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -300,8 +300,8 @@ printf "\n"
 declare PREVIEW_AVAILABLE
 printf "Checking for the latest available preview versions of VRS..."
 if ! which wget >/dev/null 2>&1; then printf "\n${RED_COLOR}FATAL ERROR! The program 'wget' needs to be installed before continuing!${NO_COLOR}\n"; exit 3; fi
-LIMITCHECK=11  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
-INITIALCHECK=6
+LIMITCHECK=12  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
+INITIALCHECK=7
 for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
    PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
    URLTOCHECK="${VRSFILES_PREVIEW245[0]}"  # Checking just the first element in the array should suffice.
@@ -310,8 +310,8 @@ for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
    if [[ $PREVIEW245 -eq $LIMITCHECK ]]; then PREVIEW_AVAILABLE=0; break; fi
 done
 if [[ $PREVIEW_AVAILABLE =~ [1] ]]; then  # Only check for the other preview version if the first preview version was found.
-   LIMITCHECK=12  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
-   INITIALCHECK=7
+   LIMITCHECK=13  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
+   INITIALCHECK=8
    for (( PREVIEW300=$INITIALCHECK; PREVIEW300<=$LIMITCHECK; PREVIEW300++ )); do
       PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
       URLTOCHECK="${VRSFILES_PREVIEW300[0]}"  # Checking just the first element in the array should suffice.
@@ -367,11 +367,11 @@ if [[ $PREVIEW_AVAILABLE =~ [1] ]]; then  # Only run this portion if the preview
       fi
       printf "Version set to install:  ${ORANGE_COLOR}$VRS_VERSION${NO_COLOR}\n\n"
       printf "${RED_COLOR}"
-      printf " *************************** WARNING ****************************\n"
+      printf " ****************************************************************\n"
       printf "          A preview version has been selected to install.\n"
       printf "     The preview version is under testing and may contain bugs!\n"
       printf " Please consider this when choosing to install a preview version.\n"
-      printf " *************************** WARNING ****************************\n"
+      printf " ****************************************************************\n"
       printf "${NO_COLOR}"
    fi
 fi
