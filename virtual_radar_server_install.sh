@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 11.7)
+# Virtual Radar Server installation script (ver 12.0)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -146,6 +146,7 @@ function PREVIEW_URLS {  # These arrays must be in a function because it is not 
       "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-FeedFilter-3.0.0-preview-${PREVIEW300}.tar.gz"
       "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-SqlServer-3.0.0-preview-${PREVIEW300}.tar.gz"
       "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-TileServerCache-3.0.0-preview-${PREVIEW300}.tar.gz"
+      "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-Vatsim-3.0.0-preview-${PREVIEW300}.tar.gz"
       "https://github.com/vradarserver/vrs/releases/download/v3.0.0-preview-${PREVIEW300}-mono/Plugin-WebAdmin-3.0.0-preview-${PREVIEW300}.tar.gz"
    )
 }
@@ -235,6 +236,11 @@ fi
 if grep -qEi 'ID=raspb' /etc/os-release; then CRONCMD="crontab -e"; else CRONCMD="sudo crontab -e"; fi
 
 
+# At the very start of the script, find latest version of preview versions.  These values are the minimum version numbers to check because it is known that the preview versions are at least these values.
+INITIALCHECK_245=7
+INITIALCHECK_300=10
+
+
 # Function ran after nearly every command in this script to report an error if one exists.
 function ERROREXIT {
    if [ $? -ne 0 ]; then
@@ -286,7 +292,8 @@ printf "  * Database Writer Plugin\n"
 printf "  * Tile Server Cache Plugin\n"
 printf "  * Web Admin Plugin\n"
 printf "  * Feed Filter Plugin${NO_COLOR} (only with either preview version of VRS)${BOLD_FONT}\n"
-printf "  * SQLServer Plugin${NO_COLOR} (only with preview version 3.0.0 of VRS)\n\n"
+printf "  * SQLServer Plugin${NO_COLOR} (only with preview version 3.0.0 of VRS)${BOLD_FONT}\n"
+printf "  * VATSIM Plugin${NO_COLOR} (only with preview version 3.0.0 of VRS)\n\n"
 printf "Need help with this installation script?:\n"
 printf "https://github.com/mypiaware/virtual-radar-server-installation\n\n"
 
@@ -301,7 +308,7 @@ declare PREVIEW_AVAILABLE
 printf "Checking for the latest available preview versions of VRS..."
 if ! which wget >/dev/null 2>&1; then printf "\n${RED_COLOR}FATAL ERROR! The program 'wget' needs to be installed before continuing!${NO_COLOR}\n"; exit 3; fi
 LIMITCHECK=12  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
-INITIALCHECK=7
+INITIALCHECK=$INITIALCHECK_245
 for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
    PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
    URLTOCHECK="${VRSFILES_PREVIEW245[0]}"  # Checking just the first element in the array should suffice.
@@ -311,7 +318,7 @@ for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
 done
 if [[ $PREVIEW_AVAILABLE =~ [1] ]]; then  # Only check for the other preview version if the first preview version was found.
    LIMITCHECK=13  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
-   INITIALCHECK=8
+   INITIALCHECK=$INITIALCHECK_300
    for (( PREVIEW300=$INITIALCHECK; PREVIEW300<=$LIMITCHECK; PREVIEW300++ )); do
       PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
       URLTOCHECK="${VRSFILES_PREVIEW300[0]}"  # Checking just the first element in the array should suffice.
