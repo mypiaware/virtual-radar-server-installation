@@ -26,7 +26,7 @@ This script should be able to install all versions (stable or preview) of VRS on
 * openSUSE
 * Ubuntu
 
-When deciding on which operating sytem to use with VRS, it is very important to read about the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).
+:point_right: When deciding on which operating sytem to use with VRS, it is very important to read about the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).
 
 For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), this installation script offers the choice to install a preview version instead of the stable version (ver 2.4.4).  Even though it is always risky to install a preview version that is under development, the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue) may make a preview version the better choice under certain circumstances.
 
@@ -57,6 +57,7 @@ Here is a very brief summary of what this script will do:
   * Web Admin Plugin
   * Feed Filter Plugin (only with either preview version of VRS)
   * SQL Server Plugin (only with preview version 3.0.0 of VRS)
+  * VATSIM Plugin (only with preview version 3.0.0 of VRS)
 * [Download and install the VRS language packs](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#language-packs)
 * [Download additional files (all optional):](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#download-additional-files)
   * Airline operator flags
@@ -91,7 +92,7 @@ This VRS installation script will try to determine the latest editions of the pr
 
 ## VRS Plugins
 
-This VRS installation script will install the following VRS plugins. Note that many of the plugins are disabled by default.  Click on each for more information on the plugin.
+This VRS installation script will install the following VRS plugins. Note that many of the plugins are disabled by default, and some plugins are available only on certain versions of VRS.  Click on each for more information on the plugin.
   * [Custom Content Plugin](http://www.virtualradarserver.co.uk/Documentation/CustomContent/Default.aspx)
   * [Database Editor Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-database-editor)
   * [Database Writer Plugin](http://www.virtualradarserver.co.uk/Documentation/DatabaseWriter/Default.aspx)
@@ -99,6 +100,7 @@ This VRS installation script will install the following VRS plugins. Note that m
   * [Web Admin Plugin](http://www.virtualradarserver.co.uk/Download.aspx#panel-web-admin)
   * Feed Filter Plugin (only with a preview version of VRS)
   * SQL Server Plugin (only with preview version 3.0.0 of VRS)
+  * [VATSIM Plugin](https://github.com/vradarserver/vrs/tree/master/Plugin.Vatsim#readme) (only with preview version 3.0.0 of VRS)
 
 ## Language Packs
 
