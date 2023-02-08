@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 12.0)
+# Virtual Radar Server installation script (ver 12.1)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -307,7 +307,7 @@ printf "\n"
 declare PREVIEW_AVAILABLE
 printf "Checking for the latest available preview versions of VRS..."
 if ! which wget >/dev/null 2>&1; then printf "\n${RED_COLOR}FATAL ERROR! The program 'wget' needs to be installed before continuing!${NO_COLOR}\n"; exit 3; fi
-LIMITCHECK=12  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
+LIMITCHECK=$(($INITIALCHECK_245 + 5))  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
 INITIALCHECK=$INITIALCHECK_245
 for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
    PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
@@ -317,7 +317,7 @@ for (( PREVIEW245=$INITIALCHECK; PREVIEW245<=$LIMITCHECK; PREVIEW245++ )); do
    if [[ $PREVIEW245 -eq $LIMITCHECK ]]; then PREVIEW_AVAILABLE=0; break; fi
 done
 if [[ $PREVIEW_AVAILABLE =~ [1] ]]; then  # Only check for the other preview version if the first preview version was found.
-   LIMITCHECK=13  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
+   LIMITCHECK=$(($INITIALCHECK_300 + 5))  # To be safe, this value should be at least +5 the 'INITIALCHECK' value below.
    INITIALCHECK=$INITIALCHECK_300
    for (( PREVIEW300=$INITIALCHECK; PREVIEW300<=$LIMITCHECK; PREVIEW300++ )); do
       PREVIEW_URLS  # Calling this function simply fills in the variable values that are in the URLs.
