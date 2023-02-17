@@ -24,7 +24,7 @@ This script should be able to install all versions (stable or preview) of VRS on
 * Manjaro
 * MX Linux *(systemd should be enabled)*
 * openSUSE
-* Ubuntu
+* Ubuntu (AMD64 & ARM64)
 
 :point_right: When deciding on which operating sytem to use with VRS, it is very important to read about the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).
 
@@ -358,9 +358,12 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 21.10                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 22.04 LTS                  | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 22.10 *                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop (RPi) 22.10 *      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Server (RPi) 22.10 *       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 5.1.7               | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 6.0                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 6.1                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 7.0                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 19.3                   | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Linux Mint 20.2                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 20.3                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
