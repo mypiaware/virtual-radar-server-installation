@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 12.1)
+# Virtual Radar Server installation script (ver 12.2)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -238,7 +238,7 @@ if grep -qEi 'ID=raspb' /etc/os-release; then CRONCMD="crontab -e"; else CRONCMD
 
 # At the very start of the script, find latest version of preview versions.  These values are the minimum version numbers to check because it is known that the preview versions are at least these values.
 INITIALCHECK_245=7
-INITIALCHECK_300=10
+INITIALCHECK_300=11
 
 
 # Function ran after nearly every command in this script to report an error if one exists.
