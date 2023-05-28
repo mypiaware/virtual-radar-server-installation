@@ -64,7 +64,7 @@ Here is a very brief summary of what this script will do:
   * Aircraft silhouettes
   * Aircraft pictures
   * Sample database
-* [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings)
+* [Fix libpng warnings](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#fix-libpng-warnings) (only needed for the 2.* versions)
 * Allow the user to select/enter the following:
   * [Which port number the VRS server should use](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#server-port-number)
   * [Which default language the VRS webpage should display](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#webpage-default-language)
@@ -246,7 +246,7 @@ The `vrs` command will provide the VRS status and options on how a user may want
 
 `vrs -enable` will enable VRS to start at every system boot as a background process. `vrs -disable` will prevent VRS from starting at every system boot.
 
-`vrs -webadmin` will allow the user to create a username & password for accessing the VRS Web Admin webpage. Note that this will also start VRS without a GUI. If not wanting VRS to run, the user will simply need to wait until VRS has completely started and then press `Q ` to quit VRS.
+`vrs -webadmin` will allow the user to create a username & password for accessing the optional VRS Web Admin webpage. Note that this will also start VRS without a GUI. If not wanting VRS to run, the user will simply need to wait until VRS has completely started and then press `Q ` to quit VRS.
 
 `vrs -log` will show the log of the previous instances of VRS running as a background process since the most recent system boot. The log will only show the records of the previous instances of VRS running as a background process. This includes any instance of VRS that may have started at system boot if the `vrs -enable` command was used to start VRS at every system boot.
 
@@ -347,6 +347,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Debian 11.2                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Debian 11.3                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Debian 11.6                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.7                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | MX Linux 19.4                     | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 21.0                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | MX Linux 21.1                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -358,6 +359,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 21.10                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 22.04 LTS                  | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 22.10 *                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 23.04 *                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop (RPi) 22.10 *      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Server (RPi) 22.10 *       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 5.1.7               | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
@@ -367,6 +369,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Linux Mint 19.3                   | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Linux Mint 20.2                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 20.3                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 21.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | CentOS Stream 8                   | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | CentOS Stream 9                   | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | Fedora 31 **                      | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
@@ -376,11 +379,12 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 35 **                      | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 36 **                      | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 37 **                      | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 38 **                      | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.3 **                  | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.4 **                  | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 22.0.2 **                 | 6.12.0.177                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 22.1.2 **                 | 6.12.0.190                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Arch Linux **                     | 6.12.0.177                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
-\* Interesting... Ubuntu 22.10 has returned to allowing aircraft icons to appear.  
+\* Interesting... These versions of Ubuntu have returned to allowing aircraft icons to appear with the stable version of VRS.  
 \*\* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
