@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 12.2)
+# Virtual Radar Server installation script (ver 12.21)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -387,8 +387,8 @@ printf "\n"
 
 # Prompt user if the following sample files should be downloaded:  Operator Flags, Silhouettes, sample Pictures and a database file.
 while ! [[ $DL_OPF =~ ^[YyNn]$ ]]; do printf "Download & install operator flags (airline logos)? [yn]: "; read DL_OPF; done
-while ! [[ $DL_SIL =~ ^[YyNn]$ ]]; do printf "Download & install silhouettes? [yn]: ";                    read DL_SIL; done
-while ! [[ $DL_PIC =~ ^[YyNn]$ ]]; do printf "Download & install pictures? [yn]: ";                       read DL_PIC; done
+while ! [[ $DL_SIL =~ ^[YyNn]$ ]]; do printf "Download & install aircraft silhouettes? [yn]: ";           read DL_SIL; done
+while ! [[ $DL_PIC =~ ^[YyNn]$ ]]; do printf "Download & install sample pictures? [yn]: ";                read DL_PIC; done
 # For safety reasons, prevent any possible existing database file from getting overwritten by a possibly older database file.  It is assumed that an existing database should not be overwritten.
 if [[ ! -f "$DATABASEFILE" ]]; then
    while ! [[ $DL_DB =~ ^[YyNn]$ ]]; do printf "Download & install a sample database? [yn]: "; read DL_DB; done
