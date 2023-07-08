@@ -336,55 +336,59 @@ If any method of downgrading Mono has been found for the operating systems that 
 
 As of this writing, the default versions of Mono that will get installed on the following operating systems are:
 
-| Linux                             | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|Preview Versions Display Aircraft Icons?|
-| --------------------------------- |:------------------------------:|:-------------------------------------:|:---------------------------------------:
-| Raspberry Pi OS (Buster)          | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Raspberry Pi OS (Bullseye 32-bit) | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Raspberry Pi OS (Bullseye 64-bit) | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 10.10                      | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Debian 11.0                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.1                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.2                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.3                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.6                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Debian 11.7                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| MX Linux 19.4                     | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| MX Linux 21.0                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| MX Linux 21.1                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| MX Linux 21.3                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 18.04.6 LTS                | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu 20.04.2 LTS                | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 20.10                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 21.04                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 21.10                      | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 22.04 LTS                  | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Ubuntu 22.10 *                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu 23.04 *                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu Desktop (RPi) 22.10 *      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu Server (RPi) 22.10 *       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| elementary OS 5.1.7               | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| elementary OS 6.0                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| elementary OS 6.1                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| elementary OS 7.0                 | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Linux Mint 19.3                   | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Linux Mint 20.2                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Linux Mint 20.3                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| Linux Mint 21.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
-| CentOS Stream 8                   | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
-| CentOS Stream 9                   | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
-| Fedora 31 **                      | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 32 **                      | 6.6.0.166                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 33 **                      | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 34 **                      | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 35 **                      | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 36 **                      | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 37 **                      | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Fedora 38 **                      | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| openSUSE 15.3 **                  | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| openSUSE 15.4 **                  | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 22.1.2 **                 | 6.12.0.190                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Arch Linux **                     | 6.12.0.177                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Linux                               | Default Mono Version Installed |Stable Version Displays Aircraft Icons?|Preview Versions Display Aircraft Icons?|
+| ---------------------------------   |:------------------------------:|:-------------------------------------:|:---------------------------------------:
+| Raspberry Pi OS (Buster)            | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bullseye 32-bit)   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bullseye 64-bit)   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 10.10                        | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Debian 11.0                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.1                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.2                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.3                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.6                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 11.7                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Debian 12.0 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| MX Linux 19.4                       | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| MX Linux 21.0                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| MX Linux 21.1                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| MX Linux 21.3                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 18.04.6 LTS                  | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 20.04.2 LTS                  | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 20.10                        | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 21.04                        | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 21.10                        | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 22.04 LTS                    | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Ubuntu 22.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 23.04 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop (RPi) 22.10          | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Server (RPi) 22.10           | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop (RPi) 23.04          | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Server (RPi) 23.04           | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| elementary OS 5.1.7                 | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| elementary OS 6.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 6.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 7.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 19.3                     | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Linux Mint 20.2                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 20.3                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 21.1                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| CentOS Stream 8                     | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
+| CentOS Stream 9                     | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
+| Fedora 31 **                        | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 32 **                        | 6.6.0.166                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 33 **                        | 6.8.0.123                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 34 **                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 35 **                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 36 **                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 37 **                        | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 38 **                        | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.3 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 23.0.0 **                   | 6.12.0.190                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Arch Linux **                       | 6.12.0.198                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
-\* Interesting... These versions of Ubuntu have returned to allowing aircraft icons to appear with the stable version of VRS.  
+\* Interesting... These versions of Linux have returned to allowing aircraft icons to appear with the stable version of VRS.  
 \*\* Stable version of VRS appears to work fine on Fedora, openSUSE, Manjaro and Arch Linux regardless of which version of Mono is installed.
