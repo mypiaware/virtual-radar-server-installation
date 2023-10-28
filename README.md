@@ -15,8 +15,8 @@ This script should be able to install all versions (stable or preview) of VRS on
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Raspberry Pi OS Bullseye (32-bit -- Desktop & Lite)
 * Raspberry Pi OS Bullseye (64-bit -- Desktop & Lite)
-* Raspberry Pi OS Bullseye (32-bit -- Desktop & Lite)
-* Raspberry Pi OS Bullseye (64-bit -- Desktop & Lite)
+* Raspberry Pi OS Bookworm (32-bit -- Desktop & Lite)
+* Raspberry Pi OS Bookworm (64-bit -- Desktop & Lite)
 * Arch Linux
 * CentOS Stream
 * Debian
