@@ -341,6 +341,8 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Raspberry Pi OS (Buster)            | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Raspberry Pi OS (Bullseye 32-bit)   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Raspberry Pi OS (Bullseye 64-bit)   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bookworm 32-bit) * | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Raspberry Pi OS (Bookworm 64-bit) * | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 10.10                        | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 11.0                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Debian 11.1                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
