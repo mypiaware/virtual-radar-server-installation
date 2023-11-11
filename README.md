@@ -13,10 +13,8 @@ This script may be safely ran multiple times if wanting to change a few of the s
 This script should be able to install all versions (stable or preview) of VRS on most popular Linux distributions:
 
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
-* Raspberry Pi OS Bullseye (32-bit -- Desktop & Lite)
-* Raspberry Pi OS Bullseye (64-bit -- Desktop & Lite)
-* Raspberry Pi OS Bookworm (32-bit -- Desktop & Lite)
-* Raspberry Pi OS Bookworm (64-bit -- Desktop & Lite)
+* Raspberry Pi OS Bullseye (32/64-bit -- Desktop & Lite)
+* Raspberry Pi OS Bookworm (32/64-bit -- Desktop & Lite)
 * Arch Linux
 * CentOS Stream
 * Debian
@@ -390,6 +388,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 36 **                        | 6.12.0.122                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 37 **                        | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 38 **                        | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 39 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.3 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
