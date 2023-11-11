@@ -365,6 +365,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 22.04 LTS                    | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 22.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 23.04 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 23.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop (RPi) 22.10          | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Server (RPi) 22.10           | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop (RPi) 23.04          | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
