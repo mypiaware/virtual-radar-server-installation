@@ -366,10 +366,9 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 22.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 23.04 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 23.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu Desktop (RPi) 22.10          | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu Server (RPi) 22.10           | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu Desktop (RPi) 23.04          | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Ubuntu Server (RPi) 23.04           | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop/Server (RPi) 22.10   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop/Server (RPi) 23.04   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop/Server (RPi) 23.10   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 5.1.7                 | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 6.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 6.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -393,8 +392,8 @@ As of this writing, the default versions of Mono that will get installed on the 
 | openSUSE 15.3 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 23.0.0 **                   | 6.12.0.190                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Arch Linux **                       | 6.12.0.198                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 23.0.4 **                   | 6.12.0.205                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Arch Linux **                       | 6.12.0.205                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
 \* Interesting... These versions of Linux have returned to allowing aircraft icons to appear with the stable version of VRS.  
