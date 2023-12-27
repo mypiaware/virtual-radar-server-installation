@@ -32,8 +32,6 @@ For anyone interested in trying a preview version (versions 2.4.5 or 3.0.0), thi
 
 If this scripts fails to install because it is reporting that the operating system is not recognized or supported, please try the following steps below for [advanced users](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#advanced-users).
 
-Any installation of this VRS script prior to 2021-08-22 should be updated as soon as possible. Here are instructions to [perform an update](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#how-to-perform-an-update).
-
 The author of this VRS installation script has nothing to do with the creation, development or support of VRS.  Please visit the VRS website and also consider donating towards this amazing project:  [www.virtualradarserver.co.uk](http://www.virtualradarserver.co.uk/ "Virtual Radar Server")
 
 
@@ -141,7 +139,7 @@ The user has an option of entering the GPS coordinates for the center of the VRS
 The user has an option of adding and entering the configuration information of an ADS-B receiver.  There are four critical parameters to enter for a receiver:
 
   * **Receiver name**:  User may enter an arbitrary name for the receiver.  The name may essentially have nearly any alphanumeric character, spaces, and most symbols.
-  * **Receiver source type**:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then consider selecting "AVR or Beast Raw Feed".
+  * **Receiver source type**:  There are six options for the source type.  It may take some knowledge in choosing the appropriate source.  However, if the ADS-B receiver is using FlightAware's PiAware, then consider selecting `"AVR or Beast Raw Feed"`.
   * **Receiver IP address**:  The IP address of the ADS-B receiver device.  If VRS is installed on the same device as the receiver, enter `127.0.0.1` as the IP address.
   * **Receiver IP port**:  Enter the ADS-B receiver's port value that is supplying the aircraft messages.  If using FlightAware's PiAware, then consider using port `30005` for non-MLAT messages, or port `30105` for MLAT messages.
 
@@ -352,6 +350,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Debian 11.7                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Debian 12.0 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 12.1 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Debian 12.4 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 19.4                       | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 21.0                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | MX Linux 21.1                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -373,6 +372,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | elementary OS 6.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 6.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 7.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 7.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 19.3                     | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Linux Mint 20.2                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 20.3                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
