@@ -351,6 +351,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Debian 12.0 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 12.1 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 12.4 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Debian 12.5 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 19.4                       | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 21.0                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | MX Linux 21.1                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -367,9 +368,11 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 22.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 23.04 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 23.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 24.04 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 22.10   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 23.04   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 23.10   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop/Server (RPi) 24.04   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 5.1.7                 | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 6.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 6.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -392,11 +395,12 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 37 **                        | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 38 **                        | 6.12.0.182                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 39 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 40 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.3 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Manjaro 23.1.2 **                   | 6.12.0.205                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Arch Linux **                       | 6.12.0.205                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Arch Linux **                       | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
 \* Interesting... These versions of Linux have returned to allowing aircraft icons to appear with the stable version of VRS.  
