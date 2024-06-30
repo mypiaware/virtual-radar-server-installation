@@ -359,6 +359,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | MX Linux 23.0 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 23.1 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 23.2 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| MX Linux 23.3 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 18.04.6 LTS                  | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 20.04.2 LTS                  | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 20.10                        | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -399,7 +400,8 @@ As of this writing, the default versions of Mono that will get installed on the 
 | openSUSE 15.3 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| Manjaro 23.1.2 **                   | 6.12.0.205                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 15.6 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 24.0.2 **                   | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Arch Linux **                       | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
