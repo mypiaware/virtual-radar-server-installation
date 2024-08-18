@@ -385,6 +385,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Linux Mint 21.1                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 21.2                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 21.3                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| Linux Mint 22.0 *                   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | CentOS Stream 8                     | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | CentOS Stream 9                     | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | Fedora 31 **                        | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
