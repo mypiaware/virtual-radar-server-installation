@@ -417,7 +417,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.6 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
-| openSUSE 16.0 **                    | :x: N/A                        | :x: N/A                               | :x: N/A                                |
+| openSUSE 16.0                       | :x: N/A                        | :x: N/A                               | :x: N/A                                |
 | Manjaro 24.0.2 **                   | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Manjaro 24.1.1 **                   | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Manjaro 25.0.10 **                  | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
