@@ -15,6 +15,7 @@ This script should be able to install all versions (stable or preview) of VRS on
 * Raspberry Pi OS Buster (32-bit -- Desktop & Lite)
 * Raspberry Pi OS Bullseye (32/64-bit -- Desktop & Lite)
 * Raspberry Pi OS Bookworm (32/64-bit -- Desktop & Lite)
+* Raspberry Pi OS Trixie (32/64-bit -- Desktop & Lite)
 * Arch Linux
 * CentOS Stream
 * Debian
@@ -23,7 +24,7 @@ This script should be able to install all versions (stable or preview) of VRS on
 * Linux Mint
 * Manjaro
 * MX Linux *(systemd should be enabled)*
-* openSUSE
+* openSUSE (not Leap 16.0)
 * Ubuntu (AMD64 & ARM64)
 
 :point_right: When deciding on which operating sytem to use with VRS, it is very important to read about the [Mono issue](https://github.com/mypiaware/virtual-radar-server-installation/blob/master/README.md#mono-issue).
@@ -341,6 +342,8 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Raspberry Pi OS (Bullseye 64-bit)   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Raspberry Pi OS (Bookworm 32-bit) * | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Raspberry Pi OS (Bookworm 64-bit) * | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Raspberry Pi OS (Trixie 32-bit) *   | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Raspberry Pi OS (Trixie 64-bit) *   | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 10.10                        | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 11.0                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Debian 11.1                         | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -353,6 +356,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Debian 12.4 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 12.5 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Debian 12.7 *                       | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Debian 13.1 *                       | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 19.4                       | 5.18.0.240                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 21.0                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | MX Linux 21.1                       | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -362,6 +366,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | MX Linux 23.2 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 23.3 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | MX Linux 23.4 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| MX Linux 23.6 *                     | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 18.04.6 LTS                  | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 20.04.2 LTS                  | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Ubuntu 20.10                        | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -373,16 +378,19 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Ubuntu 23.10 *                      | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 24.04 LTS*                   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu 24.10 *                      | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu 25.10 *                      | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 22.10   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 23.04   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 23.10   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 24.04   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Ubuntu Desktop/Server (RPi) 24.10   | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Ubuntu Desktop/Server (RPi) 25.10   | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 5.1.7                 | 4.6.2                          | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | elementary OS 6.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 6.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 7.0                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | elementary OS 7.1                   | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
+| elementary OS 8.0                   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Linux Mint 19.3                     | 4.6.2.7                        | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Linux Mint 20.2                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 20.3                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
@@ -390,6 +398,7 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Linux Mint 21.2                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 21.3                     | 6.8.0.105                      | :x:                                   | :heavy_check_mark:                     |
 | Linux Mint 22.0 *                   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Linux Mint 22.2 *                   | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | CentOS Stream 8                     | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | CentOS Stream 9                     | 6.12.0.107                     | :x:                                   | :heavy_check_mark:                     |
 | Fedora 31 **                        | 5.20.1.34                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
@@ -403,12 +412,15 @@ As of this writing, the default versions of Mono that will get installed on the 
 | Fedora 39 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 40 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Fedora 41 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Fedora 43 **                        | 6.12.0.199                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.3 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.4 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.5 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | openSUSE 15.6 **                    | 6.8.0.105                      | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| openSUSE 16.0 **                    | :x: N/A                        | :x: N/A                               | :x: N/A                                |
 | Manjaro 24.0.2 **                   | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Manjaro 24.1.1 **                   | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
+| Manjaro 25.0.10 **                  | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 | Arch Linux **                       | 6.12.0.206                     | :heavy_check_mark:                    | :heavy_check_mark:                     |
 
 
