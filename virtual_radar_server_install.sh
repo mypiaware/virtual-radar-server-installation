@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Virtual Radar Server installation script (ver 12.22)
+# Virtual Radar Server installation script (ver 13.00)
 # VRS Homepage:  http://www.virtualradarserver.co.uk
 #
 # VERY BRIEF SUMMARY OF THIS SCRIPT:
@@ -154,9 +154,9 @@ function PREVIEW_URLS {  # These arrays must be in a function because it is not 
 
 # Declare URLs for operator flags, silhouettes and a database file. (Change any URL if better files are found elsewhere.)
 OPFLAGSURL="http://www.woodair.net/SBS/Download/LOGO.zip"  # Images credit: Bones (http://www.woodair.net)
-SILHOUETTESURL="https://github.com/rikgale/VRSOperatorFlags/raw/main/Silhouettes.zip"  # Images credit: rikgale  (https://github.com/rikgale)
-DATABASEURL="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/Database/BaseStation.sqb"
-PICTURESURL="https://github.com/mypiaware/virtual-radar-server-installation/raw/master/Downloads/Pictures/Pictures.zip"
+SILHOUETTESURL="https://raw.githubusercontent.com/rikgale/VRSOperatorFlags/main/Silhouettes.zip"  # Images credit: rikgale  (https://github.com/rikgale)
+PICTURESURL="https://raw.githubusercontent.com/mypiaware/virtual-radar-server-installation/master/Downloads/Pictures/Pictures.zip"
+DATABASEURL="https://raw.githubusercontent.com/mypiaware/virtual-radar-server-installation/master/Downloads/Database/BaseStation.sqb"  # This database file has not been updated in a long time.
 
 
 # Declare URLs for updated aircraft markers.
@@ -260,7 +260,8 @@ function ERROREXIT {
 if ! which mono >/dev/null 2>&1 || ! which unzip >/dev/null 2>&1; then
    if [[ $OPERATINGSYSTEMVERSION == "unknown" ]]; then
       printf "${RED_COLOR}FATAL ERROR! This operating system is not yet supported or identified!${NO_COLOR}\n"
-      printf "Try installing Mono and/or unzip manually and then rerun this script again.\n"
+      printf "Try installing Mono and/or other dependencies manually\n"
+      printf "and then rerun this script again.\n"
       printf "More help:\n"
       printf "https://github.com/mypiaware/virtual-radar-server-installation#advanced-users\n"
       exit 1
@@ -579,6 +580,7 @@ printf "\n"
 if [[ $OPERATINGSYSTEMVERSION == "opensuse" ]]; then        # Possibly install/update Mono and other necessary software on openSUSE.
    if ! rpm -q unzip          >/dev/null 2>&1; then sudo zypper install -y unzip; fi
    if ! rpm -q mono-complete  >/dev/null 2>&1; then sudo zypper install -y mono-complete; fi
+# Mono not available for OpenSUSE Leap 16 (https://software.opensuse.org/package/mono-complete?search_term=mono-complete)
 elif [[ $OPERATINGSYSTEMVERSION == "centos8" ]]; then       # Possibly install/update Mono and other necessary software on CentOS 8 Stream.
    if ! rpm -q libcanberra-gtk2 >/dev/null 2>&1; then sudo dnf install -y libcanberra-gtk2; fi
    if ! rpm -q unzip            >/dev/null 2>&1; then sudo dnf install -y unzip; fi
@@ -615,28 +617,34 @@ elif [[ $OPERATINGSYSTEMVERSION == "archlinux" ]]; then     # Assume many things
       ! pacman -Q unzip    >/dev/null 2>&1 ||
       ! pacman -Q which    >/dev/null 2>&1 ||
       ! pacman -Q wget     >/dev/null 2>&1 ||
+      ! pacman -Q curl     >/dev/null 2>&1 ||
       ! pacman -Q glibc    >/dev/null 2>&1 ||
       ! pacman -Q mono     >/dev/null 2>&1; then
          sudo pacman -Syy --noconfirm
-         sudo pacman -S --noconfirm gtk2 iproute2 sed tar unzip which wget glibc mono  # GLIBC_2.33 necessary for 'tar' command.
+         sudo pacman -S --noconfirm iproute2 sed tar unzip which wget curl glibc mono  # GLIBC_2.33 necessary for 'tar' command. Note: 'gtk2' deprecated and causes issues here if still listed.
    fi
 elif [[ $OPERATINGSYSTEMVERSION == "elementaryos" ]]; then  # Possibly install/update Mono and other necessary software on elementary OS.
    if ! dpkg -s gtk2-engines-pixbuf    >/dev/null 2>&1 ||
       ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
+      ! dpkg -s curl                   >/dev/null 2>&1 ||
       ! dpkg -s unzip                  >/dev/null 2>&1 ||
       ! dpkg -s mono-complete          >/dev/null 2>&1; then
          sudo apt update -y
          sudo apt install -y gtk2-engines-pixbuf     # Prevents `Unable to locate theme engine in module_path: "pixmap"` error message from appearing.
          sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
+         sudo apt install -y curl
+         sudo apt install -y unzip
          sudo apt install -y mono-complete
          # export MONO_WINFORMS_XIM_STYLE=disabled   # Prevents `Could not get XIM` error message from appearing.  Must be executed outside of this script.
    fi
 elif [[ $OPERATINGSYSTEMVERSION == "debian" ]]; then        # Possibly install/update Mono and other necessary software on Debian-based operating systems. (Includes Raspberry Pi OS, Ubuntu and MX Linux.)
    if ! dpkg -s libcanberra-gtk-module >/dev/null 2>&1 ||
+      ! dpkg -s curl                   >/dev/null 2>&1 ||
       ! dpkg -s unzip                  >/dev/null 2>&1 ||
       ! dpkg -s mono-complete          >/dev/null 2>&1; then
          sudo apt update -y
          sudo apt install -y libcanberra-gtk-module  # Prevents `Failed to load module "canberra-gtk-module"` error message from appearing.
+         sudo apt install -y curl
          sudo apt install -y unzip
          sudo apt install -y mono-complete
    fi
@@ -677,7 +685,7 @@ function UNPACK {
    local REGEX="\/([^/]*)$"
    [[ $URL =~ $REGEX ]]
    local FILENAME=${BASH_REMATCH[1]}
-   if [ ! -f "$TEMPDIR/$FILENAME" ]; then wget -P "$TEMPDIR" "$URL"; fi
+   if [ ! -f "$TEMPDIR/$FILENAME" ]; then curl -A "Chrome/142.0.7444.176" -o "$TEMPDIR/$FILENAME" "$URL"; fi
    if [ $? -ne 0 ]; then printf "Failed to download %s!\n" "$FILENAME"; printf "${RED_COLOR}Press [ENTER] to continue with the VRS installation...${NO_COLOR}"; read -p ""
    else
       if [ $ID == "OperatorFlagsFolder" ]; then
